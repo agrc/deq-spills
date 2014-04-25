@@ -1,0 +1,9 @@
+dist/
+node_modules/
+src/agrc
+src/dijit
+src/dojo
+src/dojox
+src/ijit
+src/util
+*.sublime-workspace

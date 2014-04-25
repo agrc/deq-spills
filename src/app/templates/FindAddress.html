@@ -1,0 +1,15 @@
+<div class="find-address">
+    <label>
+        <span>Address</span>
+        <input data-dojo-attach-point="txt_address" class="text-box">
+    </label>
+    <label>
+        <span>Zip or City</span>
+        <input data-dojo-attach-point="txt_zone" class="text-box">
+    </label>
+    <button type="submit" data-dojo-attach-point="btn_geocode"
+        class="find-btn" data-dojo-attach-event="onclick:geocodeAddress">
+        Find
+    </button>
+    <span data-dojo-attach-point='errorMsg' class="error-msg">No Match Found!</span>
+</div>

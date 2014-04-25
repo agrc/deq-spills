@@ -1,0 +1,38 @@
+@import '../../agrc/themes/standard/map/BaseMap.css';
+@import '../../agrc/themes/standard/locate/FindRouteMilepost.css';
+@import 'ZoomToCoord.css';
+@import 'FindAddress.css';
+@import '../../agrc/themes/standard/locate/MagicZoom.css';
+@import '../../agrc/themes/standard/map/BaseMapSelector.css';
+@import 'TRSsearch.css';
+
+.agrc-app {
+}
+.agrc-app .map-div, .agrc-app .dijitBorderContainer {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+.agrc-app .find-route-milepost input {
+    width: 50px;
+}
+.agrc-app .dijitSlider {
+    left: 10px !important;
+    top: 10px !important;
+}
+.agrc-app .bottom-div {
+    height: 125px;
+    overflow-y: hidden;
+}
+.agrc-app .center-div {
+    padding: 0 !important;
+}
+.agrc-app [data-dojo-attach-point='clearBtn'] {
+    position: absolute;
+    right:9px;
+    bottom: 9px;
+    z-index: 999;
+    width: 120px;
+}

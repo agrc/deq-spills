@@ -1,0 +1,19 @@
+.zoom-to-coord, .zoom-to-coord .dijitStackContainer {
+    height: 100%;
+}
+.zoom-to-coord .dijitTextBox {
+    width: 100px;
+}
+.zoom-to-coord .inner-table {
+    border-collapse: collapse;
+}
+.zoom-to-coord .dijitStackContainer .dijitContentPane {
+    padding: 0px;
+    height: 100%;
+}
+.zoom-to-coord .dijitStackContainer {
+    margin-left: -2px;
+}
+.zoom-to-coord .dijitInputInner {
+    padding: 0 !important;
+}

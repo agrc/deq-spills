@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Embed Demo</title>
+</head>
+<body class='claro'>
+
+    <!-- styling demo -->
+    <style type="text/css">
+        .agrc-app, body, html {
+            height: 500px;
+            width: 600px;
+        }
+    </style>
+
+    <!-- required widget div and .js file -->
+    <div id='AGRCMap'></div>
+
+    <!-- get xy values demo -->
+    <script>
+        // var apiKey = 'AGRC-63E1FF17767822'; // dev
+        // var apiKey = 'AGRC-1B07B497348512'; // mapserv
+        var apiKey = 'AGRC-AC122FA9671436'; // test.mapserv
+        window.agrcOnLoad = function () {
+            // county name
+            var app = new AGRCMap({
+                countyName: 'KANE',
+                apiKey: apiKey
+            }, document.getElementById('AGRCMap'));
+
+            // must always call startup
+            app.startup();
+
+            AGRC.widget.findWidget.onFind = function (result) {
+                // console.log('result.UTM_X', result.UTM_X);
+                // console.log('result.UTM_Y', result.UTM_Y);
+            };
+        }
+
+        loadMapWithoutParams = function () {
+            var app = new AGRCMap({
+                apiKey: apiKey
+            }, document.getElementById('AGRCMap'));
+            app.startup();
+
+            AGRC.widget.findWidget.onFind = function (result) {
+                TEST.UTM_X = result.UTM_X;
+                TEST.UTM_Y = result.UTM_Y;
+            };
+        }
+        loadMapWithCoords = function () {
+            var app = new AGRCMap({
+                UTM_X: 418502,
+                UTM_Y: 4519515,
+                apiKey: apiKey
+            }, document.getElementById('AGRCMap'));
+            app.startup();
+        }
+        loadMapWithCounty = function () {
+            var app = new AGRCMap({
+                countyName: 'KANE',
+                apiKey: apiKey
+            }, document.getElementById('AGRCMap'));
+            app.startup();
+        }
+        loadMapWithCity = function () {
+            var app = new AGRCMap({
+                cityName: 'Cottonwood Heights',
+                apiKey: apiKey
+            }, document.getElementById('AGRCMap'));
+            app.startup();
+        }
+        loadMapWithAddress = function () {
+            var app = new AGRCMap({
+                addressStreet: '2832 banbury rd',
+                addressZone: '84121',
+                apiKey: apiKey
+            }, document.getElementById('AGRCMap'));
+            app.startup();
+        }
+        loadMapWithRouteMilepost = function () {
+            var app = new AGRCMap({
+                milepost: '300',
+                route: '15',
+                apiKey: apiKey
+            }, document.getElementById('AGRCMap'));
+            app.startup();
+        }
+        loadMapWithAllParams = function () {
+            var app = new AGRCMap({
+                apiKey: apiKey,
+                UTM_X: 418502,
+                UTM_Y: 4519515,
+                countyName: 'KANE',
+                cityName: 'Cottonwood Heights',
+                addressStreet: '2832 banbury rd',
+                addressZone: '84121',
+                milepost: '300',
+                route: '15'
+            }, document.getElementById('AGRCMap'));
+            app.startup();
+        }
+    </script>
+    <script type="text/javascript" src="EmbeddedMapLoader.js"></script>
+    <!-- // <script type='text/javascript' src='http://mapserv.utah.gov/DEQSpills/EmbeddedMapLoader.js'></script> -->
+</body>
+</html>
