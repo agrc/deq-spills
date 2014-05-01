@@ -1,10 +1,12 @@
-@import '../../agrc/themes/standard/map/BaseMap.css';
-@import '../../agrc/themes/standard/locate/FindRouteMilepost.css';
+@import '../../agrc/resources/map/BaseMap.css';
+@import '../../agrc/resources/locate/FindRouteMilepost.css';
 @import 'ZoomToCoord.css';
 @import 'FindAddress.css';
-@import '../../agrc/themes/standard/locate/MagicZoom.css';
-@import '../../agrc/themes/standard/map/BaseMapSelector.css';
+@import '../../agrc/resources/locate/MagicZoom.css';
+@import '../../agrc/resources/map/BaseMapSelector.css';
 @import 'TRSsearch.css';
+@import '../../dijit/themes/claro/claro.css';
+@import '../../esri/css/esri.css';
 
 .agrc-app {
 }
