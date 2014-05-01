@@ -1,9 +1,12 @@
+*.sublime-workspace
+.grunt/
 dist/
 node_modules/
 src/agrc
 src/dijit
 src/dojo
 src/dojox
+src/esri
 src/ijit
+src/spinjs
 src/util
-*.sublime-workspace

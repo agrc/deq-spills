@@ -1,17 +1,12 @@
 define([
-    'dojo/dom',
     'app/App'
 
-], 
+],
 
 function (
-    dom,
     App
     ) {
     window.AGRCGLOBAL = {
-        // errorLogger: ijit.modules.ErrorLogger
-        errorLogger: null,
-
         // app: app.App
         //      global reference to App
         app: null,

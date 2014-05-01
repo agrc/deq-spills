@@ -1,16 +1,16 @@
 define([
-    'dijit/registry', 
-    'dojo/dom', 
+    'dijit/registry',
+    'dojo/dom',
     'dojo/_base/declare',
-    'dijit/_WidgetBase', 
-    'dijit/_TemplatedMixin', 
+    'dijit/_WidgetBase',
+    'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
     'dojo/text!app/templates/App.html',
     'agrc/widgets/map/BaseMap',
     'agrc/widgets/locate/FindRouteMilepost',
     'app/ZoomToCoord',
     'dojo/dom-class',
-    'agrc/modules/SGIDQuery',
+    'agrc/modules/WebAPI',
     'dojo/string',
     'app/FindAddress',
     'agrc/widgets/locate/MagicZoom',
@@ -20,21 +20,21 @@ define([
 
     'dijit/layout/BorderContainer',
     'dijit/layout/ContentPane'
-], 
+],
 
 function (
-    registry, 
-    dom, 
-    declare, 
-    _WidgetBase, 
-    _TemplatedMixin, 
-    _WidgetsInTemplateMixin, 
-    template, 
-    BaseMap, 
+    registry,
+    dom,
+    declare,
+    _WidgetBase,
+    _TemplatedMixin,
+    _WidgetsInTemplateMixin,
+    template,
+    BaseMap,
     FindRouteMilepost,
     ZoomToCoord,
     domClass,
-    sgidQuery,
+    WebAPI,
     string,
     FindAddress,
     MagicZoom,
@@ -42,8 +42,8 @@ function (
     BaseMapSelector,
     domConstruct
     ) {
-    return declare("app.App", 
-        [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], 
+    return declare('app.App',
+        [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin],
         {
         // summary:
         //      The main widget for the app
@@ -77,7 +77,7 @@ function (
         missingAddressErrTxt: 'Must provide both addressStreet and addressZone parameters!',
 
         // missingRouteMilepostTxt: String
-        missingRouteMilepostTxt: "Must provide both route and milepost parameters!",
+        missingRouteMilepostTxt: 'Must provide both route and milepost parameters!',
 
         // map: agrc.widgets.map.Basemap
         map: null,
@@ -120,11 +120,11 @@ function (
         // milepost: String
         //      Milepost
         milepost: null,
-        
+
         constructor: function (params) {
             // summary:
             //      first function to fire after page loads
-            console.info(this.declaredClass + "::" + arguments.callee.nom, arguments);
+            console.log('app/App:constructor', arguments);
 
             window.AGRC = {
                 widget: this
@@ -136,8 +136,8 @@ function (
         },
         postCreate: function () {
             // summary:
-            //      Fires when 
-            console.log(this.declaredClass + "::" + arguments.callee.nom, arguments);
+            //      Fires when
+            console.log('app/App:postCreate', arguments);
 
             domClass.add(this.domNode, 'claro');
 
@@ -146,19 +146,19 @@ function (
         wireEvents: function () {
             // summary:
             //      wires events for this widget
-            console.log(this.declaredClass + "::wireEvents", arguments);
-        
+            console.log('app/App:wireEvents', arguments);
+
             this.connect(this.clearBtn, 'onclick', 'clearAllFields');
         },
         startup: function () {
             // summary:
             //      Fires after postCreate when all of the child widgets are finished laying out.
-            console.log(this.declaredClass + "::" + arguments.callee.nom, arguments);
+            console.log('app/App:startup', arguments);
 
-            // call this before creating the map to make sure that the map container is 
+            // call this before creating the map to make sure that the map container is
             // the correct size
             this.inherited(arguments);
-            
+
             this.initMap();
 
             this.parseParams();
@@ -166,9 +166,9 @@ function (
         parseParams: function () {
             // summary:
             //      description
-            console.log(this.declaredClass + "::parseParams", arguments);
+            console.log('app/App:parseParams', arguments);
             var that = this;
-        
+
             if (this.UTM_X && this.UTM_Y) {
                 this.connect(this.map, 'onLoad', function () {
                     that.zoomWidget.typeSelect.selectedIndex = 3;
@@ -201,9 +201,9 @@ function (
         initMap: function () {
             // summary:
             //      Sets up the map
-            console.info(this.declaredClass + "::" + arguments.callee.nom, arguments);
+            console.log('app/App:initMap', arguments);
             var that = this;
-            
+
             this.map = new BaseMap(this.mapDiv, {useDefaultBaseMap: false});
             this.bms = new BaseMapSelector({
                 map: this.map,
@@ -233,14 +233,13 @@ function (
 
             this.connect(this.map, 'onClick', 'onMapClick');
         },
-        onMapClick: function (evt) {
-            // summary:
+        onMapClick: function (evt) {// summary:
             //      description
             // evt: Event Object
-            console.log(this.declaredClass + "::onMapClick", arguments);
+            console.log(this.declaredClass + '::onMapClick', arguments);
 
             this.findWidget.graphicsLayer.clear();
-        
+
             this.findWidget._onXHRSuccess({
                 result: {
                     location: {
@@ -257,14 +256,23 @@ function (
             //      queries the feature from sde and zooms to the extent
             // name: String
             // type: Object
-            console.log(this.declaredClass + "::zoomToCounty", arguments);
+            console.log(this.declaredClass + '::zoomToCounty', arguments);
 
             var that = this;
-        
-            var def = sgidQuery.getFeatureGeometry(
-                type.fcName, type.fldName, name);
-            def.then(function (extent) {
-                that.map.setExtent(extent);
+            if (!this.webAPI) {
+                this.webAPI = new WebAPI({
+                    apiKey: AGRC.apiKey
+                });
+            }
+
+            this.webAPI.search(type.fcName, 'shape@envelope', {
+                predicate: type.fldName + ' = ' + name
+            }).then(function (response) {
+                if (response.status === 200) {
+                    that.map.setExtent(response.results[0].geometry);
+                } else {
+                    that.showError(string.substitute(type.errTxt, [name]));
+                }
             }, function () {
                 that.showError(string.substitute(type.errTxt, [name]));
             });
@@ -273,18 +281,18 @@ function (
             // summary:
             //      shows an alert dialog with the error message
             // errMsg: String
-            console.log(this.declaredClass + "::showError", arguments);
-        
+            console.log(this.declaredClass + '::showError', arguments);
+
             // window.alert(errMsg);
         },
         zoomToAddress: function (street, zone) {
             // summary:
-            //      
+            //
             // street: String
             // zone: String
-            console.log(this.declaredClass + "::zoomToAddress", arguments);
+            console.log('app/App:zoomToAddress', arguments);
             var that = this;
-        
+
             this.findAddressWidget.txt_address.value = street;
             this.findAddressWidget.txt_zone.value = zone;
 
@@ -298,7 +306,7 @@ function (
         zoomToRouteMilepost: function (route, milepost) {
             // route: String
             // milepost: String
-            console.log(this.declaredClass + "::zoomToRouteMilepost", arguments);
+            console.log('app/App:zoomToRouteMilepost', arguments);
             var that = this;
 
             this.findWidget.routeTxt.value = route;
@@ -314,16 +322,14 @@ function (
         clearAllFields: function () {
             // summary:
             //      clears all text boxes
-            console.log(this.declaredClass + "::clearAllFields", arguments);
-        
+            console.log('app/App:clearAllFields', arguments);
+
             this.zoomWidget.w_deg_dd.set('Value', '');
             this.zoomWidget.n_deg_dd.set('Value', '');
             this.zoomWidget.w_deg_dm.set('Value', '');
             this.zoomWidget.w_min_dm.set('Value', '');
             this.zoomWidget.n_deg_dm.set('Value', '');
             this.zoomWidget.n_min_dm.set('Value', '');
-            this.zoomWidget.w_deg_dms.set('Value', '');
-            this.zoomWidget.w_min_dms.set('Value', '');
             this.zoomWidget.w_sec_dms.set('Value', '');
             this.zoomWidget.n_deg_dms.set('Value', '');
             this.zoomWidget.n_min_dms.set('Value', '');
@@ -348,8 +354,8 @@ function (
         destroyRecursive: function () {
             // summary:
             //      description
-            console.log(this.declaredClass + "::destroyRecursive", arguments);
-        
+            console.log('app/App:destroyRecursive', arguments);
+
             this.bms.destroyRecursive();
             domConstruct.destroy(this.bms.domNode);
 

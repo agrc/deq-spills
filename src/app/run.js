@@ -1,36 +1,33 @@
 (function () {
-    var projectUrl;
-    if (typeof location === 'object') {
-        // **begin dev code
-        // // running in browser
-        // projectUrl = location.pathname.replace(/\/[^\/]+$/, "") + '/';
-
-        // // jasmine unit tests
-        // if (projectUrl === '/') {
-        //     projectUrl += 'src/';
-        // }
-        // **end dev code
-
-        // ** begin prod code
-        // projectUrl = 'http://mapserv.utah.gov/deqspills/';
-        projectUrl = 'http://test.mapserv.utah.gov/deqspills/';
-        // ** end prod code
-    } else {
-        // running in build system
-        projectUrl = '';
-    }
-    require({
+    var config = {
+        baseUrl: (
+            typeof window !== 'undefined' &&
+            window.dojoConfig &&
+            window.dojoConfig.isJasmineTestRunner
+            ) ? '/src': './',
         packages: [
+            'agrc',
+            'app',
+            'dijit',
+            'dojo',
+            'dojox',
+            'esri',
+            'ijit',
             {
-                name: 'app',
-                location: projectUrl + 'app'
-            },{
-                name: 'agrc',
-                location: projectUrl + 'agrc'
-            },{
-                name: 'ijit',
-                location: projectUrl + 'ijit'
+                name: 'spin',
+                location: 'spinjs',
+                main: 'spin'
             }
         ]
-    }, ['app']);
+    };
+    require(config, [
+        'esri/config',
+
+        'app/config',
+        'dojo/domReady!'
+    ],
+
+    function (esriConfig) {
+        esriConfig.defaults.io.corsEnabledServers.push('mapserv.utah.gov');
+    });
 })();
