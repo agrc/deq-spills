@@ -1,14 +1,12 @@
 <div>
-    <div data-dojo-type="dijit.layout.BorderContainer">
-        <div data-dojo-type="dijit.layout.ContentPane" region='center' class='center-div'>
-            <div data-dojo-attach-point="magicZoomDiv"></div>
-            <div data-dojo-attach-point='mapDiv' class='map-div'></div>
-        </div>
-        <div data-dojo-type="dijit.layout.ContentPane" region='bottom' class='bottom-div'>
-            <button data-dojo-attach-point="clearBtn">Clear All Fields</button>
-            <div data-dojo-attach-point="findAddressDiv"></div>
-            <div data-dojo-attach-point="findRouteDiv"></div>
-            <div data-dojo-attach-point="zoomCoordsDiv"></div>
-        </div>
+    <div class='center-div'>
+        <div data-dojo-attach-point="magicZoomDiv"></div>
+        <div data-dojo-attach-point='mapDiv' class='map-div'></div>
+    </div>
+    <div class='bottom-div'>
+        <button class='btn btn-default' data-dojo-attach-point="clearBtn">Clear All Fields</button>
+        <div data-dojo-attach-point="findAddressDiv"></div>
+        <div data-dojo-attach-point="findRouteDiv"></div>
+        <div data-dojo-attach-point="zoomCoordsDiv"></div>
     </div>
 </div>

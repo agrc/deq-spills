@@ -1,3 +1,5 @@
+/* globals AGRCGLOBAL */
+/* jshint camelcase:false */
 require([
     'app/App',
     'dojo/dom-construct',
@@ -23,7 +25,7 @@ function (
             var defaultParams = {
                 apiKey: apiKey
             };
-            return new App(lang.mixin(defaultParams, params), 
+            return new App(lang.mixin(defaultParams, params),
                 domConstruct.create('div', null, win.body()));
         }
         beforeEach(function () {
@@ -39,17 +41,17 @@ function (
             it('creates a valid object', function () {
                 expect(testWidget).toEqual(jasmine.any(App));
             });
-            it("set's AGRCGLOBAL.apiKey", function () {
+            it('set\'s AGRCGLOBAL.apiKey', function () {
                 expect(AGRCGLOBAL.apiKey).toEqual(apiKey);
             });
-            it("throws an error if no apiKey is passed", function () {
+            it('throws an error if no apiKey is passed', function () {
                 expect(function () {
                     new App();
                 }).toThrow(App.noApiKeyErrorTxt);
             });
         });
         describe('postCreate', function () {
-            it("calls wireEvents", function () {
+            it('calls wireEvents', function () {
                 spyOn(testWidget, 'wireEvents');
 
                 testWidget.postCreate();
@@ -58,7 +60,7 @@ function (
             });
         });
         describe('wireEvents', function () {
-            it("wires the clear button", function () {
+            it('wires the clear button', function () {
                 spyOn(testWidget, 'clearAllFields');
 
                 testWidget.clearBtn.click();
@@ -70,7 +72,7 @@ function (
             beforeEach(function () {
                 testWidget.destroyRecursive();
             });
-            it("calls zoomToFeature if countyName is passed", function () {
+            it('calls zoomToFeature if countyName is passed', function () {
                 var countyName = 'blah';
                 var testWidget2 = createWidget({countyName: countyName});
                 spyOn(testWidget2, 'zoomToFeature');
@@ -79,7 +81,7 @@ function (
                 expect(testWidget2.zoomToFeature)
                     .toHaveBeenCalledWith(countyName, testWidget2.zoomTypes.county);
             });
-            it("calls zoomToFeature if cityName is passed", function () {
+            it('calls zoomToFeature if cityName is passed', function () {
                 var cityName = 'blah';
                 var testWidget2 = createWidget({cityName: cityName});
                 spyOn(testWidget2, 'zoomToFeature');
@@ -88,7 +90,7 @@ function (
                 expect(testWidget2.zoomToFeature)
                     .toHaveBeenCalledWith(cityName, testWidget2.zoomTypes.citytown);
             });
-            it("calls find address if addressStreet and addressZone are passed", function () {
+            it('calls find address if addressStreet and addressZone are passed', function () {
                 var street = 'blah';
                 var zone = 'blah2';
                 var testWidget2 = createWidget({
@@ -101,7 +103,7 @@ function (
                 expect(testWidget2.zoomToAddress)
                     .toHaveBeenCalledWith(street, zone);
             });
-            it("calls find routeMilepost if route and milepost are passed", function () {
+            it('calls find routeMilepost if route and milepost are passed', function () {
                 var rt = 'blah';
                 var mp = '2';
                 var testWidget2 = createWidget({
@@ -114,7 +116,7 @@ function (
                 expect(testWidget2.zoomToRouteMilepost)
                     .toHaveBeenCalledWith(rt, mp);
             });
-            it("throws error if only one address parameter is passed", function () {
+            it('throws error if only one address parameter is passed', function () {
                 var testWidget2 = createWidget({
                     addressStreet: 'blah'
                 });
@@ -122,7 +124,7 @@ function (
                     testWidget2.startup();
                 }).toThrow(testWidget2.missingAddressTxt);
             });
-            it("throws error if only one route/milepost parameter is passed", function () {
+            it('throws error if only one route/milepost parameter is passed', function () {
                 var testWidget2 = createWidget({
                     route: 'blah'
                 });
@@ -130,7 +132,7 @@ function (
                     testWidget2.startup();
                 }).toThrow(testWidget2.missingRouteMilepostTxt);
             });
-            it("implements the correct init params hierarchy", function () {
+            it('implements the correct init params hierarchy', function () {
                 // should be XY -> Address/Rt Milepost -> City -> County -> Zoom to state
                 var testWidget2;
                 function destroy() {
@@ -208,7 +210,7 @@ function (
             });
         });
         describe('zoomToFeature', function () {
-            // it("calls SGIDQuery::getFeatureGeometry", function () {
+            // it('calls SGIDQuery::getFeatureGeometry', function () {
             //     spyOn(sgidQuery, 'getFeatureGeometry').andReturn(new Deferred());
             //     var value = 'blah';
 
@@ -217,7 +219,7 @@ function (
             //     expect(sgidQuery.getFeatureGeometry).toHaveBeenCalledWith(
             //         testWidget.zoomTypes.county.fcName, testWidget.zoomTypes.county.fldName, value);
             // });
-            // it("call show error when no feature is found", function () {
+            // it('call show error when no feature is found', function () {
             //     var def = new Deferred();
             //     spyOn(sgidQuery, 'getFeatureGeometry').andReturn(def);
             //     spyOn(testWidget, 'showError');
@@ -227,7 +229,7 @@ function (
 
             //     expect(testWidget.showError).toHaveBeenCalledWith('County: blah not found!');
             // });
-            // it("zooms the map if successful", function () {
+            // it('zooms the map if successful', function () {
             //     var value = 'blah';
             //     spyOn(testWidget.map, 'setExtent');
             //     var def = new Deferred();
@@ -238,7 +240,7 @@ function (
 
             //     expect(testWidget.map.setExtent).toHaveBeenCalledWith(value);
             // });
-            // it("works with city/towns", function () {
+            // it('works with city/towns', function () {
             //     spyOn(sgidQuery, 'getFeatureGeometry').andReturn(new Deferred());
             //     var value = 'blah';
 
@@ -249,7 +251,7 @@ function (
             // });
         });
         describe('showError', function () {
-            it("calls alert with the message", function () {
+            it('calls alert with the message', function () {
                 var value = 'blah';
                 spyOn(window, 'alert');
 
@@ -267,20 +269,20 @@ function (
                 zone = '84121';
                 widget = testWidget.findAddressWidget;
             });
-            it("sets the address and zone values in the find address widget", function () {
+            it('sets the address and zone values in the find address widget', function () {
                 testWidget.zoomToAddress(add, zone);
 
                 expect(widget.txt_address.value).toEqual(add);
                 expect(widget.txt_zone.value).toEqual(zone);
             });
-            it("call geocodeAddress", function () {
+            it('call geocodeAddress', function () {
                 spyOn(widget, 'geocodeAddress').andReturn(new Deferred());
 
                 testWidget.zoomToAddress(add, zone);
 
                 expect(widget.geocodeAddress).toHaveBeenCalled();
             });
-            it("removes the address params and refires parseParams on error", function () {
+            it('removes the address params and refires parseParams on error', function () {
                 var def = new Deferred();
                 spyOn(testWidget, 'parseParams');
                 spyOn(testWidget.findAddressWidget, 'geocodeAddress').andReturn(def);
@@ -302,20 +304,20 @@ function (
                 milepost = '300';
                 widget = testWidget.findWidget;
             });
-            it("sets the address and zone values in the find address widget", function () {
+            it('sets the address and zone values in the find address widget', function () {
                 testWidget.zoomToRouteMilepost(route, milepost);
 
                 expect(widget.routeTxt.value).toEqual(route);
                 expect(widget.milepostTxt.value).toEqual(milepost);
             });
-            it("call _onFindClick", function () {
+            it('call _onFindClick', function () {
                 spyOn(widget, '_onFindClick').andReturn(new Deferred());
 
                 testWidget.zoomToRouteMilepost(route, milepost);
 
                 expect(widget._onFindClick).toHaveBeenCalled();
             });
-            it("removes the address params and refires parseParams on error", function () {
+            it('removes the address params and refires parseParams on error', function () {
                 var def = new Deferred();
                 spyOn(testWidget, 'parseParams');
                 spyOn(testWidget.findWidget, '_onFindClick').andReturn(def);
@@ -329,7 +331,7 @@ function (
             });
         });
         describe('clearAllFields', function () {
-            it("clear all input fields", function () {
+            it('clear all input fields', function () {
                 testWidget.zoomWidget.w_deg_dm.value = 'blah';
                 testWidget.findAddressWidget.txt_address.value = 'blah';
                 testWidget.magicZoom.textBox.textbox.value = 'blah';

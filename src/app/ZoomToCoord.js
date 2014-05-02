@@ -1,74 +1,75 @@
 define([
-    'dojo/_base/declare', 
+    'dojo/_base/declare',
     'dojo/text!app/templates/ZoomToCoord.html',
-    'agrc/widgets/locate/ZoomToCoords',
-    'app/TRSsearch',
     'dojo/query',
+
+    'agrc/widgets/locate/ZoomToCoords',
+
+    'esri/geometry/Point',
+
+    'app/TRSsearch',
 
     'dijit/form/Select',
     'dijit/form/NumberTextBox'
 ],
 
 function (
-    declare, 
+    declare,
     template,
+    query,
+
     ZoomToCoords,
-    TRSsearch,
-    query
+
+    Point,
+
+    TRSsearch
     ) {
-    return declare('app.ZoomToCoord', [ZoomToCoords], {
+    return declare([ZoomToCoords], {
         widgetsInTemplate: true,
         templateString: template,
-        baseClass: 'zoom-to-coord',
+        baseClass: 'zoom-to-coordinate',
+
+        apiKey: null,
 
         // findRouteWidget: agrc.widgets.locate.FindRouteMilepost
         findRouteWidget: null,
 
         constructor: function () {
-            console.log(this.declaredClass + "::constructor", arguments);
+            console.log('app/ZoomToCoord:constructor', arguments);
         },
         postCreate: function () {
             // summary:
             //      description
-            console.log(this.declaredClass + '::postCreate', arguments);
-        
+            console.log('app/ZoomToCoord:postCreate', arguments);
+
             this.trsSearchWidget = new TRSsearch({
-                map: this.map
+                map: this.map,
+                apiKey: this.apiKey
             }, this.trsSearchWidgetDiv);
 
             this.inherited(arguments);
-        },
-        _wireEvents: function () {
-            // summary:
-            //    Wires events.
-            // tags:
-            //    private
-            console.info(this.declaredClass + '::' + arguments.callee.nom);
 
-            this.connect(this.zoomButton, 'onclick', this._onZoomClick);
-            this.connect(this._geoService, 'onError', this._onGeoServiceError);
-            this.connect(this._geoService, 'onProjectComplete', this._onProjectComplete);
-            this.connect(this.typeSelect, "onchange", this._onTypeChange);
+            this._panelController.panels.trs = this.trsNode;
         },
         _onTypeChange: function (newValue) {
             // summary:
             //      Fires when the user changes the value of the drop-down.
             //      Moves the stack container to the appropriate pane.
-            console.info(this.declaredClass + "::" + arguments.callee.nom);
+            console.log('app/ZoomToCoord:_onTypeChange', arguments);
 
             var child;
 
             switch (newValue.srcElement.value) {
-                case "dd":
+                case 'dd':
                     child = this.dd;
                     break;
-                case "dm":
+                case 'dm':
                     child = this.dm;
                     break;
-                case "dms":
+                case 'dms':
                     child = this.dms;
                     break;
-                case "utm":
+                case 'utm':
                     child = this.utm;
                     break;
                 case 'st':
@@ -81,7 +82,7 @@ function (
         _onZoomClick: function () {
             // summary:
             //      Fires when the user clicks on the Zoom button
-            console.info(this.declaredClass + '::' + arguments.callee.nom);
+            console.log('app/ZoomTo:_onZoomClick', arguments);
 
             if (this.typeSelect.value === 'st') {
                 this.trsSearchWidget.zoom();
@@ -91,7 +92,7 @@ function (
             var coords = this.getCoords(this.typeSelect.value);
             console.log(coords);
 
-            var point = new esri.geometry.Point(coords.x, coords.y, this._inputSpatialReference);
+            var point = new Point(coords.x, coords.y, this._inputSpatialReference);
 
             if (point.spatialReference !== this.map.spatialReference) {
                 this._geoService.project([point], this.map.spatialReference);
@@ -102,15 +103,15 @@ function (
         },
         _zoomToPoint: function (point) {
             // summary:
-            //      Zoom to the point created 
+            //      Zoom to the point created
             // description:
             //      clears old map graphics and centers and zooms on the input point
             // tags:
             //      private
-            console.info(this.declaredClass + "::" + arguments.callee.nom);
+            console.log('app/ZoomToCoord:_zoomToPoint', arguments);
 
             this.findRouteWidget.graphicsLayer.clear();
-        
+
             this.findRouteWidget._onXHRSuccess({
                 result: {
                     location: {
@@ -126,7 +127,7 @@ function (
             //      Handles the callback from the project function on the geometry service
             // geometries: Geometry[]
             //      An array of the projected geometries.
-            console.info(this.declaredClass + '::' + arguments.callee.nom);
+            console.log('app/ZoomToCoord:_onProjectComplete', arguments);
 
             var newPoint = geometries[0];
 
@@ -141,8 +142,8 @@ function (
         clear: function () {
             // summary:
             //      clears the text boxes
-            console.log(this.declaredClass + "::clear", arguments);
-        
+            console.log('app/ZoomToCoord:clear', arguments);
+
             query('input', this.domNode).forEach(function (node) {
                 node.value = '';
             });

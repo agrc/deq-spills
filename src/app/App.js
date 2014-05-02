@@ -1,49 +1,54 @@
+/* jshint camelcase:false */
 define([
-    'dijit/registry',
-    'dojo/dom',
+    'dojo/text!app/templates/App.html',
+
     'dojo/_base/declare',
+    'dojo/dom',
+    'dojo/dom-class',
+    'dojo/dom-construct',
+    'dojo/string',
+    'dojo/aspect',
+
+    'dijit/registry',
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
-    'dojo/text!app/templates/App.html',
+    
     'agrc/widgets/map/BaseMap',
     'agrc/widgets/locate/FindRouteMilepost',
-    'app/ZoomToCoord',
-    'dojo/dom-class',
     'agrc/modules/WebAPI',
-    'dojo/string',
-    'app/FindAddress',
     'agrc/widgets/locate/MagicZoom',
-    'dojo/aspect',
     'agrc/widgets/map/BaseMapSelector',
-    'dojo/dom-construct',
-
-    'dijit/layout/BorderContainer',
-    'dijit/layout/ContentPane'
+    
+    'agrc/widgets/locate/FindAddress',
+    'app/ZoomToCoord'
 ],
 
 function (
-    registry,
-    dom,
+    template,
+
     declare,
+    dom,
+    domClass,
+    domConstruct,
+    string,
+    aspect,
+    
+    registry,
     _WidgetBase,
     _TemplatedMixin,
     _WidgetsInTemplateMixin,
-    template,
+
     BaseMap,
     FindRouteMilepost,
-    ZoomToCoord,
-    domClass,
     WebAPI,
-    string,
-    FindAddress,
     MagicZoom,
-    aspect,
     BaseMapSelector,
-    domConstruct
+
+    FindAddress,
+    ZoomToCoord
     ) {
-    return declare('app.App',
-        [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin],
+    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin],
         {
         // summary:
         //      The main widget for the app
@@ -120,6 +125,9 @@ function (
         // milepost: String
         //      Milepost
         milepost: null,
+
+        // apiKey: String
+        apiKey: null,
 
         constructor: function (params) {
             // summary:
@@ -202,8 +210,6 @@ function (
             // summary:
             //      Sets up the map
             console.log('app/App:initMap', arguments);
-            var that = this;
-
             this.map = new BaseMap(this.mapDiv, {useDefaultBaseMap: false});
             this.bms = new BaseMapSelector({
                 map: this.map,
@@ -213,14 +219,22 @@ function (
             });
             this.bms.startup();
 
-            this.findAddressWidget = new FindAddress({map: this.map}, this.findAddressDiv);
+            this.findAddressWidget = new FindAddress({
+                map: this.map,
+                apiKey: this.apiKey,
+                inline: true
+            }, this.findAddressDiv);
             this.findAddressWidget.startup();
-            aspect.after(this.findAddressWidget, 'onFind', function (result) {
-                that.findWidget._onXHRSuccess(result, true);
-            }, true);
-            this.findWidget = new FindRouteMilepost({map: this.map}, this.findRouteDiv);
+            this.findWidget = new FindRouteMilepost({
+                map: this.map,
+                inline: true,
+                apiKey: this.apiKey
+            }, this.findRouteDiv);
             this.findWidget.startup();
-            this.zoomWidget = new ZoomToCoord({map: this.map, findRouteWidget: this.findWidget}, this.zoomCoordsDiv);
+            this.zoomWidget = new ZoomToCoord({
+                map: this.map, 
+                apiKey: this.apiKey
+            }, this.zoomCoordsDiv);
             this.zoomWidget.startup();
             this.magicZoom = new MagicZoom({
                 promptMessage: 'Please type a city, town, or county...',

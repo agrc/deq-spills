@@ -1,19 +1,13 @@
-.zoom-to-coord, .zoom-to-coord .dijitStackContainer {
-    height: 100%;
-}
-.zoom-to-coord .dijitTextBox {
+@import '../../agrc/resources/locate/ZoomToCoords.css';
+
+.zoom-to-coordinate label.float-label {
     width: 100px;
+    display: inline-block;
+    float: left;
 }
-.zoom-to-coord .inner-table {
-    border-collapse: collapse;
+.zoom-to-coordinate .form-group {
+    margin-top: 4px;
 }
-.zoom-to-coord .dijitStackContainer .dijitContentPane {
-    padding: 0px;
-    height: 100%;
-}
-.zoom-to-coord .dijitStackContainer {
-    margin-left: -2px;
-}
-.zoom-to-coord .dijitInputInner {
-    padding: 0 !important;
+.zoom-to-coordinate form>select {
+    margin-bottom: 4px;
 }
