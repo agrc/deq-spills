@@ -1,12 +1,12 @@
 {
     "folders": [{
         "folder_exclude_patterns": [
-            // "dist",
+            "dist",
             "src/dojo",
             "src/dojox",
             "src/util",
             "src/dijit",
-            // "src/esri",
+            "src/esri",
             "node_modules",
             ".grunt"
         ],

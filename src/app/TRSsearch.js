@@ -9,7 +9,7 @@ define([
     TRSsearch
     ) {
     // this is just to change the layout from veritcal to horizontal
-    return declare('app.TRSsearch', [TRSsearch], {
+    return declare([TRSsearch], {
         templateString: template
     });
 });
