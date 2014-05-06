@@ -1,15 +1,15 @@
 <div>
     <form data-dojo-attach-point="formNode" class='form-inline'>
     <div class="form-group">
-    <label>Coordinate Type</label>
-    <select data-dojo-attach-event="change:_updateView" class='form-control'>
-        <option value='dd'>Decimal Degrees</option>
-        <option value="dm">Degrees, Minutes</option>
-        <option value="dms">Degrees, Minutes, Seconds</option>
-        <option value="utm">Universal Transverse Mercator</option>
-        <option value="trs">Section/Township</option>
-    </select>
-        <button dojoattachpoint='zoomNode' class='btn btn-default'>Find</button>
+        <label>Coordinate Type</label>
+        <select data-dojo-attach-point="typeSelect" data-dojo-attach-event="change:_updateView" class='form-control'>
+            <option value='dd'>Decimal Degrees</option>
+            <option value="dm">Degrees, Minutes</option>
+            <option value="dms">Degrees, Minutes, Seconds</option>
+            <option value="utm">Universal Transverse Mercator</option>
+            <option value="trs">Section/Township</option>
+        </select>
+        <button class="btn btn-primary disabled text" disabled="true" data-dojo-attach-point="zoomNode" data-dojo-attach-event="click:zoom">Zoom</button>
     </div>
         <div class="show" data-dojo-attach-point="ddNode">
             <div class="form-group">

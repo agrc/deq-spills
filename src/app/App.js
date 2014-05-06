@@ -3,41 +3,58 @@ define([
     'dojo/text!app/templates/App.html',
 
     'dojo/_base/declare',
+    'dojo/_base/lang',
     'dojo/dom',
     'dojo/dom-class',
     'dojo/dom-construct',
     'dojo/string',
     'dojo/aspect',
+    'dojo/query',
 
     'dijit/registry',
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
-    
+
+    'esri/Graphic',
+    'esri/geometry/Polygon',
+    'esri/SpatialReference',
+    'esri/geometry/Point',
+
     'agrc/widgets/map/BaseMap',
     'agrc/widgets/locate/FindRouteMilepost',
     'agrc/modules/WebAPI',
     'agrc/widgets/locate/MagicZoom',
     'agrc/widgets/map/BaseMapSelector',
-    
+
     'agrc/widgets/locate/FindAddress',
-    'app/ZoomToCoord'
+    'app/ZoomToCoord',
+
+
+    'dojo/NodeList-manipulate'
 ],
 
 function (
     template,
 
     declare,
+    lang,
     dom,
     domClass,
     domConstruct,
     string,
     aspect,
-    
+    query,
+
     registry,
     _WidgetBase,
     _TemplatedMixin,
     _WidgetsInTemplateMixin,
+
+    Graphic,
+    Polygon,
+    SpatialReference,
+    Point,
 
     BaseMap,
     FindRouteMilepost,
@@ -60,21 +77,23 @@ function (
         // zoomWidget: app.ZoomToCoords
         zoomWidget: null,
 
-        // findWidget: agrc.widgets.locate.FindRouteMilepost
-        findWidget: null,
+        // findRouteMilepostWidget: agrc.widgets.locate.FindRouteMilepost
+        findRouteMilepostWidget: null,
 
         zoomTypes: {
             county: {
                 name: 'county',
                 fcName: 'SGID10.BOUNDARIES.Counties',
                 fldName: 'NAME',
-                errTxt: 'County: ${0} not found!'
+                errTxt: 'County: ${0} not found!',
+                type: 'polygon'
             },
             citytown: {
                 name: 'citytown',
                 fcName: 'SGID10.SOCIETY.UDOTMAP_CityLocations',
                 fldName: 'NAME',
-                errTxt: 'City/Town: ${0} not found!'
+                errTxt: 'City/Town: ${0} not found!',
+                type: 'point'
             }
         },
 
@@ -137,7 +156,7 @@ function (
             window.AGRC = {
                 widget: this
             };
-            if (!params.apiKey) {
+            if (!params || !params.apiKey) {
                 throw this.noApiKeyErrorTxt;
             }
             window.AGRCGLOBAL.apiKey = params.apiKey;
@@ -163,13 +182,17 @@ function (
             //      Fires after postCreate when all of the child widgets are finished laying out.
             console.log('app/App:startup', arguments);
 
+            var that = this;
+
             // call this before creating the map to make sure that the map container is
             // the correct size
             this.inherited(arguments);
 
             this.initMap();
 
-            this.parseParams();
+            this.map.on('load', function () {
+                that.parseParams();
+            });
         },
         parseParams: function () {
             // summary:
@@ -181,14 +204,10 @@ function (
                 this.connect(this.map, 'onLoad', function () {
                     that.zoomWidget.typeSelect.selectedIndex = 3;
                     that.zoomWidget.typeSelect.value = 'utm';
-                    that.zoomWidget._onTypeChange({
-                        srcElement: {
-                            value: 'utm'
-                        }
-                    });
-                    that.zoomWidget.x_utm.set('value', that.UTM_X);
-                    that.zoomWidget.y_utm.set('value', that.UTM_Y);
-                    that.zoomWidget._onZoomClick();
+                    that.zoomWidget._updateView({target: {value: 'utm'}});
+                    query('input[name="x"]', that.zoomWidget.utmNode)[0].value = that.UTM_X;
+                    query('input[name="y"]', that.zoomWidget.utmNode)[0].value = that.UTM_Y;
+                    that.zoomWidget.zoom();
                 });
             } else if (this.addressStreet && !this.addressZone ||
                 !this.addressStreet && this.addressZone) {
@@ -210,6 +229,8 @@ function (
             // summary:
             //      Sets up the map
             console.log('app/App:initMap', arguments);
+
+            var that = this;
             this.map = new BaseMap(this.mapDiv, {useDefaultBaseMap: false});
             this.bms = new BaseMapSelector({
                 map: this.map,
@@ -225,14 +246,20 @@ function (
                 inline: true
             }, this.findAddressDiv);
             this.findAddressWidget.startup();
-            this.findWidget = new FindRouteMilepost({
+            aspect.after(this.findAddressWidget, 'onFind', function (result) {
+                that.defineLocation(result.location);
+            }, true);
+            this.findRouteMilepostWidget = new FindRouteMilepost({
                 map: this.map,
                 inline: true,
                 apiKey: this.apiKey
             }, this.findRouteDiv);
-            this.findWidget.startup();
+            this.findRouteMilepostWidget.startup();
+            aspect.after(this.findRouteMilepostWidget, 'onFind', function (location) {
+                that.defineLocation(location);
+            }, true);
             this.zoomWidget = new ZoomToCoord({
-                map: this.map, 
+                map: this.map,
                 apiKey: this.apiKey
             }, this.zoomCoordsDiv);
             this.zoomWidget.startup();
@@ -246,23 +273,49 @@ function (
             this.magicZoom.startup();
 
             this.connect(this.map, 'onClick', 'onMapClick');
+
+            this.own(
+                aspect.after(this.zoomWidget, '_projectionComplete', function (response) {
+                    that.addGraphic(response.geometries[0]);
+                }, true),
+                aspect.around(this.zoomWidget, '_getPoint', function (_getPoint) {
+                    var pnt = lang.hitch(that.zoomWidget, _getPoint)();
+                    if (!isNaN(pnt.x) && pnt.spatialReference.wkid === that.map.spatialReference.wkid) {
+                        that.addGraphic(pnt);
+                    }
+                })
+            );
+        },
+        defineLocation: function (location) {
+            // summary:
+            //      fires the event
+            // location: Object
+            console.log('app/App::defineLocation', arguments);
+        
+            this.emit('location-defined', {
+                UTM_X: location.x,
+                UTM_Y: location.y
+            });
         },
         onMapClick: function (evt) {// summary:
             //      description
             // evt: Event Object
             console.log(this.declaredClass + '::onMapClick', arguments);
 
-            this.findWidget.graphicsLayer.clear();
+            this.addGraphic(evt.mapPoint);
 
-            this.findWidget._onXHRSuccess({
-                result: {
-                    location: {
-                        x: evt.mapPoint.x,
-                        y: evt.mapPoint.y
-                    }
-                }
-            }, true);
-
+            this.defineLocation(evt.mapPoint);
+        },
+        addGraphic: function (point) {
+            // summary:
+            //      adds the point as a graphic to the map, clear any pre-existing graphics
+            // point: Point
+            console.log('app/App::addGraphic', arguments);
+        
+            this.findRouteMilepostWidget.graphicsLayer.clear();
+            this.findAddressWidget.graphicsLayer.clear();
+            this.map.graphics.clear();
+            this.map.graphics.add(new Graphic(point, this.findRouteMilepostWidget.symbol));
             this.zoomWidget.clear();
         },
         zoomToFeature: function (name, type) {
@@ -270,34 +323,39 @@ function (
             //      queries the feature from sde and zooms to the extent
             // name: String
             // type: Object
-            console.log(this.declaredClass + '::zoomToCounty', arguments);
+            console.log('app/App:zoomToFeature', arguments);
 
             var that = this;
             if (!this.webAPI) {
                 this.webAPI = new WebAPI({
-                    apiKey: AGRC.apiKey
+                    apiKey: this.apiKey
                 });
             }
 
-            this.webAPI.search(type.fcName, 'shape@envelope', {
-                predicate: type.fldName + ' = ' + name
-            }).then(function (response) {
-                if (response.status === 200) {
-                    that.map.setExtent(response.results[0].geometry);
+            this.webAPI.search(type.fcName, ['shape@envelope'], {
+                predicate: type.fldName + ' = \'' + name + '\''
+            }).then(function (results) {
+                var geo = results[0].geometry;
+                if (type.type === 'point') {
+                    var pnt = new Point(geo.rings[0][0], new SpatialReference(26912));
+                    that.map.centerAndZoom(pnt, 9);
                 } else {
-                    that.showError(string.substitute(type.errTxt, [name]));
+                    var p = new Polygon(results[0].geometry);
+                    p.setSpatialReference(new SpatialReference(26912));
+                    that.map.setExtent(p.getExtent());
                 }
             }, function () {
                 that.showError(string.substitute(type.errTxt, [name]));
             });
         },
-        showError: function (/*errMsg*/) {
+        showError: function (errMsg) {
             // summary:
             //      shows an alert dialog with the error message
             // errMsg: String
             console.log(this.declaredClass + '::showError', arguments);
 
-            // window.alert(errMsg);
+            this.errMsg.innerHTML = errMsg;
+            domClass.remove(this.errMsg, 'hidden');
         },
         zoomToAddress: function (street, zone) {
             // summary:
@@ -307,10 +365,13 @@ function (
             console.log('app/App:zoomToAddress', arguments);
             var that = this;
 
-            this.findAddressWidget.txt_address.value = street;
-            this.findAddressWidget.txt_zone.value = zone;
+            this.findAddressWidget.txtAddress.value = street;
+            this.findAddressWidget.txtZone.value = zone;
 
-            this.findAddressWidget.geocodeAddress().then(null, function () {
+            this.findAddressWidget._invokeWebService({
+                street: street,
+                zone: zone
+            }).then(lang.hitch(that.findAddressWidget, '_onFind'), function () {
                 delete that.addressStreet;
                 delete that.addressZone;
 
@@ -323,10 +384,10 @@ function (
             console.log('app/App:zoomToRouteMilepost', arguments);
             var that = this;
 
-            this.findWidget.routeTxt.value = route;
-            this.findWidget.milepostTxt.value = milepost;
+            this.findRouteMilepostWidget.routeTxt.value = route;
+            this.findRouteMilepostWidget.milepostTxt.value = milepost;
 
-            this.findWidget._onFindClick().then(null, function () {
+            this.findRouteMilepostWidget._onFindClick().then(null, function () {
                 delete that.route;
                 delete that.milepost;
 
@@ -338,32 +399,19 @@ function (
             //      clears all text boxes
             console.log('app/App:clearAllFields', arguments);
 
-            this.zoomWidget.w_deg_dd.set('Value', '');
-            this.zoomWidget.n_deg_dd.set('Value', '');
-            this.zoomWidget.w_deg_dm.set('Value', '');
-            this.zoomWidget.w_min_dm.set('Value', '');
-            this.zoomWidget.n_deg_dm.set('Value', '');
-            this.zoomWidget.n_min_dm.set('Value', '');
-            this.zoomWidget.w_sec_dms.set('Value', '');
-            this.zoomWidget.n_deg_dms.set('Value', '');
-            this.zoomWidget.n_min_dms.set('Value', '');
-            this.zoomWidget.n_sec_dms.set('Value', '');
-            this.zoomWidget.x_utm.set('Value', '');
-            this.zoomWidget.y_utm.set('Value', '');
+            query('input[type="text"]', this.zoomWidget.domNode).val('');
 
-            this.findAddressWidget.txt_address.value = '';
-            this.findAddressWidget.txt_zone.value = '';
+            this.findAddressWidget.txtAddress.value = '';
+            this.findAddressWidget.txtZone.value = '';
 
-            this.findWidget.routeTxt.value = '';
-            this.findWidget.milepostTxt.value = '';
+            this.findRouteMilepostWidget.routeTxt.value = '';
+            this.findRouteMilepostWidget.milepostTxt.value = '';
 
-            this.magicZoom.textBox.textbox.value = '';
+            this.magicZoom.textBox.value = '';
 
             var ts = this.zoomWidget.trsSearchWidget;
-            ts._slRB.set('Checked', true);
-            ts._townshipDD.set('Value', '');
-            ts._rangeDD.set('Value', '');
-            ts._sectionDD.set('Value', '');
+            query('input[type="radio"]', ts.domNode).val(false);
+            query('select', ts.domNode).val('');
         },
         destroyRecursive: function () {
             // summary:

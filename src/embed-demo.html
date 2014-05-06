@@ -43,10 +43,10 @@
             // must always call startup
             app.startup();
 
-            AGRC.widget.findWidget.onFind = function (result) {
+            app.on('location-defined', function (result) {
                 console.log('result.UTM_X', result.UTM_X);
                 console.log('result.UTM_Y', result.UTM_Y);
-            };
+            });
         };
 
         window.loadMapWithoutParams = function () {

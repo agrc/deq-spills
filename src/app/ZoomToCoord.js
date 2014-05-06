@@ -2,6 +2,7 @@ define([
     'dojo/_base/declare',
     'dojo/text!app/templates/ZoomToCoord.html',
     'dojo/query',
+    'dojo/aspect',
 
     'agrc/widgets/locate/ZoomToCoords',
 
@@ -17,6 +18,7 @@ function (
     declare,
     template,
     query,
+    aspect,
 
     ZoomToCoords,
 
@@ -42,102 +44,34 @@ function (
             //      description
             console.log('app/ZoomToCoord:postCreate', arguments);
 
+            var that = this;
+
             this.trsSearchWidget = new TRSsearch({
                 map: this.map,
                 apiKey: this.apiKey
             }, this.trsSearchWidgetDiv);
+            aspect.after(this, '_updateView', function (evt) {
+                if (evt.target.value === 'trs') {
+                    that._enableZoom(null, null, true);
+                }
+            }, true);
 
             this.inherited(arguments);
 
+            this._panelController.visible = this.ddNode;
+
             this._panelController.panels.trs = this.trsNode;
         },
-        _onTypeChange: function (newValue) {
+        zoom: function () {
             // summary:
-            //      Fires when the user changes the value of the drop-down.
-            //      Moves the stack container to the appropriate pane.
-            console.log('app/ZoomToCoord:_onTypeChange', arguments);
-
-            var child;
-
-            switch (newValue.srcElement.value) {
-                case 'dd':
-                    child = this.dd;
-                    break;
-                case 'dm':
-                    child = this.dm;
-                    break;
-                case 'dms':
-                    child = this.dms;
-                    break;
-                case 'utm':
-                    child = this.utm;
-                    break;
-                case 'st':
-                    child = this.st;
-                    break;
-            }
-
-            this.stackContainer.selectChild(child);
-        },
-        _onZoomClick: function () {
-            // summary:
-            //      Fires when the user clicks on the Zoom button
-            console.log('app/ZoomTo:_onZoomClick', arguments);
-
-            if (this.typeSelect.value === 'st') {
+            //      overridden
+            console.log('app/ZoomToCoord::zoom', arguments);
+        
+            if (this._panelController.visible === this.trsNode) {
                 this.trsSearchWidget.zoom();
-                return;
+            } else {
+                this.inherited(arguments);
             }
-
-            var coords = this.getCoords(this.typeSelect.value);
-            console.log(coords);
-
-            var point = new Point(coords.x, coords.y, this._inputSpatialReference);
-
-            if (point.spatialReference !== this.map.spatialReference) {
-                this._geoService.project([point], this.map.spatialReference);
-            }
-            else {
-                this._zoomToPoint(point);
-            }
-        },
-        _zoomToPoint: function (point) {
-            // summary:
-            //      Zoom to the point created
-            // description:
-            //      clears old map graphics and centers and zooms on the input point
-            // tags:
-            //      private
-            console.log('app/ZoomToCoord:_zoomToPoint', arguments);
-
-            this.findRouteWidget.graphicsLayer.clear();
-
-            this.findRouteWidget._onXHRSuccess({
-                result: {
-                    location: {
-                        x: point.x,
-                        y: point.y
-                    }
-                },
-                status: 200
-            });
-        },
-        _onProjectComplete: function (geometries) {
-            // summary:
-            //      Handles the callback from the project function on the geometry service
-            // geometries: Geometry[]
-            //      An array of the projected geometries.
-            console.log('app/ZoomToCoord:_onProjectComplete', arguments);
-
-            var newPoint = geometries[0];
-
-            // check for bad point
-            if (isNaN(newPoint.x)) {
-                alert('Bad point returned. Please check your coordinates.');
-                return;
-            }
-
-            this._zoomToPoint(newPoint);
         },
         clear: function () {
             // summary:
