@@ -17,6 +17,14 @@
                 name: 'spin',
                 location: 'spinjs',
                 main: 'spin'
+            }, {
+                name: 'jquery',
+                location: 'jquery/dist',
+                main: 'jquery'
+            }, {
+                name: 'bootstrap',
+                location: 'bootstrap/dist/js',
+                main: 'bootstrap'
             }
         ]
     };

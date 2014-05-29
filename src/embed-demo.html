@@ -37,7 +37,8 @@
             // county name
             var app = new AGRCMap({
                 countyName: 'KANE',
-                apiKey: apiKey
+                apiKey: apiKey,
+                layers: [0, 4, 5, 10]
             }, document.getElementById('AGRCMap'));
 
             // must always call startup
@@ -51,7 +52,8 @@
 
         window.loadMapWithoutParams = function () {
             var app = new AGRCMap({
-                apiKey: apiKey
+                apiKey: apiKey,
+                layers: [0, 4, 5, 10]
             }, document.getElementById('AGRCMap'));
             app.startup();
 
@@ -64,21 +66,24 @@
             var app = new AGRCMap({
                 UTM_X: 418502,
                 UTM_Y: 4519515,
-                apiKey: apiKey
+                apiKey: apiKey,
+                layers: [0, 4, 5, 10]
             }, document.getElementById('AGRCMap'));
             app.startup();
         };
         window.loadMapWithCounty = function () {
             var app = new AGRCMap({
                 countyName: 'KANE',
-                apiKey: apiKey
+                apiKey: apiKey,
+                layers: [0, 4, 5, 10]
             }, document.getElementById('AGRCMap'));
             app.startup();
         };
         window.loadMapWithCity = function () {
             var app = new AGRCMap({
                 cityName: 'Cottonwood Heights',
-                apiKey: apiKey
+                apiKey: apiKey,
+                layers: [0, 4, 5, 10]
             }, document.getElementById('AGRCMap'));
             app.startup();
         };
@@ -86,7 +91,8 @@
             var app = new AGRCMap({
                 addressStreet: '2832 banbury rd',
                 addressZone: '84121',
-                apiKey: apiKey
+                apiKey: apiKey,
+                layers: [0, 4, 5, 10]
             }, document.getElementById('AGRCMap'));
             app.startup();
         };
@@ -94,7 +100,8 @@
             var app = new AGRCMap({
                 milepost: '300',
                 route: '15',
-                apiKey: apiKey
+                apiKey: apiKey,
+                layers: [0, 4, 5, 10]
             }, document.getElementById('AGRCMap'));
             app.startup();
         };
@@ -108,7 +115,8 @@
                 addressStreet: '2832 banbury rd',
                 addressZone: '84121',
                 milepost: '300',
-                route: '15'
+                route: '15',
+                layers: [0, 4, 5, 10]
             }, document.getElementById('AGRCMap'));
             app.startup();
         };
