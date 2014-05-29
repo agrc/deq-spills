@@ -80,7 +80,7 @@ function (
                 var countyName = 'blah';
                 var testWidget2 = createWidget({countyName: countyName});
                 spyOn(testWidget2, 'zoomToFeature');
-                testWidget2.startup();
+                testWidget2.parseParams();
 
                 expect(testWidget2.zoomToFeature)
                     .toHaveBeenCalledWith(countyName, testWidget2.zoomTypes.county);
@@ -89,7 +89,7 @@ function (
                 var cityName = 'blah';
                 var testWidget2 = createWidget({cityName: cityName});
                 spyOn(testWidget2, 'zoomToFeature');
-                testWidget2.startup();
+                testWidget2.parseParams();
 
                 expect(testWidget2.zoomToFeature)
                     .toHaveBeenCalledWith(cityName, testWidget2.zoomTypes.citytown);
@@ -102,7 +102,7 @@ function (
                     addressZone: zone
                 });
                 spyOn(testWidget2, 'zoomToAddress');
-                testWidget2.startup();
+                testWidget2.parseParams();
 
                 expect(testWidget2.zoomToAddress)
                     .toHaveBeenCalledWith(street, zone);
@@ -115,7 +115,7 @@ function (
                     milepost: mp
                 });
                 spyOn(testWidget2, 'zoomToRouteMilepost');
-                testWidget2.startup();
+                testWidget2.parseParams();
 
                 expect(testWidget2.zoomToRouteMilepost)
                     .toHaveBeenCalledWith(rt, mp);
@@ -125,7 +125,7 @@ function (
                     addressStreet: 'blah'
                 });
                 expect(function () {
-                    testWidget2.startup();
+                    testWidget2.parseParams();
                 }).toThrow(testWidget2.missingAddressErrTxt);
             });
             it('throws error if only one route/milepost parameter is passed', function () {
@@ -133,7 +133,7 @@ function (
                     route: 'blah'
                 });
                 expect(function () {
-                    testWidget2.startup();
+                    testWidget2.parseParams();
                 }).toThrow(testWidget2.missingRouteMilepostTxt);
             });
         });
@@ -192,7 +192,7 @@ function (
             beforeEach(function () {
                 route = '15';
                 milepost = '300';
-                widget = testWidget.findWidget;
+                widget = testWidget.findRouteMilepostWidget;
             });
             it('sets the address and zone values in the find address widget', function () {
                 testWidget.zoomToRouteMilepost(route, milepost);
@@ -210,7 +210,7 @@ function (
             it('removes the address params and refires parseParams on error', function () {
                 var def = new Deferred();
                 spyOn(testWidget, 'parseParams');
-                spyOn(testWidget.findWidget, '_onFindClick').and.returnValue(def);
+                spyOn(testWidget.findRouteMilepostWidget, '_onFindClick').and.returnValue(def);
 
                 testWidget.zoomToRouteMilepost(route, milepost);
                 def.reject();
