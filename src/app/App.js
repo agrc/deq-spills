@@ -20,15 +20,17 @@ define([
     'esri/geometry/Polygon',
     'esri/SpatialReference',
     'esri/geometry/Point',
+    'esri/layers/ArcGISDynamicMapServiceLayer',
 
     'agrc/widgets/map/BaseMap',
     'agrc/widgets/locate/FindRouteMilepost',
     'agrc/modules/WebAPI',
     'agrc/widgets/locate/MagicZoom',
     'agrc/widgets/map/BaseMapSelector',
-
     'agrc/widgets/locate/FindAddress',
+
     'app/ZoomToCoord',
+    'app/MapLayers',
 
 
     'dojo/NodeList-manipulate'
@@ -55,6 +57,7 @@ function (
     Polygon,
     SpatialReference,
     Point,
+    ArcGISDynamicMapServiceLayer,
 
     BaseMap,
     FindRouteMilepost,
@@ -63,7 +66,8 @@ function (
     BaseMapSelector,
 
     FindAddress,
-    ZoomToCoord
+    ZoomToCoord,
+    MapLayers
     ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin],
         {
@@ -109,8 +113,16 @@ function (
         // noApiKeyErrorTxt: String
         noApiKeyErrorTxt: 'Must provide an apiKey parameter!',
 
+        // deqMapServiceLayer: ArcGISDynamicMapServiceLayer
+        deqMapServiceLayer: null,
+
 
         // properties passed in via the constructor
+
+        // layers: Number[]
+        //      The map service layer indices of the layers that you want
+        //      to make available in the layers popup
+        layers: null,
 
         // UTM_X: Number
         //      passed in to initialize the widget with coords
@@ -192,23 +204,25 @@ function (
 
             this.map.on('load', function () {
                 that.parseParams();
+
+                that.mapLayers = new MapLayers({
+                    btn: that.layersBtn,
+                    layers: that.layers
+                });
             });
         },
         parseParams: function () {
             // summary:
             //      description
             console.log('app/App:parseParams', arguments);
-            var that = this;
 
             if (this.UTM_X && this.UTM_Y) {
-                this.connect(this.map, 'onLoad', function () {
-                    that.zoomWidget.typeSelect.selectedIndex = 3;
-                    that.zoomWidget.typeSelect.value = 'utm';
-                    that.zoomWidget._updateView({target: {value: 'utm'}});
-                    query('input[name="x"]', that.zoomWidget.utmNode)[0].value = that.UTM_X;
-                    query('input[name="y"]', that.zoomWidget.utmNode)[0].value = that.UTM_Y;
-                    that.zoomWidget.zoom();
-                });
+                this.zoomWidget.typeSelect.selectedIndex = 3;
+                this.zoomWidget.typeSelect.value = 'utm';
+                this.zoomWidget._updateView({target: {value: 'utm'}});
+                query('input[name="x"]', this.zoomWidget.utmNode)[0].value = this.UTM_X;
+                query('input[name="y"]', this.zoomWidget.utmNode)[0].value = this.UTM_Y;
+                this.zoomWidget.zoom();
             } else if (this.addressStreet && !this.addressZone ||
                 !this.addressStreet && this.addressZone) {
                 throw this.missingAddressErrTxt;
@@ -272,7 +286,7 @@ function (
             }, this.magicZoomDiv);
             this.magicZoom.startup();
 
-            this.connect(this.map, 'onClick', 'onMapClick');
+            this.map.on('click', lang.hitch(this, 'onMapClick'));
 
             this.own(
                 aspect.after(this.zoomWidget, '_projectionComplete', function (response) {
@@ -300,7 +314,12 @@ function (
         onMapClick: function (evt) {// summary:
             //      description
             // evt: Event Object
-            console.log(this.declaredClass + '::onMapClick', arguments);
+            console.log('app/App:onMapClick', arguments);
+
+            // don't do anything if a graphic was clicked
+            if (evt.graphic) {
+                return;
+            }
 
             this.addGraphic(evt.mapPoint);
 
@@ -352,7 +371,7 @@ function (
             // summary:
             //      shows an alert dialog with the error message
             // errMsg: String
-            console.log(this.declaredClass + '::showError', arguments);
+            console.log('app/App:showError', arguments);
 
             this.errMsg.innerHTML = errMsg;
             domClass.remove(this.errMsg, 'hidden');

@@ -18,7 +18,12 @@ function (
         // apiKey: String
         //      Key for api.mapserv.utah.gov services
         //      Passed in as a parameter to the app
-        apiKey: null
+        apiKey: null,
+
+        // urls: Object
+        urls: {
+            mapservice: '/arcgis/rest/services/DEQSpills/MapServer'
+        }
     };
 
     window.AGRCMap = App;

@@ -234,5 +234,16 @@ function (
                 expect(testWidget.magicZoom.textBox.value).toEqual('');
             });
         });
+        describe('onMapClick', function () {
+            it('doesnt do anything if a graphic was clicked', function () {
+                spyOn(testWidget, 'addGraphic');
+                spyOn(testWidget, 'defineLocation');
+
+                testWidget.onMapClick({graphic: {}});
+
+                expect(testWidget.addGraphic).not.toHaveBeenCalled();
+                expect(testWidget.defineLocation).not.toHaveBeenCalled();
+            });
+        });
     });
 });
