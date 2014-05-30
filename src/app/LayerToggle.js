@@ -3,6 +3,7 @@ define([
 
     'dojo/_base/declare',
     'dojo/_base/lang',
+    'dojo/_base/array',
 
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
@@ -16,6 +17,7 @@ define([
 
     declare,
     lang,
+    array,
 
     _WidgetBase,
     _TemplatedMixin,
@@ -46,8 +48,12 @@ define([
 
             var that = this;
 
-            this.layer = new FeatureLayer(this.url, {visible: true});
+            this.layer = new FeatureLayer(this.url, {
+                visible: true,
+                outFields: window.AGRCGLOBAL.deqLayerFields
+            });
             window.AGRC.widget.map.addLayer(this.layer);
+            window.AGRC.widget.map.addLoaderToLayer(this.layer);
             this.layer.on('load', function () {
                 that.nameSpan.innerHTML = that.layer.name;
 
@@ -67,7 +73,7 @@ define([
             // summary:
             //      fires when the user toggles the checkbox
             console.log('app/MapLayers:onChange', arguments);
-        
+
             this.layer.setVisibility(this.checkbox.checked);
         },
         onLayerClick: function (evt) {
@@ -75,8 +81,17 @@ define([
             //      fires when the user clicks on a graphic from this feature layer
             // evt: Event Object
             console.log('app/LayerToggle:onLayerClick', arguments);
-        
-            
+
+            var g = evt.graphic;
+            var location = {
+                x: g.geometry.x,
+                y: g.geometry.y
+            };
+            array.forEach(window.AGRCGLOBAL.deqLayerFields, function (f) {
+                location[f] = g.attributes[f];
+            });
+
+            window.AGRC.widget.defineLocation(location);
         }
     });
 });

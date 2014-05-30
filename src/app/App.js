@@ -216,12 +216,12 @@ function (
             this.initMap();
 
             this.map.on('load', function () {
-                that.parseParams();
-
                 that.mapLayers = new MapLayers({
                     btn: that.layersBtn,
                     layers: that.layers
                 });
+                
+                that.parseParams();
             });
         },
         parseParams: function () {
@@ -270,7 +270,8 @@ function (
             this.findAddressWidget = new FindAddress({
                 map: this.map,
                 apiKey: this.apiKey,
-                inline: true
+                inline: true,
+                symbol: window.AGRCGLOBAL.symbol
             }, this.findAddressDiv);
             this.findAddressWidget.startup();
             aspect.after(this.findAddressWidget, 'onFind', function (result) {
@@ -279,7 +280,8 @@ function (
             this.findRouteMilepostWidget = new FindRouteMilepost({
                 map: this.map,
                 inline: true,
-                apiKey: this.apiKey
+                apiKey: this.apiKey,
+                symbol: window.AGRCGLOBAL.symbol
             }, this.findRouteDiv);
             this.findRouteMilepostWidget.startup();
             aspect.after(this.findRouteMilepostWidget, 'onFind', function (location) {
@@ -287,7 +289,8 @@ function (
             }, true);
             this.zoomWidget = new ZoomToCoord({
                 map: this.map,
-                apiKey: this.apiKey
+                apiKey: this.apiKey,
+                symbol: window.AGRCGLOBAL.symbol
             }, this.zoomCoordsDiv);
             this.zoomWidget.startup();
             this.magicZoom = new MagicZoom({
@@ -304,12 +307,18 @@ function (
             this.own(
                 aspect.after(this.zoomWidget, '_projectionComplete', function (response) {
                     that.addGraphic(response.geometries[0]);
+                    that.defineLocation(response.geometies[0]);
                 }, true),
                 aspect.around(this.zoomWidget, '_getPoint', function (_getPoint) {
-                    var pnt = lang.hitch(that.zoomWidget, _getPoint)();
-                    if (!isNaN(pnt.x) && pnt.spatialReference.wkid === that.map.spatialReference.wkid) {
-                        that.addGraphic(pnt);
-                    }
+                    return function () {
+                        var pnt = lang.hitch(that.zoomWidget, _getPoint)();
+                        if (pnt && !isNaN(pnt.x) && pnt.spatialReference.wkid === that.map.spatialReference.wkid) {
+                            that.addGraphic(pnt);
+                            that.defineLocation(pnt);
+                        }
+                        
+                        return pnt;
+                    };
                 })
             );
         },
@@ -322,6 +331,8 @@ function (
             var that = this;
             var promises = [];
             var noFeatFound = 'no feature found';
+
+            this.map.showLoader();
 
             array.forEach(window.AGRCGLOBAL.queries, function (q) {
                 promises.push(
@@ -353,6 +364,7 @@ function (
 
             all(promises).always(function () {
                 that.emit('location-defined', location);
+                that.map.hideLoader();
             });
         },
         onMapClick: function (evt) {
@@ -361,14 +373,13 @@ function (
             // evt: Event Object
             console.log('app/App:onMapClick', arguments);
 
-            // don't do anything if a graphic was clicked
-            if (evt.graphic) {
-                return;
+            if (!evt.graphic) {
+                this.addGraphic(evt.mapPoint);
+                this.defineLocation(evt.mapPoint);
+            } else {
+                this.addGraphic(evt.graphic.geometry);
+                // defineLocation is called from LayerToggle:onClick
             }
-
-            this.addGraphic(evt.mapPoint);
-
-            this.defineLocation(evt.mapPoint);
         },
         addGraphic: function (point) {
             // summary:

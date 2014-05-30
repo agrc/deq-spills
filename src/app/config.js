@@ -1,10 +1,18 @@
 define([
-    'app/App'
+    'app/App',
+
+    'esri/symbols/SimpleMarkerSymbol',
+
+    'dojo/_base/Color'
 
 ],
 
 function (
-    App
+    App,
+
+    SimpleMarkerSymbol,
+
+    Color
     ) {
     window.AGRCGLOBAL = {
         // app: app.App
@@ -34,7 +42,13 @@ function (
 
         projections: {
             utm: '+proj=utm +zone=12 +ellps=GRS80 +datum=NAD83 +units=m +no_defs'
-        }
+        },
+
+        deqLayerFields: ['DERRID', 'SITEDESC', 'ST_KEY'],
+
+        symbol: new SimpleMarkerSymbol()
+            .setStyle(SimpleMarkerSymbol.STYLE_DIAMOND)
+            .setColor(new Color([255, 255, 0]))
     };
 
     window.AGRCMap = App;

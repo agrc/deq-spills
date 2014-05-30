@@ -241,7 +241,7 @@ function (
 
                 testWidget.onMapClick({graphic: {}});
 
-                expect(testWidget.addGraphic).not.toHaveBeenCalled();
+                expect(testWidget.addGraphic).toHaveBeenCalled();
                 expect(testWidget.defineLocation).not.toHaveBeenCalled();
             });
         });
