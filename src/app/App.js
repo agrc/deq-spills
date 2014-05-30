@@ -358,9 +358,21 @@ function (
             location.UTM_X = location.x;
             location.UTM_Y = location.y;
 
+            // decimal degrees
             var ll = proj4(window.AGRCGLOBAL.projections.utm, proj4.WGS84, [location.x, location.y]);
             location.DD_LONG = ll[0];
             location.DD_LAT = ll[1];
+
+            // degrees, minutes, seconds
+            var convertToDMS = function (dd) {
+                var deg = dd | 0; // truncate dd to get degrees
+                var frac = Math.abs(dd - deg); // get fractional part
+                var min = (frac * 60) | 0; // multiply fraction by 60 and truncate
+                var sec = frac * 3600 - min * 60;
+                return deg + "d " + min + "' " + sec + "\"";
+            };
+            location.DMS_LONG = convertToDMS(location.DD_LONG);
+            location.DMS_LAT = convertToDMS(location.DD_LAT);
 
             all(promises).always(function () {
                 that.emit('location-defined', location);
