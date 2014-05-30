@@ -39,6 +39,10 @@
     width: 100%;
     height: 100%;
 }
+.agrc-app .mapContainer .spinner {
+    left: 100px !important;
+    bottom: 33px !important;
+}
 .agrc-app .center-div {
     position: absolute;
     top: 0;
