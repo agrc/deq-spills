@@ -3,7 +3,10 @@ define([
 
     'esri/symbols/SimpleMarkerSymbol',
 
-    'dojo/_base/Color'
+    'dojo/_base/Color',
+
+
+    'dojo/domReady!'
 
 ],
 
