@@ -4,12 +4,14 @@ define([
 
     'dojo/_base/declare',
     'dojo/_base/lang',
+    'dojo/_base/array',
     'dojo/dom',
     'dojo/dom-class',
     'dojo/dom-construct',
     'dojo/string',
     'dojo/aspect',
     'dojo/query',
+    'dojo/promise/all',
 
     'dijit/registry',
     'dijit/_WidgetBase',
@@ -32,6 +34,8 @@ define([
     'app/ZoomToCoord',
     'app/MapLayers',
 
+    'proj4',
+
 
     'dojo/NodeList-manipulate'
 ],
@@ -41,12 +45,14 @@ function (
 
     declare,
     lang,
+    array,
     dom,
     domClass,
     domConstruct,
     string,
     aspect,
     query,
+    all,
 
     registry,
     _WidgetBase,
@@ -64,10 +70,12 @@ function (
     WebAPI,
     MagicZoom,
     BaseMapSelector,
-
     FindAddress,
+
     ZoomToCoord,
-    MapLayers
+    MapLayers,
+
+    proj4
     ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin],
         {
@@ -115,6 +123,9 @@ function (
 
         // deqMapServiceLayer: ArcGISDynamicMapServiceLayer
         deqMapServiceLayer: null,
+
+        // api: WebAPI
+        api: null,
 
 
         // properties passed in via the constructor
@@ -172,6 +183,8 @@ function (
                 throw this.noApiKeyErrorTxt;
             }
             window.AGRCGLOBAL.apiKey = params.apiKey;
+
+            this.api = new WebAPI({apiKey: params.apiKey});
         },
         postCreate: function () {
             // summary:
@@ -203,12 +216,12 @@ function (
             this.initMap();
 
             this.map.on('load', function () {
-                that.parseParams();
-
                 that.mapLayers = new MapLayers({
                     btn: that.layersBtn,
                     layers: that.layers
                 });
+                
+                that.parseParams();
             });
         },
         parseParams: function () {
@@ -257,7 +270,8 @@ function (
             this.findAddressWidget = new FindAddress({
                 map: this.map,
                 apiKey: this.apiKey,
-                inline: true
+                inline: true,
+                symbol: window.AGRCGLOBAL.symbol
             }, this.findAddressDiv);
             this.findAddressWidget.startup();
             aspect.after(this.findAddressWidget, 'onFind', function (result) {
@@ -266,7 +280,8 @@ function (
             this.findRouteMilepostWidget = new FindRouteMilepost({
                 map: this.map,
                 inline: true,
-                apiKey: this.apiKey
+                apiKey: this.apiKey,
+                symbol: window.AGRCGLOBAL.symbol
             }, this.findRouteDiv);
             this.findRouteMilepostWidget.startup();
             aspect.after(this.findRouteMilepostWidget, 'onFind', function (location) {
@@ -274,7 +289,8 @@ function (
             }, true);
             this.zoomWidget = new ZoomToCoord({
                 map: this.map,
-                apiKey: this.apiKey
+                apiKey: this.apiKey,
+                symbol: window.AGRCGLOBAL.symbol
             }, this.zoomCoordsDiv);
             this.zoomWidget.startup();
             this.magicZoom = new MagicZoom({
@@ -291,12 +307,18 @@ function (
             this.own(
                 aspect.after(this.zoomWidget, '_projectionComplete', function (response) {
                     that.addGraphic(response.geometries[0]);
+                    that.defineLocation(response.geometies[0]);
                 }, true),
                 aspect.around(this.zoomWidget, '_getPoint', function (_getPoint) {
-                    var pnt = lang.hitch(that.zoomWidget, _getPoint)();
-                    if (!isNaN(pnt.x) && pnt.spatialReference.wkid === that.map.spatialReference.wkid) {
-                        that.addGraphic(pnt);
-                    }
+                    return function () {
+                        var pnt = lang.hitch(that.zoomWidget, _getPoint)();
+                        if (pnt && !isNaN(pnt.x) && pnt.spatialReference.wkid === that.map.spatialReference.wkid) {
+                            that.addGraphic(pnt);
+                            that.defineLocation(pnt);
+                        }
+                        
+                        return pnt;
+                    };
                 })
             );
         },
@@ -306,24 +328,58 @@ function (
             // location: Object
             console.log('app/App::defineLocation', arguments);
         
-            this.emit('location-defined', {
-                UTM_X: location.x,
-                UTM_Y: location.y
+            var that = this;
+            var promises = [];
+            var noFeatFound = 'no feature found';
+
+            this.map.showLoader();
+
+            array.forEach(window.AGRCGLOBAL.queries, function (q) {
+                promises.push(
+                    that.api.search('SGID10.' + q[0], q[1], {
+                        geometry: 'point:[' + location.x + ',' + location.y + ']'
+                    }).then(function (data) {
+                        array.forEach(q[2], function (f, i) {
+                            if (data.length) {
+                                location[f] = data[0].attributes[q[1][i]];
+                            } else {
+                                location[f] = noFeatFound;
+                            }
+                        });
+                    }, function () {
+                        array.forEach(q[2], function (f) {
+                            location[f] = noFeatFound;
+                        });
+                    })
+                );
+            });
+
+            // keep backward compatibility
+            location.UTM_X = location.x;
+            location.UTM_Y = location.y;
+
+            var ll = proj4(window.AGRCGLOBAL.projections.utm, proj4.WGS84, [location.x, location.y]);
+            location.DD_LONG = ll[0];
+            location.DD_LAT = ll[1];
+
+            all(promises).always(function () {
+                that.emit('location-defined', location);
+                that.map.hideLoader();
             });
         },
-        onMapClick: function (evt) {// summary:
+        onMapClick: function (evt) {
+            // summary:
             //      description
             // evt: Event Object
             console.log('app/App:onMapClick', arguments);
 
-            // don't do anything if a graphic was clicked
-            if (evt.graphic) {
-                return;
+            if (!evt.graphic) {
+                this.addGraphic(evt.mapPoint);
+                this.defineLocation(evt.mapPoint);
+            } else {
+                this.addGraphic(evt.graphic.geometry);
+                // defineLocation is called from LayerToggle:onClick
             }
-
-            this.addGraphic(evt.mapPoint);
-
-            this.defineLocation(evt.mapPoint);
         },
         addGraphic: function (point) {
             // summary:

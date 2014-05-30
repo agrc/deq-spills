@@ -32,14 +32,54 @@
 
     <!-- get xy values demo -->
     <script>
+        window.county = {
+            countyName: 'KANE',
+            apiKey: apiKey,
+            layers: [0, 4, 5, 11]
+        };
+        window.none = {
+            apiKey: apiKey,
+            layers: [0, 4, 5, 10]
+        };
+        window.coords = {
+            UTM_X: 418502,
+            UTM_Y: 4519515,
+            apiKey: apiKey,
+            layers: [0, 4, 5, 10]
+        };
+        window.city = {
+            cityName: 'Cottonwood Heights',
+            apiKey: apiKey,
+            layers: [0, 4, 5, 10]
+        };
+        window.address = {
+            addressStreet: '2832 banbury rd',
+            addressZone: '84121',
+            apiKey: apiKey,
+            layers: [0, 4, 5, 10]
+        };
+        window.routeMilepost = {
+            milepost: '300',
+            route: '15',
+            apiKey: apiKey,
+            layers: [0, 4, 5, 10]
+        };
+        window.all = {
+            apiKey: apiKey,
+            UTM_X: 418502,
+            UTM_Y: 4519515,
+            countyName: 'KANE',
+            cityName: 'Cottonwood Heights',
+            addressStreet: '2832 banbury rd',
+            addressZone: '84121',
+            milepost: '300',
+            route: '15',
+            layers: [0, 4, 5, 10]
+        };
+
         /* globals AGRCMap */
         window.agrcOnLoad = function () {
-            // county name
-            var app = new AGRCMap({
-                countyName: 'KANE',
-                apiKey: apiKey,
-                layers: [0, 4, 5, 10]
-            }, document.getElementById('AGRCMap'));
+            var app = new AGRCMap(window.city, document.getElementById('AGRCMap'));
 
             // must always call startup
             app.startup();
@@ -47,78 +87,18 @@
             app.on('location-defined', function (result) {
                 console.log('result.UTM_X', result.UTM_X);
                 console.log('result.UTM_Y', result.UTM_Y);
+                console.log('result.ZIP', result.ZIP);
+                console.log('result.CITY', result.CITY);
+                console.log('result.COUNTY', result.COUNTY);
+                console.log('result.TOWNSHIP', result.TOWNSHIP);
+                console.log('result.RANGE', result.RANGE);
+                console.log('result.SECTION', result.SECTION);
+                console.log('result.DD_LAT', result.DD_LAT);
+                console.log('result.DD_LONG', result.DD_LONG);
+                console.log('result.DERRID', result.DERRID);
+                console.log('result.SITEDESC', result.SITEDESC);
+                console.log('result.ST_KEY', result.ST_KEY);
             });
-        };
-
-        window.loadMapWithoutParams = function () {
-            var app = new AGRCMap({
-                apiKey: apiKey,
-                layers: [0, 4, 5, 10]
-            }, document.getElementById('AGRCMap'));
-            app.startup();
-
-            AGRC.widget.findWidget.onFind = function (result) {
-                window.TEST.UTM_X = result.UTM_X;
-                window.TEST.UTM_Y = result.UTM_Y;
-            };
-        };
-        window.loadMapWithCoords = function () {
-            var app = new AGRCMap({
-                UTM_X: 418502,
-                UTM_Y: 4519515,
-                apiKey: apiKey,
-                layers: [0, 4, 5, 10]
-            }, document.getElementById('AGRCMap'));
-            app.startup();
-        };
-        window.loadMapWithCounty = function () {
-            var app = new AGRCMap({
-                countyName: 'KANE',
-                apiKey: apiKey,
-                layers: [0, 4, 5, 10]
-            }, document.getElementById('AGRCMap'));
-            app.startup();
-        };
-        window.loadMapWithCity = function () {
-            var app = new AGRCMap({
-                cityName: 'Cottonwood Heights',
-                apiKey: apiKey,
-                layers: [0, 4, 5, 10]
-            }, document.getElementById('AGRCMap'));
-            app.startup();
-        };
-        window.loadMapWithAddress = function () {
-            var app = new AGRCMap({
-                addressStreet: '2832 banbury rd',
-                addressZone: '84121',
-                apiKey: apiKey,
-                layers: [0, 4, 5, 10]
-            }, document.getElementById('AGRCMap'));
-            app.startup();
-        };
-        window.loadMapWithRouteMilepost = function () {
-            var app = new AGRCMap({
-                milepost: '300',
-                route: '15',
-                apiKey: apiKey,
-                layers: [0, 4, 5, 10]
-            }, document.getElementById('AGRCMap'));
-            app.startup();
-        };
-        window.loadMapWithAllParams = function () {
-            var app = new AGRCMap({
-                apiKey: apiKey,
-                UTM_X: 418502,
-                UTM_Y: 4519515,
-                countyName: 'KANE',
-                cityName: 'Cottonwood Heights',
-                addressStreet: '2832 banbury rd',
-                addressZone: '84121',
-                milepost: '300',
-                route: '15',
-                layers: [0, 4, 5, 10]
-            }, document.getElementById('AGRCMap'));
-            app.startup();
         };
     </script>
     <script type="text/javascript" src="EmbeddedMapLoader.js"></script>
