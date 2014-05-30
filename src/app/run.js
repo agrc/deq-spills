@@ -25,6 +25,10 @@
                 name: 'bootstrap',
                 location: 'bootstrap/dist/js',
                 main: 'bootstrap'
+            }, {
+                name: 'proj4',
+                location: 'proj4',
+                main: 'proj4-src'
             }
         ]
     };

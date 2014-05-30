@@ -4,12 +4,14 @@ define([
 
     'dojo/_base/declare',
     'dojo/_base/lang',
+    'dojo/_base/array',
     'dojo/dom',
     'dojo/dom-class',
     'dojo/dom-construct',
     'dojo/string',
     'dojo/aspect',
     'dojo/query',
+    'dojo/promise/all',
 
     'dijit/registry',
     'dijit/_WidgetBase',
@@ -32,6 +34,8 @@ define([
     'app/ZoomToCoord',
     'app/MapLayers',
 
+    'proj4',
+
 
     'dojo/NodeList-manipulate'
 ],
@@ -41,12 +45,14 @@ function (
 
     declare,
     lang,
+    array,
     dom,
     domClass,
     domConstruct,
     string,
     aspect,
     query,
+    all,
 
     registry,
     _WidgetBase,
@@ -64,10 +70,12 @@ function (
     WebAPI,
     MagicZoom,
     BaseMapSelector,
-
     FindAddress,
+
     ZoomToCoord,
-    MapLayers
+    MapLayers,
+
+    proj4
     ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin],
         {
@@ -115,6 +123,9 @@ function (
 
         // deqMapServiceLayer: ArcGISDynamicMapServiceLayer
         deqMapServiceLayer: null,
+
+        // api: WebAPI
+        api: null,
 
 
         // properties passed in via the constructor
@@ -172,6 +183,8 @@ function (
                 throw this.noApiKeyErrorTxt;
             }
             window.AGRCGLOBAL.apiKey = params.apiKey;
+
+            this.api = new WebAPI({apiKey: params.apiKey});
         },
         postCreate: function () {
             // summary:
@@ -306,12 +319,44 @@ function (
             // location: Object
             console.log('app/App::defineLocation', arguments);
         
-            this.emit('location-defined', {
-                UTM_X: location.x,
-                UTM_Y: location.y
+            var that = this;
+            var promises = [];
+            var noFeatFound = 'no feature found';
+
+            array.forEach(window.AGRCGLOBAL.queries, function (q) {
+                promises.push(
+                    that.api.search('SGID10.' + q[0], q[1], {
+                        geometry: 'point:[' + location.x + ',' + location.y + ']'
+                    }).then(function (data) {
+                        array.forEach(q[2], function (f, i) {
+                            if (data.length) {
+                                location[f] = data[0].attributes[q[1][i]];
+                            } else {
+                                location[f] = noFeatFound;
+                            }
+                        });
+                    }, function () {
+                        array.forEach(q[2], function (f) {
+                            location[f] = noFeatFound;
+                        });
+                    })
+                );
+            });
+
+            // keep backward compatibility
+            location.UTM_X = location.x;
+            location.UTM_Y = location.y;
+
+            var ll = proj4(window.AGRCGLOBAL.projections.utm, proj4.WGS84, [location.x, location.y]);
+            location.DD_LONG = ll[0];
+            location.DD_LAT = ll[1];
+
+            all(promises).always(function () {
+                that.emit('location-defined', location);
             });
         },
-        onMapClick: function (evt) {// summary:
+        onMapClick: function (evt) {
+            // summary:
             //      description
             // evt: Event Object
             console.log('app/App:onMapClick', arguments);
