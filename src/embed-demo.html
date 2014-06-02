@@ -76,10 +76,34 @@
             route: '15',
             layers: [0, 4, 5, 10]
         };
+        window.latlong = {
+            apiKey: apiKey,
+            DD_LAT: 40.633879,
+            DD_LONG: -111.852191,
+            layers: [0, 3, 5, 7, 8]
+        };
+        window.dms = {
+            apiKey: apiKey,
+            DMS_DEGREE_LAT: 40,
+            DMS_MINUTE_LAT: 3,
+            DMS_SECOND_LAT: 50,
+            DMS_DEGREE_LONG: -111,
+            DMS_MINUTE_LONG: 50,
+            DMS_SECOND_LONG: 30,
+            layers: [0, 4, 5, 7, 8, 9]
+        };
+        window.trs = {
+            apiKey: apiKey,
+            layers: [1, 4, 6],
+            BASEMERIDIAN: '26',
+            TOWNSHIP: '04.0N',
+            RANGE: '03.0N',
+            SECTION: '32'
+        };
 
         /* globals AGRCMap */
         window.agrcOnLoad = function () {
-            var app = new AGRCMap(window.city, document.getElementById('AGRCMap'));
+            var app = new AGRCMap(window.trs, document.getElementById('AGRCMap'));
 
             // must always call startup
             app.startup();
@@ -90,6 +114,7 @@
                 console.log('result.ZIP', result.ZIP);
                 console.log('result.CITY', result.CITY);
                 console.log('result.COUNTY', result.COUNTY);
+                console.log('result.BASEMERIDIAN', result.BASEMERIDIAN);
                 console.log('result.TOWNSHIP', result.TOWNSHIP);
                 console.log('result.RANGE', result.RANGE);
                 console.log('result.SECTION', result.SECTION);

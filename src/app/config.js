@@ -40,7 +40,10 @@ function (
             ['BOUNDARIES.ZipCodes', ['ZIP5'], ['ZIP']],
             ['BOUNDARIES.Municipalities', ['NAME'], ['CITY']],
             ['BOUNDARIES.Counties', ['NAME'], ['COUNTY']],
-            ['CADASTRE.PLSSSections_GCDB', ['TOWNSHIP', 'RANGE', 'SECTION'], ['TOWNSHIP', 'RANGE', 'SECTION']]
+            ['CADASTRE.PLSSSections_GCDB',
+                ['TOWNSHIP', 'RANGE', 'SECTION', 'BASEMERIDIAN'],
+                ['TOWNSHIP', 'RANGE', 'SECTION', 'BASEMERIDIAN']
+            ]
         ],
 
         projections: {

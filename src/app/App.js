@@ -1,4 +1,4 @@
-/* jshint camelcase:false */
+/* jshint camelcase:false, maxcomplexity:false */
 define([
     'dojo/text!app/templates/App.html',
 
@@ -236,6 +236,26 @@ function (
                 query('input[name="x"]', this.zoomWidget.utmNode)[0].value = this.UTM_X;
                 query('input[name="y"]', this.zoomWidget.utmNode)[0].value = this.UTM_Y;
                 this.zoomWidget.zoom();
+            } else if (this.DD_LAT && this.DD_LONG) {
+                query('input[name="x"]', this.zoomWidget.ddNode)[0].value = Math.abs(this.DD_LONG);
+                query('input[name="y"]', this.zoomWidget.ddNode)[0].value = this.DD_LAT;
+                this.zoomWidget.zoom();
+            } else if (this.DMS_DEGREE_LAT &&
+                        this.DMS_MINUTE_LAT &&
+                        this.DMS_SECOND_LAT &&
+                        this.DMS_DEGREE_LONG &&
+                        this.DMS_MINUTE_LONG &&
+                        this.DMS_SECOND_LONG) {
+                this.zoomWidget.typeSelect.selectedIndex = 2;
+                this.zoomWidget.typeSelect.value = 'dms';
+                this.zoomWidget._updateView({target: {value: 'dms'}});
+                query('input[name="x"]', this.zoomWidget.dmsNode)[0].value = Math.abs(this.DMS_DEGREE_LONG);
+                query('input[name="xm"]', this.zoomWidget.dmsNode)[0].value = this.DMS_MINUTE_LONG;
+                query('input[name="xs"]', this.zoomWidget.dmsNode)[0].value = this.DMS_SECOND_LONG;
+                query('input[name="y"]', this.zoomWidget.dmsNode)[0].value = this.DMS_DEGREE_LAT;
+                query('input[name="ym"]', this.zoomWidget.dmsNode)[0].value = this.DMS_MINUTE_LAT;
+                query('input[name="ys"]', this.zoomWidget.dmsNode)[0].value = this.DMS_SECOND_LAT;
+                this.zoomWidget.zoom();
             } else if (this.addressStreet && !this.addressZone ||
                 !this.addressStreet && this.addressZone) {
                 throw this.missingAddressErrTxt;
@@ -246,6 +266,29 @@ function (
                 throw this.missingRouteMilepostTxt;
             } else if (this.route && this.milepost) {
                 this.zoomToRouteMilepost(this.route, this.milepost);
+            } else if (this.BASEMERIDIAN &&
+                        this.TOWNSHIP &&
+                        this.RANGE &&
+                        this.SECTION) {
+                var that = this;
+                var plssQuery = window.AGRCGLOBAL.queries[3];
+                var queryTxt = '';
+                array.forEach(plssQuery[1], function (fld, i) {
+                    queryTxt = queryTxt + fld + ' = \'' + that[fld] + '\'';
+                    if (i < plssQuery[1].length - 1) {
+                        queryTxt = queryTxt + ' AND ';
+                    }
+                });
+                this.api.search('SGID10.' + plssQuery[0], ['shape@envelope'], {
+                    predicate: queryTxt
+                }).then(function (data) {
+                    if (data.length === 0) {
+                        throw that.invalidTRSTxt;
+                    }
+                    that.map.setExtent(new Polygon(data[0].geometry).getExtent());
+                }, function () {
+                    throw that.invalidTRSTxt;
+                });
             } else if (this.cityName) {
                 this.zoomToFeature(this.cityName, this.zoomTypes.citytown);
             } else if (this.countyName) {
@@ -307,7 +350,7 @@ function (
             this.own(
                 aspect.after(this.zoomWidget, '_projectionComplete', function (response) {
                     that.addGraphic(response.geometries[0]);
-                    that.defineLocation(response.geometies[0]);
+                    that.defineLocation(response.geometries[0]);
                 }, true),
                 aspect.around(this.zoomWidget, '_getPoint', function (_getPoint) {
                     return function () {
@@ -332,13 +375,14 @@ function (
             var promises = [];
             var noFeatFound = 'no feature found';
 
-            this.map.showLoader();
 
             array.forEach(window.AGRCGLOBAL.queries, function (q) {
+                that.map.showLoader();
                 promises.push(
                     that.api.search('SGID10.' + q[0], q[1], {
                         geometry: 'point:[' + location.x + ',' + location.y + ']'
                     }).then(function (data) {
+                        that.map.showLoader();
                         array.forEach(q[2], function (f, i) {
                             if (data.length) {
                                 location[f] = data[0].attributes[q[1][i]];
@@ -365,11 +409,11 @@ function (
 
             // degrees, minutes, seconds
             var convertToDMS = function (dd) {
-                var deg = dd | 0; // truncate dd to get degrees
-                var frac = Math.abs(dd - deg); // get fractional part
-                var min = (frac * 60) | 0; // multiply fraction by 60 and truncate
+                var deg = Math.floor(dd);
+                var frac = Math.abs(dd - deg);
+                var min = Math.floor(frac * 60);
                 var sec = frac * 3600 - min * 60;
-                return deg + "d " + min + "' " + sec + "\"";
+                return deg + 'º ' + min + '\' ' + sec + '\"';
             };
             location.DMS_LONG = convertToDMS(location.DD_LONG);
             location.DMS_LAT = convertToDMS(location.DD_LAT);
