@@ -120,7 +120,8 @@ module.exports = function(grunt) {
                     patterns: [replaceCommonPattern]
                 },
                 files: replaceFiles
-            }
+            },
+            grunt_slurp: {}
         }
     });
 
@@ -134,9 +135,10 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-replace');
+    grunt.loadNpmTasks('grunt-esri-slurp');
 
     grunt.registerTask('default', ['jasmine:app:build', 'jshint', 'connect', 'watch']);
-    grunt.registerTask('travis', ['jshint', 'connect', 'jasmine:app']);
+    grunt.registerTask('travis', ['grunt_slurp', 'jshint', 'connect', 'jasmine:app']);
     grunt.registerTask('build',
         ['clean', 'dojo:app', 'imagemin:dynamic', 'copy', 'processhtml:prod', 'replace:prod']);
     grunt.registerTask('stage-build',

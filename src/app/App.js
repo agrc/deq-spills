@@ -18,7 +18,7 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
 
-    'esri/Graphic',
+    'esri/graphic',
     'esri/geometry/Polygon',
     'esri/SpatialReference',
     'esri/geometry/Point',
@@ -301,7 +301,10 @@ function (
             console.log('app/App:initMap', arguments);
 
             var that = this;
-            this.map = new BaseMap(this.mapDiv, {useDefaultBaseMap: false});
+            this.map = new BaseMap(this.mapDiv, {
+                useDefaultBaseMap: false,
+                showAttribution: false
+            });
             this.bms = new BaseMapSelector({
                 map: this.map,
                 id: 'claro',

@@ -23,8 +23,8 @@
                 main: 'jquery'
             }, {
                 name: 'bootstrap',
-                location: 'bootstrap/dist/js',
-                main: 'bootstrap'
+                location: 'bootstrap/dist',
+                main: 'js/bootstrap'
             }, {
                 name: 'proj4',
                 location: 'proj4',

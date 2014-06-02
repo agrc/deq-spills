@@ -12,7 +12,8 @@
     "grunt-contrib-clean": "^0",
     "grunt-processhtml": "^0",
     "grunt-contrib-imagemin": "^0",
-    "grunt-replace": "^0"
+    "grunt-replace": "^0",
+    "grunt-esri-slurp": "~0"
   },
   "scripts": {
     "test": "grunt travis --verbose"
