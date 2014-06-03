@@ -27,8 +27,8 @@
                 main: 'js/bootstrap'
             }, {
                 name: 'proj4',
-                location: 'proj4',
-                main: 'proj4-src'
+                location: '//cdnjs.cloudflare.com/ajax/libs/proj4js/2.1.0',
+                main: 'proj4'
             }
         ]
     };

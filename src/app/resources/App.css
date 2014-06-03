@@ -9,7 +9,29 @@
 @import '../../dijit/themes/claro/claro.css';
 @import '../../esri/css/esri.css';
 
+/* disable bootstrap responsive */
+.form-inline .form-group {
+    display: inline-block;
+    margin-bottom: 0;
+    vertical-align: middle;
+}
+.form-inline .control-label {
+    margin-bottom: 0;
+    vertical-align: middle;
+}
+.form-inline .form-control {
+    display: inline-block;
+    width: auto;
+    vertical-align: middle;
+}
+.form-inline .input-group > .form-control {
+    width: 100%;
+}
 
+.form-control {
+    padding-top: 0;
+    padding-bottom: 0;
+}
 .find-address [data-dojo-attach-point='txtZone'],
 .find-route-milepost [data-dojo-attach-point='milepostTxt'] {
     width: 110px;
@@ -23,7 +45,7 @@
     padding: 0;
     overflow: hidden;
     position: relative;
-    margin: 8px;
+    background-color: #FFFF99;
 }
 .agrc-app .center-div>.alert.alert-danger {
     position: absolute;
@@ -53,6 +75,7 @@
 .agrc-app .center-div,
 .agrc-app .bottom-div {
     border: solid 1px #b5bcc7;
+    background-color: white;
 }
 .agrc-app .bottom-div {
     height: 190px;

@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Embed Demo</title>
-</hea>
+</head>
 <body>
 
     <!-- styling demo -->
@@ -94,7 +94,6 @@
         };
         window.trs = {
             apiKey: apiKey,
-            layers: [1, 4, 6],
             BASEMERIDIAN: '26',
             TOWNSHIP: '04.0N',
             RANGE: '03.0N',
@@ -103,7 +102,7 @@
 
         /* globals AGRCMap */
         window.agrcOnLoad = function () {
-            var app = new AGRCMap(window.trs, document.getElementById('AGRCMap'));
+            var app = new AGRCMap(window.coords, document.getElementById('AGRCMap'));
 
             // must always call startup
             app.startup();
