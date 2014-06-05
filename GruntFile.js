@@ -19,7 +19,7 @@ module.exports = function(grunt) {
     var replaceCommonPattern = {
         match: /\/\/ start replace[\w\W]*\/\/ end replace/,
         replacement: 'document.write(\'<script type=\\\'text/javascript\\\' ' +
-            'src=\\\'\' + server + \'/dojo/dojo.js\\\'data-dojo-config="deps:[\\\'app/run\\\']"></script>\');'
+            'src=\\\'\' + window.AGRC_server + \'/dojo/dojo.js\\\'data-dojo-config="deps:[\\\'app/run\\\']"></script>\');'
     };
     var processhtmlFiles = {'dist/embed-demo.html': ['src/embed-demo.html']};
 
@@ -101,7 +101,7 @@ module.exports = function(grunt) {
                 options: {
                     patterns: [{
                         match: /\/\/ start server replace[\w\W]*\/\/ end server replace/g,
-                        replacement: 'var server = \'http://mapserv.utah.gov/DEQSpills\';'
+                        replacement: 'window.AGRC_server = \'http://mapserv.utah.gov/DEQSpills\';'
                     }].concat(replaceCommonPattern)
                 },
                 files: replaceFiles
@@ -110,7 +110,7 @@ module.exports = function(grunt) {
                 options: {
                     patterns: [{
                         match: /\/\/ start server replace[\w\W]*\/\/ end server replace/g,
-                        replacement: 'var server = \'http://test.mapserv.utah.gov/DEQSpills\';'
+                        replacement: 'window.AGRC_server = \'http://test.mapserv.utah.gov/DEQSpills\';'
                     }].concat(replaceCommonPattern)
                 },
                 files: replaceFiles

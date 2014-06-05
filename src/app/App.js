@@ -336,7 +336,8 @@ function (
             this.zoomWidget = new ZoomToCoord({
                 map: this.map,
                 apiKey: this.apiKey,
-                symbol: window.AGRCGLOBAL.symbol
+                symbol: window.AGRCGLOBAL.symbol,
+                zoomLevel: 7
             }, this.zoomCoordsDiv);
             this.zoomWidget.startup();
             this.magicZoom = new MagicZoom({

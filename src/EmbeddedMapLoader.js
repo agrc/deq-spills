@@ -1,7 +1,7 @@
 /* jshint evil:true */
 (function(){
     // start server replace
-    var server = location.pathname.replace(/\/[^\/]+$/, '');
+    window.AGRC_server = 'http://localhost/' + location.pathname.replace(/\/[^\/]+$/, '');
     // end server replace
 
     var head = document.getElementsByTagName('head').item(0);
@@ -21,10 +21,10 @@
 
     // start replace
     document.write('<script type=\'text/javascript\' src=\'' +
-        server + '/dojo/dojo.js\' data-dojo-config=\'isDebug: 1\'></script>');
+        window.AGRC_server + '/dojo/dojo.js\' data-dojo-config=\'isDebug: 1\'></script>');
     document.write('<script type=\'text/javascript\' src=\'' +
-        server + '/app/run.js\'></script>');
+        window.AGRC_server + '/app/run.js\'></script>');
     // end replace
     
-    loadCss(server + '/app/resources/App.css');
+    loadCss(window.AGRC_server + '/app/resources/App.css');
 })();
