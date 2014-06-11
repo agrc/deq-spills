@@ -429,15 +429,23 @@ function (
             location.DD_LAT = ll[1];
 
             // degrees, minutes, seconds
-            var convertToDMS = function (dd) {
-                var deg = Math.floor(dd);
-                var frac = Math.abs(dd - deg);
-                var min = Math.floor(frac * 60);
-                var sec = frac * 3600 - min * 60;
+            var convertToDMS = function (dd, max) {
+                var sign = dd < 0 ? -1 : 1;
+
+                var abs = Math.abs(Math.round(dd * 1000000));
+
+                if (abs > (max * 1000000)) {
+                    return NaN;
+                }
+
+                var dec = abs % 1000000 / 1000000;
+                var deg = Math.floor(abs / 1000000) * sign;
+                var min = Math.floor(dec * 60);
+                var sec = (dec - min / 60) * 3600;
                 return deg + 'º ' + min + '\' ' + sec + '\"';
             };
-            location.DMS_LONG = convertToDMS(location.DD_LONG);
-            location.DMS_LAT = convertToDMS(location.DD_LAT);
+            location.DMS_LONG = convertToDMS(location.DD_LONG, 180);
+            location.DMS_LAT = convertToDMS(location.DD_LAT, 90);
 
             all(promises).always(function () {
                 that.map.hideLoader();
