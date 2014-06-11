@@ -58,7 +58,8 @@ function (
             .setStyle(SimpleMarkerSymbol.STYLE_DIAMOND)
             .setColor(new Color([255, 255, 0])),
 
-        zipCityHelpText: 'For city or zip code only searches, see "Map Search..." above'
+        zipCityHelpText: 'For city or zip code only searches, see "Map Search..." above',
+        outsideUtahMsg: 'No data is returned for points outside of the state of Utah!'
     };
 
     window.AGRCMap = App;

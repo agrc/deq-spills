@@ -440,8 +440,12 @@ function (
             location.DMS_LAT = convertToDMS(location.DD_LAT);
 
             all(promises).always(function () {
-                that.emit('location-defined', location);
                 that.map.hideLoader();
+                if (location.COUNTY === noFeatFound) {
+                    alert(window.AGRCGLOBAL.outsideUtahMsg);
+                    return;
+                }
+                that.emit('location-defined', location);
             });
         },
         onMapClick: function (evt) {
