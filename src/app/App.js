@@ -322,6 +322,12 @@ function (
                 symbol: window.AGRCGLOBAL.symbol
             }, this.findAddressDiv);
             this.findAddressWidget.startup();
+            // help text
+            $(this.findAddressWidget.btnGeocode).tooltip({
+                title: window.AGRCGLOBAL.zipCityHelpText,
+                delay: { show: 500, hide: 100 }
+            });
+
             aspect.after(this.findAddressWidget, 'onFind', function (result) {
                 that.defineLocation(result.location);
             }, true);

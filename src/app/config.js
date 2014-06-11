@@ -56,7 +56,9 @@ function (
 
         symbol: new SimpleMarkerSymbol()
             .setStyle(SimpleMarkerSymbol.STYLE_DIAMOND)
-            .setColor(new Color([255, 255, 0]))
+            .setColor(new Color([255, 255, 0])),
+
+        zipCityHelpText: 'For city or zip code only searches, see "Map Search..." above'
     };
 
     window.AGRCMap = App;
