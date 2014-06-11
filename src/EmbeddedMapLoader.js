@@ -1,4 +1,4 @@
-/* jshint evil:true */
+/* jshint evil:true, camelcase:false */
 (function(){
     // start server replace
     window.AGRC_server = 'http://localhost/' + location.pathname.replace(/\/[^\/]+$/, '');
@@ -26,5 +26,6 @@
         window.AGRC_server + '/app/run.js\'></script>');
     // end replace
     
+    loadCss(window.AGRC_server + '/bootstrap/dist/css/bootstrap.css');
     loadCss(window.AGRC_server + '/app/resources/App.css');
 })();

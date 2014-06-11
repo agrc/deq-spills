@@ -16,11 +16,15 @@ module.exports = function(grunt) {
         src: 'src/EmbeddedMapLoader.js',
         dest: 'dist/'
     }];
-    var replaceCommonPattern = {
+    var replaceCommonPatterns = [{
         match: /\/\/ start replace[\w\W]*\/\/ end replace/,
         replacement: 'document.write(\'<script type=\\\'text/javascript\\\' ' +
-            'src=\\\'\' + window.AGRC_server + \'/dojo/dojo.js\\\'data-dojo-config="deps:[\\\'app/run\\\']"></script>\');'
-    };
+            'src=\\\'\' + window.AGRC_server + \'/dojo/dojo.js\\\'' +
+            'data-dojo-config="deps:[\\\'app/run\\\']"></script>\');'
+    },{
+        match: /bootstrap\/dist\/css/,
+        replacement: 'bootstrap/css'
+    }];
     var processhtmlFiles = {'dist/embed-demo.html': ['src/embed-demo.html']};
 
     grunt.initConfig({
@@ -102,7 +106,7 @@ module.exports = function(grunt) {
                     patterns: [{
                         match: /\/\/ start server replace[\w\W]*\/\/ end server replace/g,
                         replacement: 'window.AGRC_server = \'http://mapserv.utah.gov/DEQSpills\';'
-                    }].concat(replaceCommonPattern)
+                    }].concat(replaceCommonPatterns)
                 },
                 files: replaceFiles
             },
@@ -111,17 +115,17 @@ module.exports = function(grunt) {
                     patterns: [{
                         match: /\/\/ start server replace[\w\W]*\/\/ end server replace/g,
                         replacement: 'window.AGRC_server = \'http://test.mapserv.utah.gov/DEQSpills\';'
-                    }].concat(replaceCommonPattern)
+                    }].concat(replaceCommonPatterns)
                 },
                 files: replaceFiles
             },
             dev: {
                 options: {
-                    patterns: [replaceCommonPattern]
+                    patterns: replaceCommonPatterns
                 },
                 files: replaceFiles
             },
-            grunt_slurp: {}
+            esri_slurp: {}
         }
     });
 
@@ -138,7 +142,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-esri-slurp');
 
     grunt.registerTask('default', ['jasmine:app:build', 'jshint', 'connect', 'watch']);
-    grunt.registerTask('travis', ['grunt_slurp', 'jshint', 'connect', 'jasmine:app']);
+    grunt.registerTask('travis', ['esri_slurp', 'jshint', 'connect', 'jasmine:app']);
     grunt.registerTask('build',
         ['clean', 'dojo:app', 'imagemin:dynamic', 'copy', 'processhtml:prod', 'replace:prod']);
     grunt.registerTask('stage-build',

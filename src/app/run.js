@@ -27,8 +27,12 @@
                 main: 'js/bootstrap'
             }, {
                 name: 'proj4',
-                location: '//cdnjs.cloudflare.com/ajax/libs/proj4js/2.1.0',
+                location: 'proj4',
                 main: 'proj4'
+            }, {
+                name: 'es5shim',
+                location: 'es5-shim',
+                main: 'es5-shim'
             }
         ]
     };

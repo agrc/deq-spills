@@ -48,6 +48,20 @@ var profile = {
                 return (/.*\.js/).test(filename);
             }
         }
+    }, {
+        name: 'proj4',
+        resourceTags: {
+            amd: function () {
+                return true;
+            }
+        }
+    }, {
+        name: 'es5shim',
+        resourceTags: {
+            amd: function () {
+                return true;
+            }
+        }
     }],
     // this is to make sure that the widget templates get built into the layer file.
     userConfig: {

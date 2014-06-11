@@ -1,3 +1,4 @@
+/* jshint camelcase:false */
 define([
     'app/App',
 
@@ -33,7 +34,8 @@ function (
 
         // urls: Object
         urls: {
-            mapservice: window.AGRC_server.split('/').slice(0, 3).join('/') + '/arcgis/rest/services/DEQSpills/MapServer'
+            mapservice: window.AGRC_server.split('/').slice(0, 3).join('/') +
+                '/arcgis/rest/services/DEQSpills/MapServer'
         },
 
         queries: [
