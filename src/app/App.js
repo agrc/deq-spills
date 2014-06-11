@@ -406,7 +406,14 @@ function (
                         that.map.showLoader();
                         array.forEach(q[2], function (f, i) {
                             if (data.length) {
-                                location[f] = data[0].attributes[q[1][i]];
+                                // parse rts label
+                                if (f === window.AGRCGLOBAL.queries[3][2][0]) {
+                                    var lbl = data[0].attributes[q[1][i]].split(' ');
+                                    location.TOWNSHIP = lbl[0];
+                                    location.RANGE = lbl[1];
+                                } else {
+                                    location[f] = data[0].attributes[q[1][i]];
+                                }
                             } else {
                                 location[f] = noFeatFound;
                             }

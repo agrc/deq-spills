@@ -43,8 +43,8 @@ function (
             ['BOUNDARIES.Municipalities', ['NAME'], ['CITY']],
             ['BOUNDARIES.Counties', ['NAME'], ['COUNTY']],
             ['CADASTRE.PLSSSections_GCDB',
-                ['TOWNSHIP', 'RANGE', 'SECTION', 'BASEMERIDIAN'],
-                ['TOWNSHIP', 'RANGE', 'SECTION', 'BASEMERIDIAN']
+                ['LABEL', 'SNUM', 'BASEMERIDIAN'],
+                ['TOWNSHIP/RANGE', 'SECTION', 'BASEMERIDIAN']
             ]
         ],
 
