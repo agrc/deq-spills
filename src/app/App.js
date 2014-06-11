@@ -108,6 +108,13 @@ function (
                 fldName: 'NAME',
                 errTxt: 'City/Town: ${0} not found!',
                 type: 'point'
+            },
+            zip: {
+                name: 'zip',
+                fcName: 'SGID10.BOUNDARIES.ZipCodes',
+                fldName: 'ZIP5',
+                errTxt: 'Zip: ${0} not found!',
+                type: 'polygon'
             }
         },
 
@@ -291,6 +298,8 @@ function (
                 }, function () {
                     throw that.invalidTRSTxt;
                 });
+            } else if (this.ZIP) {
+                this.zoomToFeature(this.ZIP, this.zoomTypes.zip);
             } else if (this.cityName) {
                 this.zoomToFeature(this.cityName, this.zoomTypes.citytown);
             } else if (this.countyName) {
