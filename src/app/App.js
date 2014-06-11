@@ -34,9 +34,10 @@ define([
     'app/ZoomToCoord',
     'app/MapLayers',
 
+    'es5shim',
     'proj4',
 
-
+    
     'dojo/NodeList-manipulate'
 ],
 
@@ -75,6 +76,7 @@ function (
     ZoomToCoord,
     MapLayers,
 
+    shim,
     proj4
     ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin],

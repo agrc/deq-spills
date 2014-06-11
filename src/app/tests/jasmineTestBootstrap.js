@@ -16,5 +16,11 @@ var dojoConfig = {
     }
 };
 
+window.AGRCGLOBAL = {
+    urls: {
+        mapservice: 'blah'
+    }
+};
+
 // for jasmine-favicon-reporter
-jasmine.getEnv().addReporter(new JasmineFaviconReporter());
+// jasmine.getEnv().addReporter(new JasmineFaviconReporter());

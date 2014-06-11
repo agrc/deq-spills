@@ -8,6 +8,8 @@
     "util": "dojo-util#~1.9",
     "agrc": "agrc-widgets#",
     "ijit": "agrc-ijit#",
-    "bootstrap": "~3.1.1"
+    "bootstrap": "~3.1",
+    "jquery": "~1",
+    "es5-shim": "~3.4.0"
   }
 }
