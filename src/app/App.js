@@ -12,6 +12,7 @@ define([
     'dojo/aspect',
     'dojo/query',
     'dojo/promise/all',
+    'dojo/request/script',
 
     'dijit/registry',
     'dijit/_WidgetBase',
@@ -54,6 +55,7 @@ function (
     aspect,
     query,
     all,
+    script,
 
     registry,
     _WidgetBase,
@@ -194,6 +196,7 @@ function (
             window.AGRCGLOBAL.apiKey = params.apiKey;
 
             this.api = new WebAPI({apiKey: params.apiKey});
+            this.api.xhrProvider = script;
         },
         postCreate: function () {
             // summary:
