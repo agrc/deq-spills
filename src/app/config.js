@@ -55,7 +55,7 @@ function (
         deqLayerFields: ['DERRID', 'SITEDESC', 'ST_KEY'],
 
         symbol: new SimpleMarkerSymbol()
-            .setStyle(SimpleMarkerSymbol.STYLE_DIAMOND)
+            .setStyle(SimpleMarkerSymbol.STYLE_CIRCLE)
             .setColor(new Color([255, 255, 0])),
 
         zipCityHelpText: 'For city or zip code only searches, see "Map Search..." above',
