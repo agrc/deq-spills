@@ -1,4 +1,7 @@
 /*jshint unused:false */
+var amdTag = function (filename, mid) {
+    return (/.*\.js$/).test(filename);
+};
 var profile = {
     basePath: '../src',
     action: 'release',
@@ -44,23 +47,17 @@ var profile = {
     packages: [{
         name: 'esri',
         resourceTags: {
-            amd: function (filename, mid) {
-                return (/.*\.js/).test(filename);
-            }
+            amd: amdTag
         }
     }, {
         name: 'proj4',
         resourceTags: {
-            amd: function () {
-                return true;
-            }
+            amd: amdTag
         }
     }, {
         name: 'es5shim',
         resourceTags: {
-            amd: function () {
-                return true;
-            }
+            amd: amdTag
         }
     }],
     // this is to make sure that the widget templates get built into the layer file.
