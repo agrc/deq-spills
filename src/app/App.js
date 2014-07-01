@@ -283,6 +283,8 @@ function (
                         this.RANGE &&
                         this.SECTION) {
                 var that = this;
+                this.SNUM = this.SECTION;
+                this.LABEL = this.TOWNSHIP + ' ' + this.RANGE;
                 var plssQuery = window.AGRCGLOBAL.queries[3];
                 var queryTxt = '';
                 array.forEach(plssQuery[1], function (fld, i) {
