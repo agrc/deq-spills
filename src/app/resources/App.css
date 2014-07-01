@@ -10,7 +10,7 @@
 
 /* disable bootstrap responsive */
 .form-inline .form-group {
-    display: inline-block;
+    display: inline;
     margin-bottom: 0;
     vertical-align: middle;
 }
