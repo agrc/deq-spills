@@ -339,7 +339,7 @@ function (
             // help text
             $(this.findAddressWidget.btnGeocode).tooltip({
                 title: window.AGRCGLOBAL.zipCityHelpText,
-                delay: { show: 500, hide: 100 }
+                delay: { show: 200, hide: 100 }
             });
 
             aspect.after(this.findAddressWidget, 'onFind', function (result) {
