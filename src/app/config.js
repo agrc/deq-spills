@@ -25,7 +25,7 @@ function (
 
         // version: String
         //      The version number.
-        version: '2.0.0',
+        version: '2.1.1',
 
         // apiKey: String
         //      Key for api.mapserv.utah.gov services
