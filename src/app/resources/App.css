@@ -75,6 +75,7 @@
 .agrc-app .bottom-div {
     border: solid 1px #b5bcc7;
     background-color: white;
+    overflow-y: auto;
 }
 .agrc-app .bottom-div {
     height: 190px;
