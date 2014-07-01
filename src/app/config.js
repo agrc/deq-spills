@@ -39,7 +39,7 @@ function (
         },
 
         queries: [
-            ['BOUNDARIES.ZipCodes', ['ZIP5'], ['ZIP']],
+            ['BOUNDARIES.ZipCodes', ['ZIP5', 'NAME'], ['ZIP', 'ZIPCITY']],
             ['BOUNDARIES.Municipalities', ['NAME'], ['CITY']],
             ['BOUNDARIES.Counties', ['NAME'], ['COUNTY']],
             ['CADASTRE.PLSSSections_GCDB',
