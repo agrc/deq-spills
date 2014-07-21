@@ -78,9 +78,11 @@ function (
             //      clears the text boxes
             console.log('app/ZoomToCoord:clear', arguments);
 
-            query('input', this.domNode).forEach(function (node) {
-                node.value = '';
-            });
+            query('input, select', this.domNode).val('');
+            // query('select', this.domNode).val('');
+
+            // reset base meridian to SL
+            this.trsSearchWidget.slNode.checked = true;
         }
     });
 });

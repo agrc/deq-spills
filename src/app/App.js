@@ -585,9 +585,7 @@ function (
 
             this.magicZoom.textBox.value = '';
 
-            var ts = this.zoomWidget.trsSearchWidget;
-            query('input[type="radio"]', ts.domNode).val(false);
-            query('select', ts.domNode).val('');
+            this.zoomWidget.clear();
         },
         destroyRecursive: function () {
             // summary:
