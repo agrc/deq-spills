@@ -416,6 +416,8 @@ function (
                                     var lbl = data[0].attributes[q[1][i]].split(' ');
                                     location.TOWNSHIP = lbl[0];
                                     location.RANGE = lbl[1];
+                                } else if (f === window.AGRCGLOBAL.queries[4][2][0]) {
+                                    location[f] = (data[0].attributes[q[1][i]] !== undefined);
                                 } else {
                                     location[f] = data[0].attributes[q[1][i]];
                                 }

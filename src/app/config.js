@@ -45,7 +45,8 @@ function (
             ['CADASTRE.PLSSSections_GCDB',
                 ['LABEL', 'SNUM', 'BASEMERIDIAN'],
                 ['TOWNSHIP/RANGE', 'SECTION', 'BASEMERIDIAN']
-            ]
+            ],
+            ['ENVIRONMENT.Total_IC_and_ReservationTribalLand', ['TYPE'], ['INDIAN']]
         ],
 
         projections: {
