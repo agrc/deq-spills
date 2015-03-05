@@ -1,14 +1,15 @@
+*.DS_Store
 *.sublime-workspace
 .grunt/
 dist/
 node_modules/
 src/agrc
+src/bootstrap
 src/dijit
 src/dojo
 src/dojox
 src/esri
 src/ijit
+src/jquery
 src/spinjs
 src/util
-src/bootstrap
-src/jquery
