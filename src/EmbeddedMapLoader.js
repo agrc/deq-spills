@@ -1,7 +1,7 @@
 /* jshint evil:true, camelcase:false */
 (function(){
     // start server replace
-    window.AGRC_server = 'http://localhost/' + location.pathname.replace(/\/[^\/]+$/, '');
+    window.AGRC_server = 'http://127.0.0.1/' + location.pathname.replace(/\/[^\/]+$/, '');
     // end server replace
 
     var head = document.getElementsByTagName('head').item(0);
@@ -25,7 +25,7 @@
     document.write('<script type=\'text/javascript\' src=\'' +
         window.AGRC_server + '/app/run.js\'></script>');
     // end replace
-    
+
     loadCss(window.AGRC_server + '/bootstrap/dist/css/bootstrap.css');
     loadCss(window.AGRC_server + '/app/resources/App.css');
 })();

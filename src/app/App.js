@@ -38,7 +38,7 @@ define([
     'es5shim',
     'proj4',
 
-    
+
     'dojo/NodeList-manipulate'
 ],
 
@@ -232,7 +232,7 @@ function (
                     btn: that.layersBtn,
                     layers: that.layers
                 });
-                
+
                 that.parseParams();
             });
         },
@@ -385,7 +385,7 @@ function (
                             that.addGraphic(pnt);
                             that.defineLocation(pnt);
                         }
-                        
+
                         return pnt;
                     };
                 })
@@ -396,7 +396,7 @@ function (
             //      fires the event
             // location: Object
             console.log('app/App::defineLocation', arguments);
-        
+
             var that = this;
             var promises = [];
             var noFeatFound = 'no feature found';
@@ -411,15 +411,17 @@ function (
                         that.map.showLoader();
                         array.forEach(q[2], function (f, i) {
                             if (data.length) {
-                                // parse rts label
                                 if (f === window.AGRCGLOBAL.queries[3][2][0]) {
+                                    // parse rts label
                                     var lbl = data[0].attributes[q[1][i]].split(' ');
                                     location.TOWNSHIP = lbl[0];
                                     location.RANGE = lbl[1];
-                                } else if (f === window.AGRCGLOBAL.queries[4][2][0]) {
-                                    location[f] = (data[0].attributes[q[1][i]] !== undefined);
                                 } else {
                                     location[f] = data[0].attributes[q[1][i]];
+                                }
+                                if (f === window.AGRCGLOBAL.queries[4][2][0]) {
+                                    // add tribal boolean
+                                    location.INDIAN = (data[0].attributes[q[1][i]] === 'Tribal');
                                 }
                             } else {
                                 location[f] = noFeatFound;
@@ -489,7 +491,7 @@ function (
             //      adds the point as a graphic to the map, clear any pre-existing graphics
             // point: Point
             console.log('app/App::addGraphic', arguments);
-        
+
             this.findRouteMilepostWidget.graphicsLayer.clear();
             this.findAddressWidget.graphicsLayer.clear();
             this.map.graphics.clear();

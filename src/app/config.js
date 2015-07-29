@@ -46,7 +46,7 @@ function (
                 ['LABEL', 'SNUM', 'BASEMERIDIAN'],
                 ['TOWNSHIP/RANGE', 'SECTION', 'BASEMERIDIAN']
             ],
-            ['ENVIRONMENT.Total_IC_and_ReservationTribalLand', ['TYPE'], ['INDIAN']]
+            ['CADASTRE.LandOwnership', ['AGENCY'], ['OWNER_AGENCY']]
         ],
 
         projections: {
