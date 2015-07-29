@@ -1,8 +1,8 @@
 /*global profile:true*/
 profile = {
     resourceTags: {
-        test: function () {
-            return false;
+        test: function (filename, mid) {
+            return /\/tests\//.test(mid);
         },
 
         copyOnly: function (filename, mid) {

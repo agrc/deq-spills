@@ -11,5 +11,6 @@ src/dojox
 src/esri
 src/ijit
 src/jquery
+src/mustache
 src/spinjs
 src/util

@@ -6,10 +6,11 @@
     "dojox": "~1.9",
     "dijit": "~1.9",
     "util": "dojo-util#~1.9",
-    "agrc": "agrc-widgets#",
-    "ijit": "agrc-ijit#",
+    "agrc": "agrc-widgets#~2.3",
+    "ijit": "agrc-ijit#~2.1",
     "bootstrap": "~3.1",
     "jquery": "~1",
-    "es5-shim": "~3.4.0"
+    "es5-shim": "~3.4.0",
+    "mustache": "~2.1.3"
   }
 }
