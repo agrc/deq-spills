@@ -596,8 +596,10 @@ function (
             //      description
             console.log('app/App:destroyRecursive', arguments);
 
-            this.bms.destroyRecursive();
-            domConstruct.destroy(this.bms.domNode);
+            if (this.bms) {
+                this.bms.destroyRecursive();
+                domConstruct.destroy(this.bms.domNode);
+            }
 
             this.inherited(arguments);
         }

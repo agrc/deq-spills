@@ -39,6 +39,20 @@ define([
         //      url to feature layer
         url: null,
 
+        // index: Number
+        //      the layer index number
+        index: null,
+
+        constructor: function (options) {
+            // summary:
+            //      description
+            // options: {index: Number}
+            console.log('app.LayerToggle:constructor', arguments);
+
+            this.url = window.AGRCGLOBAL.urls.mapservice + '/' + options.index;
+
+            this.inherited(arguments);
+        },
         postCreate: function() {
             // summary:
             //      Overrides method of same name in dijit._Widget.
@@ -87,8 +101,21 @@ define([
                 x: g.geometry.x,
                 y: g.geometry.y
             };
+            var that = this;
             array.forEach(window.AGRCGLOBAL.deqLayerFields, function (f) {
-                location[f] = g.attributes[f];
+                var nonStandardLU;
+                if (f === window.AGRCGLOBAL.fields.SITENAME) {
+                    nonStandardLU = window.AGRCGLOBAL.nonStandardSiteNameLU;
+                } else if (f === window.AGRCGLOBAL.fields.SITEADDRES) {
+                    nonStandardLU = window.AGRCGLOBAL.nonStandardSiteAddressLU;
+                }
+                var field;
+                if (nonStandardLU) {
+                    field = nonStandardLU[that.index] || f;
+                } else {
+                    field = f;
+                }
+                location[f] = g.attributes[field];
             });
 
             window.AGRC.widget.defineLocation(location);

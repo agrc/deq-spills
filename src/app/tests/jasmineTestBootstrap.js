@@ -21,6 +21,9 @@ window.AGRCGLOBAL = {
         mapservice: 'blah'
     }
 };
+/* jshint -W106 */
+window.AGRC_server = 'http://test.mapserv.utah.gov/DEQSpills/blah';
+/* jshint +W106 */
 
 // for jasmine-favicon-reporter
 // jasmine.getEnv().addReporter(new JasmineFaviconReporter());

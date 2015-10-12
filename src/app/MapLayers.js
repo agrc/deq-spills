@@ -76,7 +76,7 @@ define([
 
             array.forEach(layers, function (l) {
                 new LayerToggle({
-                    url: window.AGRCGLOBAL.urls.mapservice + '/' + l
+                    index: l
                 }, domConstruct.create('div', null, that.domNode));
             });
         }

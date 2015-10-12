@@ -18,6 +18,8 @@ function (
 
     Color
     ) {
+    var SITEADDRES = 'SITEADDRES';
+    var SITENAME = 'SITENAME';
     window.AGRCGLOBAL = {
         // app: app.App
         //      global reference to App
@@ -53,7 +55,28 @@ function (
             utm: '+proj=utm +zone=12 +ellps=GRS80 +datum=NAD83 +units=m +no_defs'
         },
 
-        deqLayerFields: ['DERRID', 'SITEDESC', 'ST_KEY'],
+        deqLayerFields: ['DERRID', 'SITEDESC', 'ST_KEY', SITENAME, SITEADDRES],
+
+        fields: {
+            SITENAME: SITENAME,
+            SITEADDRES: SITEADDRES
+        },
+
+        // all others layers are SITENAME
+        nonStandardSiteNameLU: {
+            7: 'FAC_NAME',
+            8: 'FAC_NAME',
+            9: 'LOCNAME',
+            11: 'Title_EventName'
+        },
+
+        // all other layers are SITEADDRES
+        nonStandardSiteAddressLU: {
+            7: 'FAC_ADDRES',
+            8: 'FAC_ADDRES',
+            9: 'LOCSTR',
+            11: 'Address_Location'
+        },
 
         symbol: new SimpleMarkerSymbol()
             .setStyle(SimpleMarkerSymbol.STYLE_CIRCLE)
