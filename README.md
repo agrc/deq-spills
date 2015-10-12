@@ -5,6 +5,29 @@ Embedded widget written for deq spills application.
 
 See [src/embed-demo.html](src/embed-demo.html) for an example of how to embed this widget and get data from it.
 
+### API
+#### constructor
+`new AGRCMap(options, node)`  
+parameter: `options`  
+type: `object`  
+properties (for examples check out [embed-demo.html](src/embed-demo.html)):  
+
+|name|type|description|
+|---|---|---|
+|`apiKey`|`string`|your api key|
+|`layers`|`number[]`|The indices of the layers that you want to show in the map. They should correspond with the layers in the map service.|
+|`countyName`|`string`|Name of the county that you want to zoom to.|
+|`cityName`|`string`|Name of the city that you want to zoom to.|
+|`zip`|`number`|The zip code that you want to zoom to.|
+|`UTM_X`/`UTM_Y`|`number`|The coords (in UTM) of the point that you want to initialize the map with.|
+|`DD_LAT`/`DD_LONG`|`number`|The coords (in decimal degrees) of the point that you want to initialize the map with.|
+|`DMS_DEGREE_LAT`/`DMS_MINUTE_LAT`/`DMS_SECOND_LAT` `DMS_DEGREE_LONG`/`DMS_MINUTE_LONG`/`DMS_SECOND_LONG`|`number`|The coords (in degrees, minutes, seconds) of the point that you want to initialize the map with.|
+|`addressStreet`|`string`|Address that you want to zoom to. Requires `addressZone`.|
+|`addressZone`|`string`|Zip or city of `addressStreet`.|
+|`route`|`string`|The UDOT route that you want to zoom to.|
+|`milepost`|`string`|Milepost of `route` that you want to zoom to.|
+|`BASEMERIDIAN`/`TOWNSHIP`/`RANGE`/`SECTION`|`string`|The TRS that you want to zoom to.
+
 ### Location Data Returned
 property: `BASEMERIDIAN`  
 type: `string`  
