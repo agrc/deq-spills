@@ -1,5 +1,7 @@
 /* jshint camelcase: false */
 module.exports = function(grunt) {
+    require('load-grunt-tasks')(grunt);
+
     var jsFiles = 'src/app/**/*.js';
     var otherFiles = [
         'src/app/**/*.html',
@@ -28,40 +30,15 @@ module.exports = function(grunt) {
     var processhtmlFiles = {'dist/embed-demo.html': ['src/embed-demo.html']};
 
     grunt.initConfig({
-        pkg: grunt.file.readJSON('package.json'),
-        jasmine: {
-            app: {
-                src: ['src/app/run.js'],
-                options: {
-                    specs: ['src/app/**/Spec*.js', 'src/matchers/**/Spec*.js'],
-                    vendor: [
-                        'src/app/tests/jasmineTestBootstrap.js',
-                        'src/dojo/dojo.js'
-                    ],
-                    host: 'http://localhost:8000'
-                }
-            }
-        },
-        jshint: {
-            files: jshintFiles,
-            options: {
-                jshintrc: '.jshintrc'
-            }
-        },
-        watch: {
-            jshint: {
-                files: jshintFiles,
-                tasks: ['jshint', 'jasmine:app:build']
-            },
-            src: {
-                files: jshintFiles.concat(otherFiles),
-                options: {
-                    livereload: true
-                }
-            }
-        },
+        clean: ['dist'],
         connect: {
             uses_defaults: {}
+        },
+        copy: {
+            main: {
+                src: 'src/ChangeLog.html',
+                dest: 'dist/ChangeLog.html'
+            }
         },
         dojo: {
             app: {
@@ -87,19 +64,32 @@ module.exports = function(grunt) {
                 }]
             }
         },
-        copy: {
-            main: {
-                src: 'src/ChangeLog.html',
-                dest: 'dist/ChangeLog.html'
+        jasmine: {
+            app: {
+                src: ['src/app/run.js'],
+                options: {
+                    specs: ['src/app/**/Spec*.js', 'src/matchers/**/Spec*.js'],
+                    vendor: [
+                        'src/app/tests/jasmineTestBootstrap.js',
+                        'src/dojo/dojo.js'
+                    ],
+                    host: 'http://localhost:8000'
+                }
             }
         },
+        jshint: {
+            files: jshintFiles,
+            options: {
+                jshintrc: '.jshintrc'
+            }
+        },
+        pkg: grunt.file.readJSON('package.json'),
         processhtml: {
             options: {},
             prod: {files: processhtmlFiles},
             stage: {files: processhtmlFiles},
             dev: {files: processhtmlFiles}
         },
-        clean: ['dist'],
         replace: {
             prod: {
                 options: {
@@ -126,27 +116,27 @@ module.exports = function(grunt) {
                 files: replaceFiles
             },
             esri_slurp: {}
+        },
+        watch: {
+            jshint: {
+                files: jshintFiles,
+                tasks: ['jshint', 'jasmine:app:build']
+            },
+            src: {
+                files: jshintFiles.concat(otherFiles),
+                options: {
+                    livereload: true
+                }
+            }
         }
     });
 
-    grunt.loadNpmTasks('grunt-contrib-jasmine');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-connect');
-    grunt.loadNpmTasks('grunt-dojo');
-    grunt.loadNpmTasks('grunt-contrib-imagemin');
-    grunt.loadNpmTasks('grunt-processhtml');
-    grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-replace');
-    grunt.loadNpmTasks('grunt-esri-slurp');
-
     grunt.registerTask('default', ['jasmine:app:build', 'jshint', 'connect', 'watch']);
     grunt.registerTask('travis', ['esri_slurp', 'jshint', 'connect', 'jasmine:app']);
-    grunt.registerTask('build',
+    grunt.registerTask('build-prod',
         ['clean', 'dojo:app', 'imagemin:dynamic', 'copy', 'processhtml:prod', 'replace:prod']);
-    grunt.registerTask('stage-build',
+    grunt.registerTask('build-stage',
         ['clean', 'dojo:app', 'imagemin:dynamic', 'copy', 'processhtml:stage', 'replace:stage']);
-    grunt.registerTask('dev-build',
+    grunt.registerTask('build-dev',
         ['clean', 'dojo:app', 'imagemin:dynamic', 'copy', 'processhtml:dev', 'replace:dev']);
 };
