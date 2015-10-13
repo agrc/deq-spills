@@ -32,13 +32,17 @@ function (
             return new App(lang.mixin(defaultParams, params),
                 domConstruct.create('div', null, win.body()));
         }
+        var destroy = function (widget) {
+            widget.destroyRecursive(false);
+            widget = null;
+        };
+
         beforeEach(function () {
             testWidget = createWidget();
             testWidget.startup();
         });
         afterEach(function () {
-            testWidget.destroyRecursive(false);
-            testWidget = null;
+            destroy(testWidget);
         });
 
         describe('constructor', function () {
@@ -73,12 +77,18 @@ function (
             });
         });
         describe('startup', function () {
+            var testWidget2;
             beforeEach(function () {
                 testWidget.destroyRecursive();
             });
+            afterEach(function () {
+                if (testWidget2) {
+                    destroy(testWidget2);
+                }
+            });
             it('calls zoomToFeature if countyName is passed', function () {
                 var countyName = 'blah';
-                var testWidget2 = createWidget({countyName: countyName});
+                testWidget2 = createWidget({countyName: countyName});
                 spyOn(testWidget2, 'zoomToFeature');
                 testWidget2.parseParams();
 
@@ -87,7 +97,7 @@ function (
             });
             it('calls zoomToFeature if cityName is passed', function () {
                 var cityName = 'blah';
-                var testWidget2 = createWidget({cityName: cityName});
+                testWidget2 = createWidget({cityName: cityName});
                 spyOn(testWidget2, 'zoomToFeature');
                 testWidget2.parseParams();
 
@@ -97,7 +107,7 @@ function (
             it('calls find address if addressStreet and addressZone are passed', function () {
                 var street = 'blah';
                 var zone = 'blah2';
-                var testWidget2 = createWidget({
+                testWidget2 = createWidget({
                     addressStreet: street,
                     addressZone: zone
                 });
@@ -110,7 +120,7 @@ function (
             it('calls find routeMilepost if route and milepost are passed', function () {
                 var rt = 'blah';
                 var mp = '2';
-                var testWidget2 = createWidget({
+                testWidget2 = createWidget({
                     route: rt,
                     milepost: mp
                 });
@@ -121,7 +131,7 @@ function (
                     .toHaveBeenCalledWith(rt, mp);
             });
             it('throws error if only one address parameter is passed', function () {
-                var testWidget2 = createWidget({
+                testWidget2 = createWidget({
                     addressStreet: 'blah'
                 });
                 expect(function () {
@@ -129,7 +139,7 @@ function (
                 }).toThrow(testWidget2.missingAddressErrTxt);
             });
             it('throws error if only one route/milepost parameter is passed', function () {
-                var testWidget2 = createWidget({
+                testWidget2 = createWidget({
                     route: 'blah'
                 });
                 expect(function () {

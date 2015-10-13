@@ -1,6 +1,6 @@
 {
-  "name": "Atlas",
-  "version": "0.0.0",
+  "name": "deq-spills",
+  "version": "2.1.1",
   "dependencies": {
     "dojo": "~1.9",
     "dojox": "~1.9",

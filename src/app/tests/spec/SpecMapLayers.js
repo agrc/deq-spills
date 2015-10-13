@@ -24,6 +24,14 @@ require([
         var layers = [0,2,4];
 
         beforeEach(function() {
+            window.AGRC = {
+                widget: {
+                    map: {
+                        addLayer: function () {},
+                        addLoaderToLayer: function () {}
+                    }
+                }
+            };
             widget = new WidgetUnderTest({
                 layers: layers
             }, domConstruct.create('div', null, win.body()));

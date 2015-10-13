@@ -104,3 +104,11 @@ source: `SGID10.BOUNDARIES.ZipCodes:ZIP5`
 property: `ZIPCITY`  
 type: `string`  
 source: `SGID10.BOUNDARIES.ZipCodes:NAME`  
+
+property: `SITENAME`  
+type: `string`  
+source: `SITENAME` of the point graphic that was clicked. This may be mapped from a [different field](src/app/config.js) for some datasets.
+
+property: `SITEADDRES`  
+type: `string`  
+source: `SITEADDRES` of the point graphic that was clicked. This may be mapped from a [different field](src/app/config.js) for some datasets.
