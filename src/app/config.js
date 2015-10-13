@@ -20,6 +20,12 @@ function (
     ) {
     var SITEADDRES = 'SITEADDRES';
     var SITENAME = 'SITENAME';
+    var FAC_NAME = 'FAC_NAME';
+    var LOCNAME = 'LOCNAME';
+    var Title_EventName = 'Title_EventName';
+    var FAC_ADDRES = 'FAC_ADDRES';
+    var LOCSTR = 'LOCSTR';
+    var Address_Location = 'Address_Location';
     window.AGRCGLOBAL = {
         // app: app.App
         //      global reference to App
@@ -55,7 +61,19 @@ function (
             utm: '+proj=utm +zone=12 +ellps=GRS80 +datum=NAD83 +units=m +no_defs'
         },
 
-        deqLayerFields: ['DERRID', 'SITEDESC', 'ST_KEY', SITENAME, SITEADDRES],
+        deqLayerFields: [
+            'DERRID',
+            'SITEDESC',
+            'ST_KEY',
+            SITENAME,
+            SITEADDRES,
+            FAC_NAME,
+            LOCNAME,
+            Title_EventName,
+            FAC_ADDRES,
+            LOCSTR,
+            Address_Location
+        ],
 
         fields: {
             SITENAME: SITENAME,
@@ -64,18 +82,18 @@ function (
 
         // all others layers are SITENAME
         nonStandardSiteNameLU: {
-            7: 'FAC_NAME',
-            8: 'FAC_NAME',
-            9: 'LOCNAME',
-            11: 'Title_EventName'
+            7: FAC_NAME,
+            8: FAC_NAME,
+            9: LOCNAME,
+            11: Title_EventName
         },
 
         // all other layers are SITEADDRES
         nonStandardSiteAddressLU: {
-            7: 'FAC_ADDRES',
-            8: 'FAC_ADDRES',
-            9: 'LOCSTR',
-            11: 'Address_Location'
+            7: FAC_ADDRES,
+            8: FAC_ADDRES,
+            9: LOCSTR,
+            11: Address_Location
         },
 
         symbol: new SimpleMarkerSymbol()
