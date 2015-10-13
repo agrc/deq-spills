@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/agrc/deq-spills.svg?branch=master)](https://travis-ci.org/agrc/deq-spills)
 deq-spills
 ==========
 

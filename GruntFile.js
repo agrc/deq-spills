@@ -98,6 +98,20 @@ module.exports = function(grunt) {
                 }
             }
         },
+        esri_slurp: {
+            options: {
+                version: '3.13'
+            },
+            dev: {
+                options: {
+                    beautify: true
+                },
+                dest: 'src/esri'
+            },
+            travis: {
+                dest: 'src/esri'
+            }
+        },
         imagemin: { // Task
             dynamic: { // Another target
                 options: { // Target options
@@ -225,13 +239,14 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('default', [
+        'if-missing:esri_slurp:dev',
         'jasmine:app:build',
         'jshint',
         'connect',
         'watch'
     ]);
     grunt.registerTask('travis', [
-        'esri_slurp',
+        'if-missing:esri_slurp:travis',
         'jshint',
         'connect',
         'jasmine:app'
@@ -239,6 +254,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('build-prod', [
         'clean:build',
+        'if-missing:esri_slurp:dev',
         'dojo:app',
         'imagemin:dynamic',
         'copy',
@@ -254,6 +270,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('build-stage', [
         'clean:build',
+        'if-missing:esri_slurp:dev',
         'dojo:app',
         'imagemin:dynamic',
         'copy',
