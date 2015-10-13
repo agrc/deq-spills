@@ -70,15 +70,13 @@ require([
                 });
 
                 var loc = defineLocationSpy.calls.mostRecent().args[0];
-                expect(loc).toEqual({
-                    x: x,
-                    y: y,
-                    DERRID: derrid,
-                    SITEDESC: sitedesc,
-                    ST_KEY: stKey,
-                    SITENAME: sitename,
-                    SITEADDRES: siteaddres
-                });
+                expect(loc.x).toEqual(x);
+                expect(loc.y).toEqual(y);
+                expect(loc.DERRID).toEqual(derrid);
+                expect(loc.SITEDESC).toEqual(sitedesc);
+                expect(loc.ST_KEY).toEqual(stKey);
+                expect(loc.SITENAME).toEqual(sitename);
+                expect(loc.SITEADDRES).toEqual(siteaddres);
             });
             it('finds non-standard fields', function () {
                 var x = 1;
@@ -109,15 +107,13 @@ require([
                 });
 
                 var loc = defineLocationSpy.calls.mostRecent().args[0];
-                expect(loc).toEqual({
-                    x: x,
-                    y: y,
-                    DERRID: derrid,
-                    SITEDESC: sitedesc,
-                    ST_KEY: stKey,
-                    SITENAME: sitename,
-                    SITEADDRES: siteaddres
-                });
+                expect(loc.x).toEqual(x);
+                expect(loc.y).toEqual(y);
+                expect(loc.DERRID).toEqual(derrid);
+                expect(loc.SITEDESC).toEqual(sitedesc);
+                expect(loc.ST_KEY).toEqual(stKey);
+                expect(loc.SITENAME).toEqual(sitename);
+                expect(loc.SITEADDRES).toEqual(siteaddres);
             });
         });
     });
