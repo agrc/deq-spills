@@ -1,8 +1,10 @@
+.grunt/
 *.DS_Store
 *.sublime-workspace
-.grunt/
+deploy/
 dist/
 node_modules/
+secrets.json
 src/agrc
 src/bootstrap
 src/dijit

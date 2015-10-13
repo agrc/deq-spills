@@ -28,9 +28,56 @@ module.exports = function(grunt) {
         replacement: 'bootstrap/css'
     }];
     var processhtmlFiles = {'dist/embed-demo.html': ['src/embed-demo.html']};
+    var bumpFiles = [
+        'package.json',
+        'bower.json',
+        'src/app/config.js'
+    ];
+    var deployExcludes = [
+        '!util/**',
+        '!**/*consoleStripped.js',
+        '!**/*.min.*',
+        '!build-report.txt'
+    ];
+    var deployDir = 'wwwroot/DEQSpills';
+    var secrets;
+    try {
+        secrets = grunt.file.readJSON('secrets.json');
+    } catch (e) {
+        // swallow for build server
+        secrets = {
+            stageHost: '',
+            prodHost: '',
+            username: '',
+            password: ''
+        };
+    }
 
     grunt.initConfig({
-        clean: ['dist'],
+        bump: {
+            options: {
+                files: bumpFiles,
+                commitFiles: bumpFiles,
+                push: false
+            }
+        },
+        clean: {
+            build: ['dist'],
+            deploy: ['deploy']
+        },
+        compress: {
+            options: {
+                archive: 'deploy/dist.zip'
+            },
+            main: {
+                files: [{
+                    src: ['**'].concat(deployExcludes),
+                    dest: './',
+                    cwd: 'dist/',
+                    expand: true
+                }]
+            }
+        },
         connect: {
             uses_defaults: {}
         },
@@ -117,6 +164,52 @@ module.exports = function(grunt) {
             },
             esri_slurp: {}
         },
+        secrets: secrets,
+        sftp: {
+            stage: {
+                files: {
+                    './': 'deploy/dist.zip'
+                },
+                options: {
+                    host: '<%= secrets.stageHost %>'
+                }
+            },
+            prod: {
+                files: {
+                    './': 'deploy/dist.zip'
+                },
+                options: {
+                    host: '<%= secrets.prodHost %>'
+                }
+            },
+            options: {
+                path: './' + deployDir + '/',
+                srcBasePath: 'deploy/',
+                username: '<%= secrets.username %>',
+                password: '<%= secrets.password %>',
+                showProgress: true,
+                readyTimeout: 120000
+            }
+        },
+        sshexec: {
+            options: {
+                username: '<%= secrets.username %>',
+                password: '<%= secrets.password %>',
+                readyTimeout: 120000
+            },
+            stage: {
+                command: ['cd ' + deployDir, 'unzip -o dist.zip', 'rm dist.zip'].join(';'),
+                options: {
+                    host: '<%= secrets.stageHost %>'
+                }
+            },
+            prod: {
+                command: ['cd ' + deployDir, 'unzip -o dist.zip', 'rm dist.zip'].join(';'),
+                options: {
+                    host: '<%= secrets.prodHost %>'
+                }
+            }
+        },
         watch: {
             jshint: {
                 files: jshintFiles,
@@ -131,12 +224,55 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.registerTask('default', ['jasmine:app:build', 'jshint', 'connect', 'watch']);
-    grunt.registerTask('travis', ['esri_slurp', 'jshint', 'connect', 'jasmine:app']);
-    grunt.registerTask('build-prod',
-        ['clean', 'dojo:app', 'imagemin:dynamic', 'copy', 'processhtml:prod', 'replace:prod']);
-    grunt.registerTask('build-stage',
-        ['clean', 'dojo:app', 'imagemin:dynamic', 'copy', 'processhtml:stage', 'replace:stage']);
-    grunt.registerTask('build-dev',
-        ['clean', 'dojo:app', 'imagemin:dynamic', 'copy', 'processhtml:dev', 'replace:dev']);
+    grunt.registerTask('default', [
+        'jasmine:app:build',
+        'jshint',
+        'connect',
+        'watch'
+    ]);
+    grunt.registerTask('travis', [
+        'esri_slurp',
+        'jshint',
+        'connect',
+        'jasmine:app'
+    ]);
+
+    grunt.registerTask('build-prod', [
+        'clean:build',
+        'dojo:app',
+        'imagemin:dynamic',
+        'copy',
+        'processhtml:prod',
+        'replace:prod'
+    ]);
+    grunt.registerTask('deploy-prod', [
+        'clean:deploy',
+        'compress:main',
+        'sftp:prod',
+        'sshexec:prod'
+    ]);
+
+    grunt.registerTask('build-stage', [
+        'clean:build',
+        'dojo:app',
+        'imagemin:dynamic',
+        'copy',
+        'processhtml:stage',
+        'replace:stage'
+    ]);
+    grunt.registerTask('deploy-stage', [
+        'clean:deploy',
+        'compress:main',
+        'sftp:stage',
+        'sshexec:stage'
+    ]);
+
+    grunt.registerTask('build-dev', [
+        'clean:build',
+        'dojo:app',
+        'imagemin:dynamic',
+        'copy',
+        'processhtml:dev',
+        'replace:dev'
+    ]);
 };
