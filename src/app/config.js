@@ -26,6 +26,7 @@ function (
     var FAC_ADDRES = 'FAC_ADDRES';
     var LOCSTR = 'LOCSTR';
     var Address_Location = 'Address_Location';
+    var DERRID = 'DERRID';
     window.AGRCGLOBAL = {
         // app: app.App
         //      global reference to App
@@ -46,6 +47,10 @@ function (
                 '/arcgis/rest/services/DEQSpills/MapServer'
         },
 
+        // labelsMinScale: Number
+        //      The minimum scale beyond which the labels will not be shown
+        labelsMinScale: 50000,
+
         queries: [
             ['BOUNDARIES.ZipCodes', ['ZIP5', 'NAME'], ['ZIP', 'ZIPCITY']],
             ['BOUNDARIES.Municipalities', ['NAME'], ['CITY']],
@@ -62,7 +67,7 @@ function (
         },
 
         deqLayerFields: [
-            'DERRID',
+            DERRID,
             'SITEDESC',
             'ST_KEY',
             SITENAME,
@@ -96,12 +101,22 @@ function (
             11: Address_Location
         },
 
+        labelsLU: {
+            sitename: 'SITENAME',
+            siteid: DERRID,
+            siteaddress: 'SITEADDRES'
+        },
+
         symbol: new SimpleMarkerSymbol()
             .setStyle(SimpleMarkerSymbol.STYLE_CIRCLE)
             .setColor(new Color([255, 255, 0])),
 
         zipCityHelpText: 'For city or zip code only searches, see "Map Search..." above',
-        outsideUtahMsg: 'No data is returned for points outside of the state of Utah!'
+        outsideUtahMsg: 'No data is returned for points outside of the state of Utah!',
+
+        topics: {
+            labelLayer: 'deq-spills/labelLayer'
+        }
     };
 
     window.AGRCMap = App;

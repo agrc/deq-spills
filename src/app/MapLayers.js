@@ -49,6 +49,10 @@ define([
         //      The layers that you want checkboxes created for
         layers: null,
 
+        // labels: String[]
+        //      The labels that the layers should show
+        labels: null,
+
         postCreate: function() {
             // summary:
             //      Overrides method of same name in dijit._Widget.
@@ -76,7 +80,8 @@ define([
 
             array.forEach(layers, function (l) {
                 new LayerToggle({
-                    index: l
+                    index: l,
+                    labels: that.labels
                 }, domConstruct.create('div', null, that.domNode));
             });
         }

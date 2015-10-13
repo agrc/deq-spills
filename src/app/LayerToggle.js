@@ -1,26 +1,25 @@
 define([
-    'dojo/text!./templates/LayerToggle.html',
+    'dijit/_TemplatedMixin',
+    'dijit/_WidgetBase',
 
+    'dojo/text!./templates/LayerToggle.html',
+    'dojo/topic',
+    'dojo/_base/array',
     'dojo/_base/declare',
     'dojo/_base/lang',
-    'dojo/_base/array',
-
-    'dijit/_WidgetBase',
-    'dijit/_TemplatedMixin',
 
     'dojox/gfx',
 
     'esri/layers/FeatureLayer'
-
 ], function(
-    template,
+    _TemplatedMixin,
+    _WidgetBase,
 
+    template,
+    topic,
+    array,
     declare,
     lang,
-    array,
-
-    _WidgetBase,
-    _TemplatedMixin,
 
     gfx,
 
@@ -42,6 +41,10 @@ define([
         // index: Number
         //      the layer index number
         index: null,
+
+        // labels: String[]
+        //      the labels that this layer should show
+        labels: null,
 
         constructor: function (options) {
             // summary:
@@ -78,10 +81,41 @@ define([
                     cy: 7,
                     r: 5
                 }).setFill(symbol.color).setStroke(symbol.outline.color);
+
             });
             this.layer.on('click', lang.hitch(this, 'onLayerClick'));
 
+            if (this.labels && this.labels.length > 0) {
+                topic.publish(
+                    window.AGRCGLOBAL.topics.labelLayer,
+                    this.layer,
+                    this.getLabelText(this.labels, this.index)
+                );
+            }
+
             this.inherited(arguments);
+        },
+        getLabelText: function (labels, index) {
+            // summary:
+            //      returns a format string for the labels
+            // labels: String[]
+            // index: Number
+            console.log('app/MapLayers:getLabelText', arguments);
+
+            var config = window.AGRCGLOBAL;
+            var fields = array.map(labels, function (lbl) {
+                var field = config.labelsLU[lbl];
+                if (field === config.fields.SITENAME &&
+                    config.nonStandardSiteNameLU[index]) {
+                    field = config.nonStandardSiteNameLU[index];
+                } else if (field === config.fields.SITEADDRES &&
+                    config.nonStandardSiteAddressLU[index]) {
+                    field = config.nonStandardSiteAddressLU[index];
+                }
+                return '{' + field + '}';
+            });
+
+            return fields.join(' - ');
         },
         onChange: function () {
             // summary:

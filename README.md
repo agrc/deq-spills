@@ -28,6 +28,7 @@ properties (for examples check out [embed-demo.html](src/embed-demo.html)):
 |`route`|`string`|The UDOT route that you want to zoom to.|
 |`milepost`|`string`|Milepost of `route` that you want to zoom to.|
 |`BASEMERIDIAN`/`TOWNSHIP`/`RANGE`/`SECTION`|`string`|The TRS that you want to zoom to.
+|`labels`|`string[]`|A array of labels that you want to show in the map. Accepted values are: `sitename`, `siteaddress` and `siteid`.
 
 ### Location Data Returned
 property: `BASEMERIDIAN`  

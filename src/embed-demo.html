@@ -47,6 +47,13 @@
             apiKey: apiKey,
             layers: [0, 4, 5, 9, 10]
         };
+        window.labels = {
+            UTM_X: 427932,
+            UTM_Y: 4503433,
+            apiKey: apiKey,
+            labels: ['sitename', 'siteid', 'siteaddress'],
+            layers: [0, 4, 5, 9, 10]
+        };
         window.city = {
             cityName: 'Cottonwood Heights',
             apiKey: apiKey,
@@ -106,7 +113,7 @@
 
         /* globals AGRCMap */
         window.agrcOnLoad = function () {
-            var app = new AGRCMap(window.coords, document.getElementById('AGRCMap'));
+            var app = new AGRCMap(window.labels, document.getElementById('AGRCMap'));
 
             // must always call startup
             app.startup();

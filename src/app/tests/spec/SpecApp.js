@@ -146,6 +146,14 @@ function (
                     testWidget2.parseParams();
                 }).toThrow(testWidget2.missingRouteMilepostTxt);
             });
+            it('throws error if an invalid label type was passed', function () {
+                testWidget2 = createWidget({
+                    labels: ['sitename', 'blah']
+                });
+                expect(function () {
+                    testWidget2.parseParams();
+                }).toThrow(testWidget2.invalidLabelTxt);
+            });
         });
         describe('zoomToFeature', function () {
         });

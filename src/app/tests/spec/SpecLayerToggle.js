@@ -116,5 +116,18 @@ require([
                 expect(loc.SITEADDRES).toEqual(siteaddres);
             });
         });
+        describe('getLabelText', function () {
+            it('returns default fields', function () {
+                expect(widget.getLabelText(['sitename'], 1))
+                    .toEqual('{SITENAME}');
+
+                expect(widget.getLabelText(['sitename', 'siteid'], 1))
+                    .toEqual('{SITENAME} - {DERRID}');
+            });
+            it('returns non-standard fields', function () {
+                expect(widget.getLabelText(['sitename', 'siteaddress'], 7))
+                    .toEqual('{FAC_NAME} - {FAC_ADDRES}');
+            });
+        });
     });
 });

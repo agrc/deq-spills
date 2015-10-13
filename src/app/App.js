@@ -1,86 +1,93 @@
 /* jshint camelcase:false, maxcomplexity:false */
 define([
-    'dojo/text!app/templates/App.html',
+    'agrc/modules/WebAPI',
+    'agrc/widgets/locate/FindAddress',
+    'agrc/widgets/locate/FindRouteMilepost',
+    'agrc/widgets/locate/MagicZoom',
+    'agrc/widgets/map/BaseMap',
+    'agrc/widgets/map/BaseMapSelector',
 
-    'dojo/_base/declare',
-    'dojo/_base/lang',
-    'dojo/_base/array',
+    'app/MapLayers',
+    'app/ZoomToCoord',
+
+    'dijit/registry',
+    'dijit/_TemplatedMixin',
+    'dijit/_WidgetBase',
+    'dijit/_WidgetsInTemplateMixin',
+
+    'dojo/aspect',
     'dojo/dom',
     'dojo/dom-class',
     'dojo/dom-construct',
-    'dojo/string',
-    'dojo/aspect',
-    'dojo/query',
     'dojo/promise/all',
+    'dojo/query',
     'dojo/request/script',
-
-    'dijit/registry',
-    'dijit/_WidgetBase',
-    'dijit/_TemplatedMixin',
-    'dijit/_WidgetsInTemplateMixin',
-
-    'esri/graphic',
-    'esri/geometry/Polygon',
-    'esri/SpatialReference',
-    'esri/geometry/Point',
-    'esri/layers/ArcGISDynamicMapServiceLayer',
-
-    'agrc/widgets/map/BaseMap',
-    'agrc/widgets/locate/FindRouteMilepost',
-    'agrc/modules/WebAPI',
-    'agrc/widgets/locate/MagicZoom',
-    'agrc/widgets/map/BaseMapSelector',
-    'agrc/widgets/locate/FindAddress',
-
-    'app/ZoomToCoord',
-    'app/MapLayers',
+    'dojo/string',
+    'dojo/text!app/templates/App.html',
+    'dojo/topic',
+    'dojo/_base/array',
+    'dojo/_base/declare',
+    'dojo/_base/lang',
 
     'es5shim',
-    'proj4',
 
+    'esri/geometry/Point',
+    'esri/geometry/Polygon',
+    'esri/graphic',
+    'esri/layers/ArcGISDynamicMapServiceLayer',
+    'esri/layers/LabelLayer',
+    'esri/renderers/SimpleRenderer',
+    'esri/SpatialReference',
+    'esri/symbols/TextSymbol',
+
+    'proj4',
 
     'dojo/NodeList-manipulate'
 ],
 
 function (
-    template,
+    WebAPI,
+    FindAddress,
+    FindRouteMilepost,
+    MagicZoom,
+    BaseMap,
+    BaseMapSelector,
 
-    declare,
-    lang,
-    array,
+    MapLayers,
+    ZoomToCoord,
+
+    registry,
+    _TemplatedMixin,
+    _WidgetBase,
+    _WidgetsInTemplateMixin,
+
+    aspect,
     dom,
     domClass,
     domConstruct,
-    string,
-    aspect,
-    query,
     all,
+    query,
     script,
-
-    registry,
-    _WidgetBase,
-    _TemplatedMixin,
-    _WidgetsInTemplateMixin,
-
-    Graphic,
-    Polygon,
-    SpatialReference,
-    Point,
-    ArcGISDynamicMapServiceLayer,
-
-    BaseMap,
-    FindRouteMilepost,
-    WebAPI,
-    MagicZoom,
-    BaseMapSelector,
-    FindAddress,
-
-    ZoomToCoord,
-    MapLayers,
+    string,
+    template,
+    topic,
+    array,
+    declare,
+    lang,
 
     shim,
+
+    Point,
+    Polygon,
+    Graphic,
+    ArcGISDynamicMapServiceLayer,
+    LabelLayer,
+    SimpleRenderer,
+    SpatialReference,
+    TextSymbol,
+
     proj4
-    ) {
+) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin],
         {
         // summary:
@@ -120,11 +127,9 @@ function (
             }
         },
 
-        // missingAddressErrTxt: String
         missingAddressErrTxt: 'Must provide both addressStreet and addressZone parameters!',
-
-        // missingRouteMilepostTxt: String
         missingRouteMilepostTxt: 'Must provide both route and milepost parameters!',
+        invalidLabelTxt: 'An invalid label string was passed: ',
 
         // map: agrc.widgets.map.Basemap
         map: null,
@@ -182,6 +187,9 @@ function (
         // apiKey: String
         apiKey: null,
 
+        // labels: String[]
+        labels: null,
+
         constructor: function (params) {
             // summary:
             //      first function to fire after page loads
@@ -228,9 +236,23 @@ function (
             this.initMap();
 
             this.map.on('load', function () {
+                if (that.labels && that.labels.length > 0) {
+                    var labelLayer = new LabelLayer();
+                    labelLayer.setMinScale(window.AGRCGLOBAL.labelsMinScale);
+                    that.map.addLayer(labelLayer);
+                    topic.subscribe(window.AGRCGLOBAL.topics.labelLayer,
+                        function (featureLayer, textExpression) {
+                            labelLayer.addFeatureLayer(featureLayer,
+                                new SimpleRenderer(new TextSymbol('hello')),
+                                textExpression
+                            );
+                        }
+                    );
+                }
                 that.mapLayers = new MapLayers({
                     btn: that.layersBtn,
-                    layers: that.layers
+                    layers: that.layers,
+                    labels: that.labels
                 });
 
                 that.parseParams();
@@ -309,6 +331,12 @@ function (
                 this.zoomToFeature(this.cityName, this.zoomTypes.citytown);
             } else if (this.countyName) {
                 this.zoomToFeature(this.countyName, this.zoomTypes.county);
+            } else if (this.labels && this.labels.length > 0) {
+                array.forEach(this.labels, function (lbl) {
+                    if (!window.AGRCGLOBAL.labelsLU[lbl]) {
+                        throw this.invalidLabelTxt;
+                    }
+                }, this);
             }
         },
         initMap: function () {
