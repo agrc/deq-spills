@@ -7,6 +7,7 @@ node_modules/
 secrets.json
 src/agrc
 src/bootstrap
+src/dgrid
 src/dijit
 src/dojo
 src/dojox
@@ -14,5 +15,7 @@ src/esri
 src/ijit
 src/jquery
 src/mustache
+src/put-selector
 src/spinjs
 src/util
+src/xstyle

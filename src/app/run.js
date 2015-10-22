@@ -9,10 +9,13 @@
             'agrc',
             'app',
             'dijit',
+            'dgrid',
             'dojo',
             'dojox',
             'esri',
             'ijit',
+            'put-selector',
+            'xstyle',
             {
                 name: 'spin',
                 location: 'spinjs',
