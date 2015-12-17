@@ -156,7 +156,7 @@ module.exports = function(grunt) {
                 options: {
                     patterns: [{
                         match: /\/\/ start server replace[\w\W]*\/\/ end server replace/g,
-                        replacement: 'window.AGRC_server = \'http://mapserv.utah.gov/DEQSpills\';'
+                        replacement: 'window.AGRC_server = \'//mapserv.utah.gov/DEQSpills\';'
                     }].concat(replaceCommonPatterns)
                 },
                 files: replaceFiles
@@ -165,7 +165,7 @@ module.exports = function(grunt) {
                 options: {
                     patterns: [{
                         match: /\/\/ start server replace[\w\W]*\/\/ end server replace/g,
-                        replacement: 'window.AGRC_server = \'http://test.mapserv.utah.gov/DEQSpills\';'
+                        replacement: 'window.AGRC_server = \'//test.mapserv.utah.gov/DEQSpills\';'
                     }].concat(replaceCommonPatterns)
                 },
                 files: replaceFiles
