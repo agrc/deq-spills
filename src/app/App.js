@@ -1,11 +1,9 @@
-/* jshint camelcase:false, maxcomplexity:false */
 define([
     'agrc/modules/WebAPI',
     'agrc/widgets/locate/FindAddress',
     'agrc/widgets/locate/FindRouteMilepost',
     'agrc/widgets/locate/MagicZoom',
     'agrc/widgets/map/BaseMap',
-    'agrc/widgets/map/BaseMapSelector',
 
     'app/MapLayers',
     'app/ZoomToCoord',
@@ -31,6 +29,7 @@ define([
 
     'es5shim',
 
+    'esri/geometry/Extent',
     'esri/geometry/Point',
     'esri/geometry/Polygon',
     'esri/graphic',
@@ -40,18 +39,17 @@ define([
     'esri/SpatialReference',
     'esri/symbols/TextSymbol',
 
+    'layer-selector/LayerSelector',
+
     'proj4',
 
     'dojo/NodeList-manipulate'
-],
-
-function (
+], function (
     WebAPI,
     FindAddress,
     FindRouteMilepost,
     MagicZoom,
     BaseMap,
-    BaseMapSelector,
 
     MapLayers,
     ZoomToCoord,
@@ -77,6 +75,7 @@ function (
 
     shim,
 
+    Extent,
     Point,
     Polygon,
     Graphic,
@@ -86,10 +85,11 @@ function (
     SpatialReference,
     TextSymbol,
 
+    LayerSelector,
+
     proj4
 ) {
-    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin],
-        {
+    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         // summary:
         //      The main widget for the app
 
@@ -235,28 +235,26 @@ function (
 
             this.initMap();
 
-            this.map.on('load', function () {
-                if (that.labels && that.labels.length > 0) {
-                    var labelLayer = new LabelLayer();
-                    labelLayer.setMinScale(window.AGRCGLOBAL.labelsMinScale);
-                    that.map.addLayer(labelLayer);
-                    topic.subscribe(window.AGRCGLOBAL.topics.labelLayer,
-                        function (featureLayer, textExpression) {
-                            labelLayer.addFeatureLayer(featureLayer,
-                                new SimpleRenderer(new TextSymbol('hello')),
-                                textExpression
-                            );
-                        }
-                    );
-                }
-                that.mapLayers = new MapLayers({
-                    btn: that.layersBtn,
-                    layers: that.layers,
-                    labels: that.labels
-                });
-
-                that.parseParams();
+            if (that.labels && that.labels.length > 0) {
+                var labelLayer = new LabelLayer();
+                labelLayer.setMinScale(window.AGRCGLOBAL.labelsMinScale);
+                that.map.addLayer(labelLayer);
+                topic.subscribe(window.AGRCGLOBAL.topics.labelLayer,
+                    function (featureLayer, textExpression) {
+                        labelLayer.addFeatureLayer(featureLayer,
+                            new SimpleRenderer(new TextSymbol('hello')),
+                            textExpression
+                        );
+                    }
+                );
+            }
+            that.mapLayers = new MapLayers({
+                btn: that.layersBtn,
+                layers: that.layers,
+                labels: that.labels
             });
+
+            that.parseParams();
         },
         parseParams: function () {
             // summary:
@@ -316,7 +314,8 @@ function (
                     }
                 });
                 this.api.search('SGID10.' + plssQuery[0], ['shape@envelope'], {
-                    predicate: queryTxt
+                    predicate: queryTxt,
+                    spatialReference: this.map.spatialReference.wkid
                 }).then(function (data) {
                     if (data.length === 0) {
                         throw that.invalidTRSTxt;
@@ -347,13 +346,21 @@ function (
             var that = this;
             this.map = new BaseMap(this.mapDiv, {
                 useDefaultBaseMap: false,
-                showAttribution: false
+                showAttribution: false,
+                extent: new Extent({
+                    xmax: -11762120.612131765,
+                    xmin: -13074391.513731329,
+                    ymax: 5225035.106177688,
+                    ymin: 4373832.359194187,
+                    spatialReference: {
+                        wkid: 3857
+                    }
+                })
             });
-            this.bms = new BaseMapSelector({
+            this.bms = new LayerSelector({
                 map: this.map,
-                id: 'claro',
-                position: 'BL',
-                defaultThemeLabel: 'Terrain'
+                quadWord: window.AGRCGLOBAL.quadWord,
+                baseLayers: ['Terrain', 'Hybrid', 'Lite', 'Topo']
             });
             this.bms.startup();
 
@@ -361,7 +368,8 @@ function (
                 map: this.map,
                 apiKey: this.apiKey,
                 inline: true,
-                symbol: window.AGRCGLOBAL.symbol
+                symbol: window.AGRCGLOBAL.symbol,
+                zoomLevel: window.AGRCGLOBAL.zoomLevel
             }, this.findAddressDiv);
             this.findAddressWidget.startup();
             // help text
@@ -377,7 +385,8 @@ function (
                 map: this.map,
                 inline: true,
                 apiKey: this.apiKey,
-                symbol: window.AGRCGLOBAL.symbol
+                symbol: window.AGRCGLOBAL.symbol,
+                zoomLevel: window.AGRCGLOBAL.zoomLevel
             }, this.findRouteDiv);
             this.findRouteMilepostWidget.startup();
             aspect.after(this.findRouteMilepostWidget, 'onFind', function (location) {
@@ -387,15 +396,16 @@ function (
                 map: this.map,
                 apiKey: this.apiKey,
                 symbol: window.AGRCGLOBAL.symbol,
-                zoomLevel: 7
+                zoomLevel: window.AGRCGLOBAL.zoomLevel
             }, this.zoomCoordsDiv);
             this.zoomWidget.startup();
             this.magicZoom = new MagicZoom({
                 promptMessage: 'Please type a city, town, or county...',
-                mapServiceURL: 'http://mapserv.utah.gov/arcgis/rest/services/BaseMaps/Hillshade/MapServer',
-                searchLayerIndex: 3,
+                searchLayer: 'SGID10.LOCATION.ZoomLocations',
                 searchField: 'Name',
-                map: this.map
+                map: this.map,
+                apiKey: this.apiKey,
+                wkid: 3857
             }, this.magicZoomDiv);
             this.magicZoom.startup();
 
@@ -434,7 +444,8 @@ function (
                 that.map.showLoader();
                 promises.push(
                     that.api.search('SGID10.' + q[0], q[1], {
-                        geometry: 'point:[' + location.x + ',' + location.y + ']'
+                        geometry: 'point:[' + location.x + ',' + location.y + ']',
+                        spatialReference: that.map.spatialReference.wkid
                     }).then(function (data) {
                         that.map.showLoader();
                         array.forEach(q[2], function (f, i) {
@@ -541,12 +552,13 @@ function (
             }
 
             this.webAPI.search(type.fcName, ['shape@envelope'], {
-                predicate: type.fldName + ' = \'' + name + '\''
+                predicate: type.fldName + ' = \'' + name + '\'',
+                spatialReference: this.map.spatialReference.wkid
             }).then(function (results) {
                 var geo = results[0].geometry;
                 if (type.type === 'point') {
                     var pnt = new Point(geo.rings[0][0], new SpatialReference(26912));
-                    that.map.centerAndZoom(pnt, 9);
+                    that.map.centerAndZoom(pnt, window.AGRCGLOBAL.zoomLevel);
                 } else {
                     var p = new Polygon(results[0].geometry);
                     p.setSpatialReference(new SpatialReference(26912));

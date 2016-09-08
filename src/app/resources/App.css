@@ -3,7 +3,7 @@
 @import '../../agrc/resources/locate/FindRouteMilepost.css';
 @import 'ZoomToCoord.css';
 @import '../../agrc/resources/locate/MagicZoom.css';
-@import '../../agrc/resources/map/BaseMapSelector.css';
+@import '../../layer-selector/resources/LayerSelector.css';
 @import 'TRSsearch.css';
 @import '../../dijit/themes/claro/claro.css';
 @import '../../esri/css/esri.css';
@@ -60,9 +60,11 @@
     width: 100%;
     height: 100%;
 }
-.agrc-app .mapContainer .spinner {
-    left: 100px !important;
-    bottom: 33px !important;
+.agrc-app .layer-selector {
+    top: 15px;
+    margin-right: 7px;
+    box-shadow: none;
+    border: 1px solid #57585A;
 }
 .agrc-app .center-div {
     position: absolute;

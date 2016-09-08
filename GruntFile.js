@@ -1,5 +1,4 @@
-/* jshint camelcase: false */
-module.exports = function(grunt) {
+module.exports = function (grunt) {
     require('load-grunt-tasks')(grunt);
 
     var jsFiles = 'src/app/**/*.js';
@@ -11,7 +10,7 @@ module.exports = function(grunt) {
     ];
     var gruntFile = 'GruntFile.js';
     var internFile = 'tests/intern.js';
-    var jshintFiles = [jsFiles, gruntFile, internFile, 'src/matchers/**/*.js'];
+    var eslintFiles = [jsFiles, gruntFile, internFile, 'src/EmbeddedMapLoader.js'];
     var replaceFiles = [{
         expand: true,
         flatten: true,
@@ -31,7 +30,8 @@ module.exports = function(grunt) {
     var bumpFiles = [
         'package.json',
         'bower.json',
-        'src/app/config.js'
+        'src/app/config.js',
+        'src/app/package.json'
     ];
     var deployExcludes = [
         '!util/**',
@@ -88,28 +88,23 @@ module.exports = function(grunt) {
             }
         },
         dojo: {
-            app: {
+            prod: {
                 options: {
-                    dojo: 'src/dojo/dojo.js', // Path to dojo.js file in dojo source
-                    releaseDir: '../dist',
-                    require: 'src/app/run.js', // Optional: Module to require for the build (Default: nothing)
-                    basePath: './src',
-                    profile: 'profiles/build.profile.js'
+                    // You can also specify options to be used in all your tasks
+                    profiles: ['profiles/prod.build.profile.js', 'profiles/build.profile.js'] // Profile for build
                 }
-            }
-        },
-        esri_slurp: {
-            options: {
-                version: '3.13'
             },
-            dev: {
+            stage: {
                 options: {
-                    beautify: true
-                },
-                dest: 'src/esri'
+                    // You can also specify options to be used in all your tasks
+                    profiles: ['profiles/stage.build.profile.js', 'profiles/build.profile.js'] // Profile for build
+                }
             },
-            travis: {
-                dest: 'src/esri'
+            options: {
+                dojo: 'src/dojo/dojo.js', // Path to dojo.js file in dojo source
+                releaseDir: '../dist',
+                require: 'src/app/run.js', // Optional: Module to require for the build (Default: nothing)
+                basePath: './src'
             }
         },
         imagemin: { // Task
@@ -138,10 +133,12 @@ module.exports = function(grunt) {
                 }
             }
         },
-        jshint: {
-            files: jshintFiles,
+        eslint: {
+            main: {
+                src: eslintFiles
+            },
             options: {
-                jshintrc: '.jshintrc'
+                configFile: '.eslintrc'
             }
         },
         pkg: grunt.file.readJSON('package.json'),
@@ -175,8 +172,7 @@ module.exports = function(grunt) {
                     patterns: replaceCommonPatterns
                 },
                 files: replaceFiles
-            },
-            esri_slurp: {}
+            }
         },
         secrets: secrets,
         sftp: {
@@ -225,12 +221,12 @@ module.exports = function(grunt) {
             }
         },
         watch: {
-            jshint: {
-                files: jshintFiles,
-                tasks: ['jshint', 'jasmine:app:build']
+            eslint: {
+                files: eslintFiles,
+                tasks: ['eslint', 'jasmine:app:build']
             },
             src: {
-                files: jshintFiles.concat(otherFiles),
+                files: eslintFiles.concat(otherFiles),
                 options: {
                     livereload: true
                 }
@@ -239,23 +235,20 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('default', [
-        'if-missing:esri_slurp:dev',
         'jasmine:app:build',
-        'jshint',
+        'eslint',
         'connect',
         'watch'
     ]);
     grunt.registerTask('travis', [
-        'if-missing:esri_slurp:travis',
-        'jshint',
+        'eslint',
         'connect',
         'jasmine:app'
     ]);
 
     grunt.registerTask('build-prod', [
         'clean:build',
-        'if-missing:esri_slurp:dev',
-        'dojo:app',
+        'dojo:prod',
         'imagemin:dynamic',
         'copy',
         'processhtml:prod',
@@ -270,8 +263,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('build-stage', [
         'clean:build',
-        'if-missing:esri_slurp:dev',
-        'dojo:app',
+        'dojo:stage',
         'imagemin:dynamic',
         'copy',
         'processhtml:stage',
@@ -286,7 +278,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('build-dev', [
         'clean:build',
-        'dojo:app',
+        'dojo:prod',
         'imagemin:dynamic',
         'copy',
         'processhtml:dev',

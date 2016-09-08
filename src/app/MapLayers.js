@@ -16,7 +16,7 @@ define([
 
     'jquery',
     'bootstrap'
-], function(
+], function (
     template,
 
     declare,
@@ -53,7 +53,7 @@ define([
         //      The labels that the layers should show
         labels: null,
 
-        postCreate: function() {
+        postCreate: function () {
             // summary:
             //      Overrides method of same name in dijit._Widget.
             // tags:

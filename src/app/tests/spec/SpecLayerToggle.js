@@ -4,14 +4,14 @@ require([
     'dojo/_base/window',
 
     'dojo/dom-construct'
-], function(
+], function (
     WidgetUnderTest,
 
     win,
 
     domConstruct
 ) {
-    describe('app/LayerToggle', function() {
+    describe('app/LayerToggle', function () {
         var widget;
         var destroy = function (widget) {
             widget.destroyRecursive();
@@ -19,7 +19,7 @@ require([
         };
         var defineLocationSpy;
 
-        beforeEach(function() {
+        beforeEach(function () {
             defineLocationSpy = jasmine.createSpy('defineLocation');
             window.AGRC = {widget: {
                 map: {
@@ -32,14 +32,14 @@ require([
             widget.startup();
         });
 
-        afterEach(function() {
+        afterEach(function () {
             if (widget) {
                 destroy(widget);
             }
         });
 
-        describe('Sanity', function() {
-            it('should create a LayerToggle', function() {
+        describe('Sanity', function () {
+            it('should create a LayerToggle', function () {
                 expect(widget).toEqual(jasmine.any(WidgetUnderTest));
             });
         });

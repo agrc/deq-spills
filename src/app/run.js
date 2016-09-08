@@ -4,7 +4,7 @@
             typeof window !== 'undefined' &&
             window.dojoConfig &&
             window.dojoConfig.isJasmineTestRunner
-            ) ? '/src': './',
+            ) ? '/src' : './',
         packages: [
             'agrc',
             'app',
@@ -17,6 +17,10 @@
             'put-selector',
             'xstyle',
             {
+                name: 'layer-selector',
+                location: 'layer-selector',
+                main: 'LayerSelector'
+            }, {
                 name: 'spin',
                 location: 'spinjs',
                 main: 'spin'
@@ -42,11 +46,15 @@
     require(config, [
         'esri/config',
 
+        'jquery',
+
         'app/config',
         'dojo/domReady!'
-    ],
-
-    function (esriConfig) {
+    ], function (esriConfig) {
         esriConfig.defaults.io.corsEnabledServers.push('mapserv.utah.gov');
+
+        if (window.agrcOnLoad) {
+            window.agrcOnLoad();
+        }
     });
-})();
+}());

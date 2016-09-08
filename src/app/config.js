@@ -1,23 +1,22 @@
-/* jshint camelcase:false */
 define([
     'app/App',
 
-    'esri/symbols/SimpleMarkerSymbol',
-
+    'dojo/has',
+    'dojo/request/xhr',
     'dojo/_base/Color',
 
+    'esri/symbols/SimpleMarkerSymbol',
 
     'dojo/domReady!'
-
-],
-
-function (
+], function (
     App,
 
-    SimpleMarkerSymbol,
+    has,
+    xhr,
+    Color,
 
-    Color
-    ) {
+    SimpleMarkerSymbol
+) {
     var SITEADDRES = 'SITEADDRES';
     var SITENAME = 'SITENAME';
     var FAC_NAME = 'FAC_NAME';
@@ -50,6 +49,8 @@ function (
         // labelsMinScale: Number
         //      The minimum scale beyond which the labels will not be shown
         labelsMinScale: 50000,
+
+        zoomLevel: 12,
 
         queries: [
             ['BOUNDARIES.ZipCodes', ['ZIP5', 'NAME'], ['ZIP', 'ZIPCITY']],
@@ -119,9 +120,20 @@ function (
         }
     };
 
-    window.AGRCMap = App;
-
-    if (window.agrcOnLoad) {
-        window.agrcOnLoad();
+    if (has('agrc-build') === 'prod') {
+        window.AGRCGLOBAL.quadWord = '??';
+    } else if (has('agrc-build') === 'stage') {
+        window.AGRCGLOBAL.quadWord = '??';
+    } else {
+        xhr(require.baseUrl + 'secrets.json', {
+            handleAs: 'json',
+            sync: true
+        }).then(function (secrets) {
+            window.AGRCGLOBAL.quadWord = secrets.quadWord;
+        }, function () {
+            throw 'Error getting secrets!';
+        });
     }
+
+    window.AGRCMap = App;
 });
