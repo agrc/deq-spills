@@ -2,7 +2,7 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
 
-    'dojo/text!./templates/LayerToggle.html',
+    'dojo/text!app/templates/LayerToggle.html',
     'dojo/topic',
     'dojo/_base/array',
     'dojo/_base/declare',

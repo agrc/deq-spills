@@ -1,5 +1,5 @@
 define([
-    'dojo/text!./templates/MapLayers.html',
+    'dojo/text!app/templates/MapLayers.html',
 
     'dojo/_base/declare',
     'dojo/_base/array',
