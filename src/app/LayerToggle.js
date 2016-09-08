@@ -2,7 +2,7 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
 
-    'dojo/text!./templates/LayerToggle.html',
+    'dojo/text!app/templates/LayerToggle.html',
     'dojo/topic',
     'dojo/_base/array',
     'dojo/_base/declare',
@@ -11,7 +11,7 @@ define([
     'dojox/gfx',
 
     'esri/layers/FeatureLayer'
-], function(
+], function (
     _TemplatedMixin,
     _WidgetBase,
 
@@ -56,7 +56,7 @@ define([
 
             this.inherited(arguments);
         },
-        postCreate: function() {
+        postCreate: function () {
             // summary:
             //      Overrides method of same name in dijit._Widget.
             // tags:
@@ -67,7 +67,7 @@ define([
 
             this.layer = new FeatureLayer(this.url, {
                 visible: true,
-                outFields: window.AGRCGLOBAL.deqLayerFields
+                outFields: '*'
             });
             window.AGRC.widget.map.addLayer(this.layer);
             window.AGRC.widget.map.addLoaderToLayer(this.layer);

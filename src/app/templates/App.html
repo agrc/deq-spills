@@ -2,12 +2,14 @@
     <div class='center-div'>
         <div data-dojo-attach-point="errMsg" class='alert alert-danger hidden'>Error message.</div>
         <div data-dojo-attach-point="magicZoomDiv"></div>
+        <!-- defined height style inline to make sure that this div is sized correctly for the
+            creation of the map -->
+        <div data-dojo-attach-point='mapDiv' class='map-div' style='height: 503px;'></div>
         <div class="map-button-container">
             <div data-dojo-attach-point="layersBtn" class='map-button' title='Map Layers'>
                 <span class="glyphicon glyphicon-list"></span>
             </div>
         </div>
-        <div data-dojo-attach-point='mapDiv' class='map-div'></div>
     </div>
     <div class='bottom-div'>
         <button class='btn btn-default' data-dojo-attach-point="clearBtn">Clear All Fields</button>

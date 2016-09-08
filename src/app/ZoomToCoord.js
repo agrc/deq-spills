@@ -12,9 +12,7 @@ define([
 
     'dijit/form/Select',
     'dijit/form/NumberTextBox'
-],
-
-function (
+], function (
     declare,
     template,
     query,
@@ -25,7 +23,7 @@ function (
     Point,
 
     TRSsearch
-    ) {
+) {
     return declare([ZoomToCoords], {
         widgetsInTemplate: true,
         templateString: template,
@@ -66,7 +64,7 @@ function (
             // summary:
             //      overridden
             console.log('app/ZoomToCoord::zoom', arguments);
-        
+
             if (this._panelController.visible === this.trsNode) {
                 this.trsSearchWidget.zoom();
             } else {

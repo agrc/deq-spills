@@ -6,7 +6,7 @@ require([
     'dojo/query',
 
     'dojo/dom-construct'
-], function(
+], function (
     WidgetUnderTest,
 
     win,
@@ -15,7 +15,7 @@ require([
 
     domConstruct
 ) {
-    describe('app/MapLayers', function() {
+    describe('app/MapLayers', function () {
         var widget;
         var destroy = function (widget) {
             widget.destroyRecursive();
@@ -23,7 +23,7 @@ require([
         };
         var layers = [0,2,4];
 
-        beforeEach(function() {
+        beforeEach(function () {
             window.AGRC = {
                 widget: {
                     map: {
@@ -38,14 +38,14 @@ require([
             widget.startup();
         });
 
-        afterEach(function() {
+        afterEach(function () {
             if (widget) {
                 destroy(widget);
             }
         });
 
-        describe('Sanity', function() {
-            it('should create a MapLayers', function() {
+        describe('Sanity', function () {
+            it('should create a MapLayers', function () {
                 expect(widget).toEqual(jasmine.any(WidgetUnderTest));
             });
         });

@@ -1,8 +1,8 @@
 {
     "name": "app",
-    "version": "0.1",
+    "version": "2.1.1",
     "main": "main",
-    "description": "AGRC Boilerplate",
-    "homepage": "https://github.com/agrc/AGRCJavaScriptProjectBoilerPlate",
-    "dojoBuild": "package.js"
+    "description": "deq-spills",
+    "homepage": "https://github.com/agrc/deq-spills",
+    "dojoBuild": "app.profile.js"
 }

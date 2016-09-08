@@ -1,27 +1,24 @@
-/* globals AGRCGLOBAL */
-/* jshint camelcase:false */
 require([
     'app/App',
-    'dojo/dom-construct',
-    'dojo/_base/window',
-    'dojo/dom-class',
-    // 'agrc/modules/SGIDQuery',
-    'dojo/Deferred',
-    'dojo/_base/lang',
-    'dojo/query'
 
+    'dojo/Deferred',
+    'dojo/dom-class',
+    'dojo/dom-construct',
+    'dojo/query',
+    'dojo/_base/lang',
+    'dojo/_base/window'
 ],
 
 function (
     App,
-    domConstruct,
-    win,
-    domClass,
-    // sgidQuery,
+
     Deferred,
+    domClass,
+    domConstruct,
+    query,
     lang,
-    query
-    ) {
+    win
+) {
     describe('app/App', function () {
         var testWidget;
         var apiKey = 'AGRC-711483DB443447';
@@ -50,7 +47,7 @@ function (
                 expect(testWidget).toEqual(jasmine.any(App));
             });
             it('set\'s AGRCGLOBAL.apiKey', function () {
-                expect(AGRCGLOBAL.apiKey).toEqual(apiKey);
+                expect(window.AGRCGLOBAL.apiKey).toEqual(apiKey);
             });
             it('throws an error if no apiKey is passed', function () {
                 expect(function () {
