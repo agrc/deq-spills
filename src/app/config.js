@@ -120,10 +120,8 @@ define([
         }
     };
 
-    if (has('agrc-build') === 'prod') {
-        window.AGRCGLOBAL.quadWord = '??';
-    } else if (has('agrc-build') === 'stage') {
-        window.AGRCGLOBAL.quadWord = '??';
+    if (has('agrc-build') === 'prod' || has('agrc-build') === 'stage') {
+        window.AGRCGLOBAL.quadWord = 'result-table-secure-antenna';
     } else {
         xhr(require.baseUrl + 'secrets.json', {
             handleAs: 'json',
