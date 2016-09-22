@@ -6,7 +6,8 @@ module.exports = function (grunt) {
         'src/app/**/*.html',
         'src/app/**/*.css',
         'src/embed-demo.html',
-        'src/ChangeLog.html'
+        'src/ChangeLog.html',
+        'src/web.config'
     ];
     var gruntFile = 'GruntFile.js';
     var internFile = 'tests/intern.js';
@@ -17,29 +18,6 @@ module.exports = function (grunt) {
         src: 'src/EmbeddedMapLoader.js',
         dest: 'dist/'
     }];
-    var replaceCommonPatterns = [{
-        match: /\/\/ start replace[\w\W]*\/\/ end replace/,
-        replacement: 'document.write(\'<script type=\\\'text/javascript\\\' ' +
-            'src=\\\'\' + window.AGRC_server + \'/dojo/dojo.js\\\'' +
-            'data-dojo-config="deps:[\\\'app/run\\\']"></script>\');'
-    },{
-        match: /bootstrap\/dist\/css/,
-        replacement: 'bootstrap/css'
-    }];
-    var processhtmlFiles = {'dist/embed-demo.html': ['src/embed-demo.html']};
-    var bumpFiles = [
-        'package.json',
-        'bower.json',
-        'src/app/config.js',
-        'src/app/package.json'
-    ];
-    var deployExcludes = [
-        '!util/**',
-        '!**/*consoleStripped.js',
-        '!**/*.min.*',
-        '!build-report.txt'
-    ];
-    var deployDir = 'wwwroot/DEQSpills';
     var secrets;
     try {
         secrets = grunt.file.readJSON('secrets.json');
@@ -52,6 +30,31 @@ module.exports = function (grunt) {
             password: ''
         };
     }
+    var replaceCommonPatterns = [{
+        match: /\/\/ start replace[\w\W]*\/\/ end replace/,
+        replacement: 'document.write(\'<script type=\\\'text/javascript\\\' ' +
+            'src=\\\'\' + window.AGRC_server + \'/dojo/dojo.js\\\'' +
+            'data-dojo-config="deps:[\\\'app/run\\\']"></script>\');'
+    },{
+        match: /bootstrap\/dist\/css/,
+        replacement: 'bootstrap/css'
+    }, {
+        match: /<test quad word from src\/secrets\.json>/,
+        replacement: secrets.testQuadWord
+    }];
+    var processhtmlFiles = {'dist/embed-demo.html': ['src/embed-demo.html']};
+    var bumpFiles = [
+        'package.json',
+        'bower.json',
+        'src/app/config.js',
+        'src/app/package.json'
+    ];
+    var deployExcludes = [
+        '!util/**',
+        '!**/*consoleStripped.js',
+        '!build-report.txt'
+    ];
+    var deployDir = 'wwwroot/DEQSpills';
 
     grunt.initConfig({
         bump: {
