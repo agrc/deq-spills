@@ -3,6 +3,7 @@
     // start server replace
     window.AGRC_server = 'http://localhost/' + location.pathname.replace(/\/[^\/]+$/, '');
     // end server replace
+    window.AGRC_testQuadWord = '<test quad word from src/secrets.json>'; // populated by grunt replace
 
     var head = document.getElementsByTagName('head').item(0);
 
