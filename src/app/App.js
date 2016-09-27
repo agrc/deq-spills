@@ -439,13 +439,17 @@ define([
             var promises = [];
             var noFeatFound = 'no feature found';
 
+            // convert to utm
+            var location = lang.clone(location);
+            var utm = proj4(proj4('GOOGLE'), window.AGRCGLOBAL.projections.utm, [location.x, location.y]);
+            location.x = utm[0];
+            location.y = utm[1];
 
             array.forEach(window.AGRCGLOBAL.queries, function (q) {
                 that.map.showLoader();
                 promises.push(
                     that.api.search('SGID10.' + q[0], q[1], {
-                        geometry: 'point:[' + location.x + ',' + location.y + ']',
-                        spatialReference: that.map.spatialReference.wkid
+                        geometry: 'point:[' + location.x + ',' + location.y + ']'
                     }).then(function (data) {
                         that.map.showLoader();
                         array.forEach(q[2], function (f, i) {
