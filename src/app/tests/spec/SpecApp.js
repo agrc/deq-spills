@@ -6,7 +6,9 @@ require([
     'dojo/dom-construct',
     'dojo/query',
     'dojo/_base/lang',
-    'dojo/_base/window'
+    'dojo/_base/window',
+
+    'esri/SpatialReference'
 ],
 
 function (
@@ -17,7 +19,9 @@ function (
     domConstruct,
     query,
     lang,
-    win
+    win,
+
+    SpatialReference
 ) {
     describe('app/App', function () {
         var testWidget;
@@ -37,6 +41,7 @@ function (
         beforeEach(function () {
             testWidget = createWidget();
             testWidget.startup();
+            testWidget.map.spatialReference = new SpatialReference(3857);
         });
         afterEach(function () {
             destroy(testWidget);
