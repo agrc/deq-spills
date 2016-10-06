@@ -355,7 +355,8 @@ define([
                     spatialReference: {
                         wkid: 3857
                     }
-                })
+                }),
+                spatialReference: new SpatialReference(3857)
             });
             this.layerSelector = new LayerSelector({
                 map: this.map,

@@ -25,16 +25,17 @@ function (
 ) {
     describe('app/App', function () {
         var testWidget;
-        var apiKey = 'AGRC-711483DB443447';
+        var apiKey = 'blah';
         function createWidget(params) {
             var defaultParams = {
-                apiKey: apiKey
+                apiKey: apiKey,
+                map: {spatialReference: {wkid: 2345}}
             };
             return new App(lang.mixin(defaultParams, params),
                 domConstruct.create('div', null, win.body()));
         }
         var destroy = function (widget) {
-            widget.destroyRecursive(false);
+            widget.destroyRecursive();
             widget = null;
         };
 
