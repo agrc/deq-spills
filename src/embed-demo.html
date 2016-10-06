@@ -113,7 +113,7 @@
 
         /* globals AGRCMap */
         window.agrcOnLoad = function () {
-            var app = new AGRCMap(window.labels, document.getElementById('AGRCMap'));
+            var app = new AGRCMap(window.county, document.getElementById('AGRCMap'));
 
             // must always call startup
             app.startup();
@@ -129,7 +129,6 @@
                 console.log('result.DMS_LONG', result.DMS_LONG);
                 console.log('result.INDIAN', result.INDIAN);
                 console.log('result.OWNER_AGENCY', result.OWNER_AGENCY);
-                console.log('result.RANGE', result.RANGE);
                 console.log('result.SECTION', result.SECTION);
                 console.log('result.SITEDESC', result.SITEDESC);
                 console.log('result.ST_KEY', result.ST_KEY);
