@@ -357,12 +357,13 @@ define([
                     }
                 })
             });
-            this.bms = new LayerSelector({
+            this.layerSelector = new LayerSelector({
                 map: this.map,
                 quadWord: window.AGRCGLOBAL.quadWord,
                 baseLayers: ['Terrain', 'Hybrid', 'Lite', 'Topo']
             });
-            this.bms.startup();
+            this.own(this.layerSelector);
+            this.layerSelector.startup();
 
             this.findAddressWidget = new FindAddress({
                 map: this.map,
@@ -633,18 +634,6 @@ define([
             this.magicZoom.textBox.value = '';
 
             this.zoomWidget.clear();
-        },
-        destroyRecursive: function () {
-            // summary:
-            //      description
-            console.log('app/App:destroyRecursive', arguments);
-
-            if (this.bms) {
-                this.bms.destroyRecursive();
-                domConstruct.destroy(this.bms.domNode);
-            }
-
-            this.inherited(arguments);
         }
     });
 });
