@@ -152,8 +152,6 @@ function (
                 }).toThrow(testWidget2.invalidLabelTxt);
             });
         });
-        describe('zoomToFeature', function () {
-        });
         describe('showError', function () {
             it('calls alert with the message', function () {
                 var value = 'blah';
