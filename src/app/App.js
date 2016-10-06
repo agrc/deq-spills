@@ -555,17 +555,16 @@ define([
                 });
             }
 
-            this.webAPI.search(type.fcName, ['shape@envelope'], {
+            this.webAPI.search(type.fcName, ['shape@'], {
                 predicate: type.fldName + ' = \'' + name + '\'',
                 spatialReference: this.map.spatialReference.wkid
             }).then(function (results) {
                 var geo = results[0].geometry;
                 if (type.type === 'point') {
-                    var pnt = new Point(geo.rings[0][0], new SpatialReference(26912));
+                    var pnt = new Point(geo);
                     that.map.centerAndZoom(pnt, window.AGRCGLOBAL.zoomLevel);
                 } else {
-                    var p = new Polygon(results[0].geometry);
-                    p.setSpatialReference(new SpatialReference(26912));
+                    var p = new Polygon(geo);
                     that.map.setExtent(p.getExtent());
                 }
             }, function () {
