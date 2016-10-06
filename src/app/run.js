@@ -8,12 +8,13 @@
         packages: [
             'agrc',
             'app',
-            'dijit',
             'dgrid',
+            'dijit',
             'dojo',
             'dojox',
             'esri',
             'ijit',
+            'moment',
             'put-selector',
             'xstyle',
             {
@@ -34,8 +35,8 @@
                 main: 'js/bootstrap'
             }, {
                 name: 'proj4',
-                location: 'proj4',
-                main: 'proj4'
+                location: 'proj4/dist',
+                main: 'proj4-src'
             }, {
                 name: 'es5shim',
                 location: 'es5-shim',
