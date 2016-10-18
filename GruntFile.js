@@ -110,16 +110,17 @@ module.exports = function (grunt) {
                 basePath: './src'
             }
         },
-        imagemin: { // Task
-            dynamic: { // Another target
-                options: { // Target options
+        imagemin: {
+            dynamic: {
+                options: {
                     optimizationLevel: 3
                 },
                 files: [{
-                    expand: true, // Enable dynamic expansion
-                    cwd: 'src/', // Src matches are relative to this path
-                    src: ['**/*.{png,jpg,gif}'], // Actual patterns to match
-                    dest: 'dist/' // Destination path prefix
+                    expand: true,
+                    cwd: 'src/',
+                    // exclude tests because some images in dojox throw errors
+                    src: ['**/*.{png,jpg,gif}', '!**/tests/**/*.*'],
+                    dest: 'src/'
                 }]
             }
         },
@@ -251,8 +252,8 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build-prod', [
         'clean:build',
-        'dojo:prod',
         'imagemin:dynamic',
+        'dojo:prod',
         'copy',
         'processhtml:prod',
         'replace:prod'
@@ -266,8 +267,8 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build-stage', [
         'clean:build',
-        'dojo:stage',
         'imagemin:dynamic',
+        'dojo:stage',
         'copy',
         'processhtml:stage',
         'replace:stage'
