@@ -11,11 +11,14 @@ from os.path import join
 
 
 class DEQSpillsPallet(Pallet):
+    def __init__(self):
+        super(DEQSpillsPallet, self).__init__()
+        
     def build(self, configuration):
         self.arcgis_services = [('DEQSpills', 'MapServer')]
 
         self.sgid = join(self.garage, 'SGID10.sde')
-        self.environment = r'C:\Scheduled\staging\environment.gdb'
+        self.environment = join(self.staging_rack, 'environment.gdb')
 
         self.copy_data = [self.environment]
 
