@@ -11,9 +11,6 @@ from os.path import join
 
 
 class DEQSpillsPallet(Pallet):
-    def __init__(self):
-        super(DEQSpillsPallet, self).__init__()
-        
     def build(self, configuration):
         self.arcgis_services = [('DEQSpills', 'MapServer')]
 
