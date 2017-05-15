@@ -20,7 +20,9 @@ var profile = {
                 'esri/dijit/Attribution',
                 'dojox/gfx/path',
                 'dojox/gfx/svg',
-                'dojox/gfx/shape'
+                'dojox/gfx/shape',
+                'dojox/gfx/filters',
+                'dojox/gfx/svgext'
             ],
             includeLocales: ['en-us'],
             customBase: true,
