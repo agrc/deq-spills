@@ -42,8 +42,8 @@ define([
 
         // urls: Object
         urls: {
-            mapservice: window.AGRC_server.split('/').slice(0, 3).join('/') +
-                '/arcgis/rest/services/DEQSpills/MapServer'
+            mapservice: window.AGRC_server.split('/').slice(0, 3).join('/') + '/arcgis/rest/services/DEQSpills/MapServer',
+            landOwnership: 'https://tlamap.trustlands.utah.gov/arcgis/rest/services/SpecialProject/UT_SITLA_LandOwnership_WM/MapServer/0'
         },
 
         // labelsMinScale: Number

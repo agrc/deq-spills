@@ -66,6 +66,9 @@
     box-shadow: none;
     border: 1px solid #57585A;
 }
+.agrc-app .map-div .layer-selector-items {
+    max-width: 140px;
+}
 .agrc-app .center-div {
     position: absolute;
     top: 0;

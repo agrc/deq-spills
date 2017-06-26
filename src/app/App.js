@@ -34,6 +34,7 @@ define([
     'esri/geometry/Polygon',
     'esri/graphic',
     'esri/layers/ArcGISDynamicMapServiceLayer',
+    'esri/layers/FeatureLayer',
     'esri/layers/LabelLayer',
     'esri/renderers/SimpleRenderer',
     'esri/SpatialReference',
@@ -80,6 +81,7 @@ define([
     Polygon,
     Graphic,
     ArcGISDynamicMapServiceLayer,
+    FeatureLayer,
     LabelLayer,
     SimpleRenderer,
     SpatialReference,
@@ -361,7 +363,13 @@ define([
             this.layerSelector = new LayerSelector({
                 map: this.map,
                 quadWord: window.AGRCGLOBAL.quadWord,
-                baseLayers: ['Terrain', 'Hybrid', 'Lite', 'Topo']
+                baseLayers: ['Terrain', 'Hybrid', 'Lite', 'Topo'],
+                overlays: [{
+                    Factory: FeatureLayer,
+                    url: window.AGRCGLOBAL.urls.landOwnership,
+                    id: 'Land Ownership',
+                    opacity: 0.6
+                }]
             });
             this.own(this.layerSelector);
             this.layerSelector.startup();
