@@ -5,6 +5,7 @@ define([
     'dojo/request/xhr',
     'dojo/_base/Color',
 
+    'esri/config',
     'esri/symbols/SimpleMarkerSymbol',
 
     'dojo/domReady!'
@@ -15,8 +16,11 @@ define([
     xhr,
     Color,
 
+    esriConfig,
     SimpleMarkerSymbol
 ) {
+    esriConfig.defaults.io.corsEnabledServers.push('https://tlamap.trustlands.utah.gov');
+
     var SITEADDRES = 'SITEADDRES';
     var SITENAME = 'SITENAME';
     var FAC_NAME = 'FAC_NAME';

@@ -7,6 +7,7 @@
 @import 'TRSsearch.css';
 @import '../../dijit/themes/claro/claro.css';
 @import '../../esri/css/esri.css';
+@import 'Legend.css';
 
 /* disable bootstrap responsive */
 .form-inline .form-group {
@@ -68,6 +69,12 @@
 }
 .agrc-app .map-div .layer-selector-items {
     max-width: 140px;
+}
+.agrc-app .map-div .layer-selector {
+    max-width: 200px;
+}
+.agrc-app .map-div .layer-selector .glyphicon {
+    margin-left: 2px;
 }
 .agrc-app .center-div {
     position: absolute;

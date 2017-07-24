@@ -7,6 +7,7 @@ define([
 
     'app/MapLayers',
     'app/ZoomToCoord',
+    'app/Legend',
 
     'dijit/registry',
     'dijit/_TemplatedMixin',
@@ -54,6 +55,7 @@ define([
 
     MapLayers,
     ZoomToCoord,
+    Legend,
 
     registry,
     _TemplatedMixin,
@@ -374,6 +376,8 @@ define([
             this.own(this.layerSelector);
             this.layerSelector.startup();
 
+            this.buildLandOwnLegend();
+
             this.findAddressWidget = new FindAddress({
                 map: this.map,
                 apiKey: this.apiKey,
@@ -438,6 +442,28 @@ define([
                     };
                 })
             );
+        },
+        buildLandOwnLegend: function () {
+            // summary:
+            //      inserts the legend elements for land own into layer selector
+            console.log('app/App:buildLandOwnLegend', arguments);
+
+            var legend = new Legend({
+                mapServiceUrl: window.AGRCGLOBAL.urls.landOwnership.slice(0, -2),
+                layerId: 0
+            }, domConstruct.create('div', null));
+            legend.startup();
+
+            var label = query('label.layer-selector-items[title="Land Ownership"]', this.layerSelector.domNode)[0];
+            var span = domConstruct.create('span', { class: 'glyphicon glyphicon-question-sign' }, label);
+            $(span).tooltip({
+                container: 'body',
+                delay: 500,
+                title: legend.domNode,
+                style: 'margin-left: 5px',
+                html: true,
+                placement: 'left'
+            });
         },
         defineLocation: function (location) {
             // summary:
