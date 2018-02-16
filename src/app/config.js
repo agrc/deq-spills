@@ -19,7 +19,7 @@ define([
     esriConfig,
     SimpleMarkerSymbol
 ) {
-    esriConfig.defaults.io.corsEnabledServers.push('https://tlamap.trustlands.utah.gov');
+    esriConfig.defaults.io.corsEnabledServers.push('https://gis.trustlands.utah.gov');
 
     var SITEADDRES = 'SITEADDRES';
     var SITENAME = 'SITENAME';
@@ -46,8 +46,9 @@ define([
 
         // urls: Object
         urls: {
-            mapservice: window.AGRC_server.split('/').slice(0, 3).join('/') + '/arcgis/rest/services/DEQSpills/MapServer',
-            landOwnership: 'https://tlamap.trustlands.utah.gov/arcgis/rest/services/SpecialProject/UT_SITLA_LandOwnership_WM/MapServer/0'
+            mapservice: window.AGRC_server.split('/').slice(0, 3).join('/') + '/arcgis/rest/services/DEQSpills/MapService/MapServer',
+            landOwnership: 'https://gis.trustlands.utah.gov/server/rest/services/Ownership/UT_SITLA_Ownership_LandOwnership_WM/MapServer/0',
+            referenceLayers: window.AGRC_server.split('/').slice(0, 3).join('/') + '/arcgis/rest/services/DEQSpills/ReferenceLayers/MapServer'
         },
 
         // labelsMinScale: Number

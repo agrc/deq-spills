@@ -371,6 +371,11 @@ define([
                     url: window.AGRCGLOBAL.urls.landOwnership,
                     id: 'Land Ownership',
                     opacity: 0.6
+                }, {
+                    Factory: ArcGISDynamicMapServiceLayer,
+                    url: window.AGRCGLOBAL.urls.referenceLayers,
+                    id: 'Health Districts',
+                    opacity: 0.8
                 }]
             });
             this.own(this.layerSelector);
