@@ -1,7 +1,4 @@
-/*jshint unused:false */
-var amdTag = function (filename, mid) {
-    return (/.*\.js$/).test(filename);
-};
+/* eslint no-unused-vars: 0 */
 var profile = {
     basePath: '../src',
     action: 'release',
@@ -17,12 +14,14 @@ var profile = {
                 'dojo/i18n',
                 'dojo/domReady',
                 'app/run',
-                'esri/dijit/Attribution',
-                'dojox/gfx/path',
-                'dojox/gfx/svg',
-                'dojox/gfx/shape',
                 'dojox/gfx/filters',
-                'dojox/gfx/svgext'
+                'dojox/gfx/svg',
+                'dojox/gfx/svgext',
+                'esri/layers/LabelLayer',
+                'esri/layers/VectorTileLayerImpl',
+                'esri/PopupInfo',
+                'esri/tasks/RelationshipQuery',
+                'xstyle/core/load-css'
             ],
             includeLocales: ['en-us'],
             customBase: true,
@@ -30,38 +29,14 @@ var profile = {
         }
     },
     staticHasFeatures: {
-        // The trace & log APIs are used for debugging the loader, so we don’t need them in the build
-        'dojo-trace-api':0,
-        'dojo-log-api':0,
-
-        // This causes normally private loader data to be exposed for debugging, so we don’t need that either
-        'dojo-publish-privates':0,
-
-        // We’re fully async, so get rid of the legacy loader
-        'dojo-sync-loader':0,
-
-        // dojo-xhr-factory relies on dojo-sync-loader
-        'dojo-xhr-factory':0,
-
-        // We aren’t loading tests in production
-        'dojo-test-sniff':0
+        'dojo-trace-api': 0,
+        'dojo-log-api': 0,
+        'dojo-publish-privates': 0,
+        'dojo-sync-loader': 0,
+        'dojo-xhr-factory': 0,
+        'dojo-test-sniff': 0
     },
     packages: [{
-        name: 'esri',
-        resourceTags: {
-            amd: amdTag
-        }
-    }, {
-        name: 'proj4',
-        resourceTags: {
-            amd: amdTag
-        }
-    }, {
-        name: 'es5shim',
-        resourceTags: {
-            amd: amdTag
-        }
-    }, {
         name: 'moment',
         location: 'moment',
         main: 'moment',
@@ -74,7 +49,7 @@ var profile = {
                 return /\.js$/.test(filename);
             }
         }
-    }, 'mustache'],
+    }, 'mustache', 'dgrid1', 'dstore'],
     // this is to make sure that the widget templates get built into the layer file.
     userConfig: {
         packages: ['app', 'dijit', 'dojox', 'agrc', 'ijit', 'esri', 'layer-selector']
