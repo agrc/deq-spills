@@ -113,7 +113,7 @@
 
         /* globals AGRCMap */
         window.agrcOnLoad = function () {
-            var app = new AGRCMap(window.all, document.getElementById('AGRCMap'));
+            var app = new AGRCMap(window.address, document.getElementById('AGRCMap'));
 
             // must always call startup
             app.startup();

@@ -1,3 +1,6 @@
+var amdTag = function (filename, mid) {
+    return (/.*\.js$/).test(filename);
+};
 /* eslint no-unused-vars: 0 */
 var profile = {
     basePath: '../src',
@@ -37,6 +40,11 @@ var profile = {
         'dojo-test-sniff': 0
     },
     packages: [{
+        name: 'proj4',
+        resourceTags: {
+            amd: amdTag
+        }
+    }, {
         name: 'moment',
         location: 'moment',
         main: 'moment',

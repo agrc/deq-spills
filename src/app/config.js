@@ -20,6 +20,7 @@ define([
     SimpleMarkerSymbol
 ) {
     esriConfig.defaults.io.corsEnabledServers.push('https://gis.trustlands.utah.gov');
+    esriConfig.defaults.io.corsEnabledServers.push('api.mapserv.utah.gov');
 
     var SITEADDRES = 'SITEADDRES';
     var SITENAME = 'SITENAME';
