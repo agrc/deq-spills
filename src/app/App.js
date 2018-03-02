@@ -398,6 +398,7 @@ define([
             });
 
             aspect.after(this.findAddressWidget, 'onFind', function (result) {
+                that.map.graphics.clear();
                 that.defineLocation(result.location);
             }, true);
             this.findRouteMilepostWidget = new FindRouteMilepost({
@@ -409,6 +410,7 @@ define([
             }, this.findRouteDiv);
             this.findRouteMilepostWidget.startup();
             aspect.after(this.findRouteMilepostWidget, 'onFind', function (location) {
+                that.map.graphics.clear();
                 that.defineLocation(location);
             }, true);
             this.zoomWidget = new ZoomToCoord({
