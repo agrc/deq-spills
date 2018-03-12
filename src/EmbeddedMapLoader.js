@@ -23,9 +23,11 @@
     loadCss(window.AGRC_server + '/app/resources/App.css');
     loadCss(window.AGRC_server + '/bootstrap/dist/css/bootstrap.css');
 
+    var dojoPath = '/dojo/dojo.js';
+
     // start replace
     document.write('<script type=\'text/javascript\' src=\'' +
-        window.AGRC_server + '/dojo/dojo.js\' data-dojo-config=\'isDebug: 1\'></script>');
+        window.AGRC_server + dojoPath + '\' data-dojo-config=\'isDebug: 1\'></script>');
     document.write('<script type=\'text/javascript\' src=\'' +
         window.AGRC_server + '/app/run.js\'></script>');
     // end replace

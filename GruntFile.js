@@ -33,7 +33,7 @@ module.exports = function (grunt) {
     var replaceCommonPatterns = [{
         match: /\/\/ start replace[\w\W]*\/\/ end replace/,
         replacement: 'document.write(\'<script type=\\\'text/javascript\\\' ' +
-            'src=\\\'\' + window.AGRC_server + \'/dojo/dojo.js\\\'' +
+            'src=\\\'\' + window.AGRC_server + dojoPath + \'\\\' ' +
             'data-dojo-config="deps:[\\\'app/run\\\']"></script>\');'
     },{
         match: /bootstrap\/dist\/css/,
@@ -64,6 +64,20 @@ module.exports = function (grunt) {
                 push: false
             }
         },
+        cachebreaker: {
+            main: {
+                options: {
+                    match: [
+                        'dojo.js',
+                        'app/resources/App.css',
+                        'bootstrap/css/bootstrap.css'
+                    ]
+                },
+                files: {
+                    src: ['dist/EmbeddedMapLoader.js']
+                }
+            }
+        },
         clean: {
             build: ['dist'],
             deploy: ['deploy']
@@ -86,8 +100,10 @@ module.exports = function (grunt) {
         },
         copy: {
             main: {
-                src: 'src/ChangeLog.html',
-                dest: 'dist/ChangeLog.html'
+                expand: true,
+                cwd: 'src/',
+                src: ['ChangeLog.html', 'web.config'],
+                dest: 'dist/'
             }
         },
         dojo: {
@@ -256,7 +272,8 @@ module.exports = function (grunt) {
         'dojo:prod',
         'copy',
         'processhtml:prod',
-        'replace:prod'
+        'replace:prod',
+        'cachebreaker'
     ]);
     grunt.registerTask('deploy-prod', [
         'clean:deploy',
@@ -271,7 +288,8 @@ module.exports = function (grunt) {
         'dojo:stage',
         'copy',
         'processhtml:stage',
-        'replace:stage'
+        'replace:stage',
+        'cachebreaker'
     ]);
     grunt.registerTask('deploy-stage', [
         'clean:deploy',
