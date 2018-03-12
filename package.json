@@ -1,6 +1,6 @@
 {
   "name": "DEQSpills",
-  "version": "2.6.1",
+  "version": "2.7.0",
   "devDependencies": {
     "grunt": "^1.0.1",
     "grunt-bump": "^0.8.0",
