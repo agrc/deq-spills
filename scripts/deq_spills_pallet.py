@@ -13,7 +13,8 @@ from forklift.models import Pallet
 
 class DEQSpillsPallet(Pallet):
     def build(self, configuration):
-        self.arcgis_services = [('DEQSpills', 'MapServer')]
+        self.arcgis_services = [('DEQSpills/MapService', 'MapServer'),
+                                ('DEQSpills/ReferenceLayers', 'MapServer')]
 
         self.sgid = join(self.garage, 'SGID10.sde')
         self.environment = join(self.staging_rack, 'environment.gdb')
