@@ -16,7 +16,7 @@ class DEQSpillsPallet(Pallet):
         self.arcgis_services = [('DEQSpills/MapService', 'MapServer'),
                                 ('DEQSpills/ReferenceLayers', 'MapServer')]
 
-        self.sgid = join(self.garage, 'SGID10.sde')
+        self.sgid = join(self.garage, 'SGID.sde')
         self.environment = join(self.staging_rack, 'environment.gdb')
         self.boundaries = join(self.staging_rack, 'boundaries.gdb')
         self.health = join(self.staging_rack, 'health.gdb')
