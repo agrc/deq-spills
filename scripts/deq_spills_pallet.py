@@ -39,4 +39,4 @@ class DEQSpillsPallet(Pallet):
                          'destination_workspace': self.environment})
 
         self.add_crate(('Counties', self.sgid, self.boundaries))
-        self.add_crate(('HealthDistricts2015', self.sgid, self.health))
+        self.add_crate(('HealthDistricts', self.sgid, self.health))
