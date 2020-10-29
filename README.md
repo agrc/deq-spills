@@ -16,7 +16,7 @@ properties (for examples check out [embed-demo.html](src/embed-demo.html)):
 |name|type|description|
 |---|---|---|
 |`apiKey`|`string`|your api key|
-|`layers`|`number[]`|The indices of the layers that you want to show in the map. They should correspond with the layers in the map service.|
+|`layers`|`number[]`|The indices of the layers that you want to show in the map. They should correspond with the layers in the [map service](http://mapserv.utah.gov/arcgis/rest/services/DEQSpills/MapService/MapServer).|
 |`countyName`|`string`|Name of the county that you want to zoom to.|
 |`cityName`|`string`|Name of the city that you want to zoom to.|
 |`zip`|`number`|The zip code that you want to zoom to.|
