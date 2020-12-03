@@ -1,6 +1,6 @@
 {
     "name": "app",
-    "version": "2.7.1",
+    "version": "2.7.2",
     "main": "main",
     "description": "deq-spills",
     "homepage": "https://github.com/agrc/deq-spills",

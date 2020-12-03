@@ -1,6 +1,6 @@
 {
   "name": "deq-spills",
-  "version": "2.7.1",
+  "version": "2.7.2",
   "dependencies": {
     "ijit": "agrc-ijit#~2.1",
     "bootstrap": "3.3.6",
