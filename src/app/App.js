@@ -117,7 +117,7 @@ define([
             },
             citytown: {
                 name: 'citytown',
-                fcName: 'SGID10.SOCIETY.UDOTMAP_CityLocations',
+                fcName: 'SGID10.LOCATION.CitiesTownsLocations',
                 fldName: 'NAME',
                 errTxt: 'City/Town: ${0} not found!',
                 type: 'point'
