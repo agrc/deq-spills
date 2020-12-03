@@ -28,6 +28,10 @@
     width: 100%;
 }
 
+.form-inline .form-group select.form-control {
+    padding: 0;
+}
+
 .form-control {
     padding-top: 0;
     padding-bottom: 0;
