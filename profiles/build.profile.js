@@ -7,9 +7,8 @@ var profile = {
     action: 'release',
     cssOptimize: 'comments',
     mini: true,
-    optimize: 'closure',
-    layerOptimize: 'closure',
-    stripConsole: 'all',
+    optimize: false,
+    layerOptimize: false,
     selectorEngine: 'acme',
     layers: {
         'dojo/dojo': {

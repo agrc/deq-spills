@@ -240,6 +240,34 @@ module.exports = function (grunt) {
                 }
             }
         },
+        uglify: {
+            options: {
+                preserveComments: false,
+                sourceMap: true,
+                compress: {
+                    drop_console: true,
+                    passes: 2,
+                    dead_code: true
+                }
+            },
+            stage: {
+                options: {
+                    compress: {
+                        drop_console: false
+                    }
+                },
+                src: ['dist/dojo/dojo.js'],
+                dest: 'dist/dojo/dojo.js'
+            },
+            prod: {
+                files: [{
+                    expand: true,
+                    cwd: 'dist',
+                    src: ['**/*.js', '!proj4/**/*.js'],
+                    dest: 'dist'
+                }]
+            }
+        },
         watch: {
             eslint: {
                 files: eslintFiles,
@@ -270,6 +298,7 @@ module.exports = function (grunt) {
         'clean:build',
         'imagemin:dynamic',
         'dojo:prod',
+        'uglify:prod',
         'copy',
         'processhtml:prod',
         'replace:prod',
@@ -286,6 +315,7 @@ module.exports = function (grunt) {
         'clean:build',
         'imagemin:dynamic',
         'dojo:stage',
+        'uglify:stage',
         'copy',
         'processhtml:stage',
         'replace:stage',
