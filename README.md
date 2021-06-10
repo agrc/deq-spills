@@ -3,14 +3,14 @@ deq-spills
 
 Embedded widget written for deq spills application.
 
-See [src/embed-demo.html](src/embed-demo.html) for an example of how to embed this widget and get data from it.
+See [src/index.html](src/index.html) for an example of how to embed this widget and get data from it.
 
 ### API
 #### constructor
 `new AGRCMap(options, node)`  
 parameter: `options`  
 type: `object`  
-properties (for examples check out [embed-demo.html](src/embed-demo.html)):  
+properties (for examples check out [index.html](src/index.html)):  
 
 |name|type|description|
 |---|---|---|

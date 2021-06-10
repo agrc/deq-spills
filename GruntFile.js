@@ -5,7 +5,7 @@ module.exports = function (grunt) {
     var otherFiles = [
         'src/app/**/*.html',
         'src/app/**/*.css',
-        'src/embed-demo.html',
+        'src/index.html',
         'src/ChangeLog.html',
         'src/web.config'
     ];
@@ -26,7 +26,7 @@ module.exports = function (grunt) {
         match: /bootstrap\/dist\/css/,
         replacement: 'bootstrap/css'
     }];
-    var processhtmlFiles = {'dist/embed-demo.html': ['src/embed-demo.html']};
+    var processhtmlFiles = {'dist/index.html': ['src/index.html']};
     var bumpFiles = [
         'package.json',
         'bower.json',
