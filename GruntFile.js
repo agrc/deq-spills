@@ -6,8 +6,7 @@ module.exports = function (grunt) {
         'src/app/**/*.html',
         'src/app/**/*.css',
         'src/index.html',
-        'src/ChangeLog.html',
-        'src/web.config'
+        'src/ChangeLog.html'
     ];
     var gruntFile = 'GruntFile.js';
     var eslintFiles = [jsFiles, gruntFile, 'src/EmbeddedMapLoader.js'];
@@ -37,7 +36,7 @@ module.exports = function (grunt) {
             main: {
                 expand: true,
                 cwd: 'src/',
-                src: ['ChangeLog.html', 'web.config'],
+                src: ['ChangeLog.html', 'EmbeddedMapLoader.js'],
                 dest: 'dist/'
             }
         },
