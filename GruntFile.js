@@ -32,8 +32,7 @@ module.exports = function (grunt) {
                 options: {
                     match: [
                         'dojo.js',
-                        'app/resources/App.css',
-                        'bootstrap/css/bootstrap.css'
+                        'run.js'
                     ]
                 },
                 files: {
