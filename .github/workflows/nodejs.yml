@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: dev
-      url: https://politicaldistricts.dev.utah.gov
+      url: https://deqspills.dev.utah.gov
     if: github.ref != 'refs/heads/main'
 
     steps:
@@ -25,7 +25,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '12'
 
       - name: Cache Node.js modules
         uses: actions/cache@v2
@@ -53,7 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: prod
-      url: https://politicaldistricts.ugrc.utah.gov
+      url: https://deqspills.ugrc.utah.gov
     if: github.ref == 'refs/heads/main'
 
     steps:
@@ -63,7 +63,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '12'
 
       - name: Cache Node.js modules
         uses: actions/cache@v2
