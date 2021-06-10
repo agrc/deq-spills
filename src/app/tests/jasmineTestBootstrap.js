@@ -19,4 +19,3 @@ window.AGRCGLOBAL = {
         mapservice: 'blah'
     }
 };
-window.AGRC_server = 'http://test.mapserv.utah.gov/DEQSpills/blah';
