@@ -25,6 +25,6 @@
     "build": "grunt build-stage",
     "postinstall": "bower install",
     "start": "grunt",
-    "test": "grunt test --verbose"
+    "test": "grunt test"
   }
 }
