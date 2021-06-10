@@ -19,8 +19,9 @@ define([
     esriConfig,
     SimpleMarkerSymbol
 ) {
-    esriConfig.defaults.io.corsEnabledServers.push('https://gis.trustlands.utah.gov');
+    esriConfig.defaults.io.corsEnabledServers.push('gis.trustlands.utah.gov');
     esriConfig.defaults.io.corsEnabledServers.push('api.mapserv.utah.gov');
+    esriConfig.defaults.io.corsEnabledServers.push('discover.agrc.utah.gov');
 
     var SITEADDRES = 'SITEADDRES';
     var SITENAME = 'SITENAME';
@@ -47,9 +48,9 @@ define([
 
         // urls: Object
         urls: {
-            mapservice: window.AGRC_server.split('/').slice(0, 3).join('/') + '/arcgis/rest/services/DEQSpills/MapService/MapServer',
+            mapservice: 'https://mapserv.utah.gov/arcgis/rest/services/DEQSpills/MapService/MapServer',
             landOwnership: 'https://gis.trustlands.utah.gov/server/rest/services/Ownership/UT_SITLA_Ownership_LandOwnership_WM/MapServer/0',
-            referenceLayers: window.AGRC_server.split('/').slice(0, 3).join('/') + '/arcgis/rest/services/DEQSpills/ReferenceLayers/MapServer'
+            referenceLayers: 'https://mapserv.utah.gov/arcgis/rest/services/DEQSpills/ReferenceLayers/MapServer'
         },
 
         // labelsMinScale: Number
@@ -129,7 +130,8 @@ define([
     if (has('agrc-build') === 'prod') {
         window.AGRCGLOBAL.quadWord = 'result-table-secure-antenna';
     } else if (has('agrc-build') === 'stage') {
-        window.AGRCGLOBAL.quadWord = window.AGRC_testQuadWord;
+        // *.dev.utah.gov
+        window.AGRCGLOBAL.quadWord = 'wedding-tactic-enrico-yes';
     } else {
         xhr(require.baseUrl + 'secrets.json', {
             handleAs: 'json',

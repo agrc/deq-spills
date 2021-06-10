@@ -5,56 +5,18 @@ module.exports = function (grunt) {
     var otherFiles = [
         'src/app/**/*.html',
         'src/app/**/*.css',
-        'src/embed-demo.html',
-        'src/ChangeLog.html',
-        'src/web.config'
+        'src/index.html',
+        'src/ChangeLog.html'
     ];
     var gruntFile = 'GruntFile.js';
-    var internFile = 'tests/intern.js';
-    var eslintFiles = [jsFiles, gruntFile, internFile, 'src/EmbeddedMapLoader.js'];
-    var replaceFiles = [{
-        expand: true,
-        flatten: true,
-        src: 'src/EmbeddedMapLoader.js',
-        dest: 'dist/'
-    }];
-    var secrets;
-    try {
-        secrets = grunt.file.readJSON('secrets.json');
-    } catch (e) {
-        // swallow for build server
-        secrets = {
-            stageHost: '',
-            prodHost: '',
-            username: '',
-            password: ''
-        };
-    }
-    var replaceCommonPatterns = [{
-        match: /\/\/ start replace[\w\W]*\/\/ end replace/,
-        replacement: 'document.write(\'<script type=\\\'text/javascript\\\' ' +
-            'src=\\\'\' + window.AGRC_server + dojoPath + \'\\\' ' +
-            'data-dojo-config="deps:[\\\'app/run\\\']"></script>\');'
-    },{
-        match: /bootstrap\/dist\/css/,
-        replacement: 'bootstrap/css'
-    }, {
-        match: /<test quad word from src\/secrets\.json>/,
-        replacement: secrets.testQuadWord
-    }];
-    var processhtmlFiles = {'dist/embed-demo.html': ['src/embed-demo.html']};
+    var eslintFiles = [jsFiles, gruntFile, 'src/EmbeddedMapLoader.js'];
+    var processhtmlFiles = {'dist/index.html': ['src/index.html']};
     var bumpFiles = [
         'package.json',
         'bower.json',
         'src/app/config.js',
         'src/app/package.json'
     ];
-    var deployExcludes = [
-        '!util/**',
-        '!**/*consoleStripped.js',
-        '!build-report.txt'
-    ];
-    var deployDir = 'wwwroot/DEQSpills';
 
     grunt.initConfig({
         bump: {
@@ -64,45 +26,24 @@ module.exports = function (grunt) {
                 push: false
             }
         },
-        cachebreaker: {
-            main: {
-                options: {
-                    match: [
-                        'dojo.js',
-                        'app/resources/App.css',
-                        'bootstrap/css/bootstrap.css'
-                    ]
-                },
-                files: {
-                    src: ['dist/EmbeddedMapLoader.js']
-                }
-            }
-        },
         clean: {
-            build: ['dist'],
-            deploy: ['deploy']
-        },
-        compress: {
-            options: {
-                archive: 'deploy/dist.zip'
-            },
-            main: {
-                files: [{
-                    src: ['**'].concat(deployExcludes),
-                    dest: './',
-                    cwd: 'dist/',
-                    expand: true
-                }]
-            }
+            build: ['dist']
         },
         connect: {
-            uses_defaults: {}
+            main: {
+                options: {
+                    base: 'src'
+                }
+            },
+            test: {
+                options: {}
+            }
         },
         copy: {
             main: {
                 expand: true,
                 cwd: 'src/',
-                src: ['ChangeLog.html', 'web.config'],
+                src: ['ChangeLog.html', 'EmbeddedMapLoader.js'],
                 dest: 'dist/'
             }
         },
@@ -168,78 +109,6 @@ module.exports = function (grunt) {
             stage: {files: processhtmlFiles},
             dev: {files: processhtmlFiles}
         },
-        replace: {
-            prod: {
-                options: {
-                    patterns: [{
-                        match: /\/\/ start server replace[\w\W]*\/\/ end server replace/g,
-                        replacement: 'window.AGRC_server = \'//mapserv.utah.gov/DEQSpills\';'
-                    }].concat(replaceCommonPatterns)
-                },
-                files: replaceFiles
-            },
-            stage: {
-                options: {
-                    patterns: [{
-                        match: /\/\/ start server replace[\w\W]*\/\/ end server replace/g,
-                        replacement: 'window.AGRC_server = \'//test.mapserv.utah.gov/DEQSpills\';'
-                    }].concat(replaceCommonPatterns)
-                },
-                files: replaceFiles
-            },
-            dev: {
-                options: {
-                    patterns: replaceCommonPatterns
-                },
-                files: replaceFiles
-            }
-        },
-        secrets: secrets,
-        sftp: {
-            stage: {
-                files: {
-                    './': 'deploy/dist.zip'
-                },
-                options: {
-                    host: '<%= secrets.stageHost %>'
-                }
-            },
-            prod: {
-                files: {
-                    './': 'deploy/dist.zip'
-                },
-                options: {
-                    host: '<%= secrets.prodHost %>'
-                }
-            },
-            options: {
-                path: './' + deployDir + '/',
-                srcBasePath: 'deploy/',
-                username: '<%= secrets.username %>',
-                password: '<%= secrets.password %>',
-                showProgress: true,
-                readyTimeout: 120000
-            }
-        },
-        sshexec: {
-            options: {
-                username: '<%= secrets.username %>',
-                password: '<%= secrets.password %>',
-                readyTimeout: 120000
-            },
-            stage: {
-                command: ['cd ' + deployDir, 'unzip -o dist.zip', 'rm dist.zip'].join(';'),
-                options: {
-                    host: '<%= secrets.stageHost %>'
-                }
-            },
-            prod: {
-                command: ['cd ' + deployDir, 'unzip -o dist.zip', 'rm dist.zip'].join(';'),
-                options: {
-                    host: '<%= secrets.prodHost %>'
-                }
-            }
-        },
         uglify: {
             options: {
                 preserveComments: false,
@@ -285,12 +154,12 @@ module.exports = function (grunt) {
     grunt.registerTask('default', [
         'jasmine:app:build',
         'eslint',
-        'connect',
+        'connect:main',
         'watch'
     ]);
-    grunt.registerTask('travis', [
+    grunt.registerTask('test', [
         'eslint',
-        'connect',
+        'connect:test',
         'jasmine:app'
     ]);
 
@@ -300,15 +169,7 @@ module.exports = function (grunt) {
         'dojo:prod',
         'uglify:prod',
         'copy',
-        'processhtml:prod',
-        'replace:prod',
-        'cachebreaker'
-    ]);
-    grunt.registerTask('deploy-prod', [
-        'clean:deploy',
-        'compress:main',
-        'sftp:prod',
-        'sshexec:prod'
+        'processhtml:prod'
     ]);
 
     grunt.registerTask('build-stage', [
@@ -317,15 +178,7 @@ module.exports = function (grunt) {
         'dojo:stage',
         'uglify:stage',
         'copy',
-        'processhtml:stage',
-        'replace:stage',
-        'cachebreaker'
-    ]);
-    grunt.registerTask('deploy-stage', [
-        'clean:deploy',
-        'compress:main',
-        'sftp:stage',
-        'sshexec:stage'
+        'processhtml:stage'
     ]);
 
     grunt.registerTask('build-dev', [
@@ -333,7 +186,6 @@ module.exports = function (grunt) {
         'dojo:prod',
         'imagemin:dynamic',
         'copy',
-        'processhtml:dev',
-        'replace:dev'
+        'processhtml:dev'
     ]);
 };

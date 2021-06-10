@@ -1,10 +1,5 @@
 /* jshint evil:true, camelcase:false */
 (function () {
-    // start server replace
-    window.AGRC_server = 'http://localhost/' + location.pathname.replace(/\/[^\/]+$/, '');
-    // end server replace
-    window.AGRC_testQuadWord = '<test quad word from src/secrets.json>'; // populated by grunt replace
-
     var head = document.getElementsByTagName('head').item(0);
 
     function loadCss(href) {
@@ -20,15 +15,10 @@
         head.appendChild(link);
     }
 
-    loadCss(window.AGRC_server + '/app/resources/App.css');
-    loadCss(window.AGRC_server + '/bootstrap/dist/css/bootstrap.css');
+    loadCss('/app/resources/App.css');
+    loadCss('/bootstrap/dist/css/bootstrap.css'); // dev
+    loadCss('/bootstrap/css/bootstrap.css'); // built
 
-    var dojoPath = '/dojo/dojo.js';
-
-    // start replace
-    document.write('<script type=\'text/javascript\' src=\'' +
-        window.AGRC_server + dojoPath + '\' data-dojo-config=\'isDebug: 1\'></script>');
-    document.write('<script type=\'text/javascript\' src=\'' +
-        window.AGRC_server + '/app/run.js\'></script>');
-    // end replace
+    document.write('<script type="text/javascript" src="/dojo/dojo.js" data-dojo-config="isDebug: 1"></script>');
+    document.write('<script type="text/javascript" src="/app/run.js"></script>');
 }());
