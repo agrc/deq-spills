@@ -11,8 +11,32 @@ on:
       - "bower.json"
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '12'
+
+      - name: Cache Node.js modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+            ${{ runner.OS }}-
+      - run: npm ci
+
+      - run: npm test
+
   deploy-dev:
     runs-on: ubuntu-latest
+    needs: test
     environment:
       name: dev
       url: https://deqspills.dev.utah.gov
@@ -51,6 +75,7 @@ jobs:
 
   deploy-prod:
     runs-on: ubuntu-latest
+    needs: test
     environment:
       name: prod
       url: https://deqspills.ugrc.utah.gov
