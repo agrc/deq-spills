@@ -30,7 +30,14 @@ module.exports = function (grunt) {
             build: ['dist']
         },
         connect: {
-            uses_defaults: {}
+            main: {
+                options: {
+                    base: 'src'
+                }
+            },
+            test: {
+                options: {}
+            }
         },
         copy: {
             main: {
@@ -147,12 +154,12 @@ module.exports = function (grunt) {
     grunt.registerTask('default', [
         'jasmine:app:build',
         'eslint',
-        'connect',
+        'connect:main',
         'watch'
     ]);
     grunt.registerTask('test', [
         'eslint',
-        'connect',
+        'connect:test',
         'jasmine:app'
     ]);
 
