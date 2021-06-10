@@ -27,19 +27,6 @@ module.exports = function (grunt) {
                 push: false
             }
         },
-        cachebreaker: {
-            main: {
-                options: {
-                    match: [
-                        'dojo.js',
-                        'run.js'
-                    ]
-                },
-                files: {
-                    src: ['dist/EmbeddedMapLoader.js']
-                }
-            }
-        },
         clean: {
             build: ['dist']
         },
@@ -176,8 +163,7 @@ module.exports = function (grunt) {
         'dojo:prod',
         'uglify:prod',
         'copy',
-        'processhtml:prod',
-        'cachebreaker'
+        'processhtml:prod'
     ]);
 
     grunt.registerTask('build-stage', [
@@ -186,8 +172,7 @@ module.exports = function (grunt) {
         'dojo:stage',
         'uglify:stage',
         'copy',
-        'processhtml:stage',
-        'cachebreaker'
+        'processhtml:stage'
     ]);
 
     grunt.registerTask('build-dev', [
