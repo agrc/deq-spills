@@ -9,6 +9,7 @@ on:
       - "firebase.json"
       - ".firebaserc"
       - "bower.json"
+  workflow_dispatch:
 
 jobs:
   test:
