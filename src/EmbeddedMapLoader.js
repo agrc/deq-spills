@@ -16,7 +16,8 @@
     }
 
     loadCss('/app/resources/App.css');
-    loadCss('/bootstrap/dist/css/bootstrap.css');
+    loadCss('/bootstrap/dist/css/bootstrap.css'); // dev
+    loadCss('/bootstrap/css/bootstrap.css'); // built
 
     document.write('<script type="text/javascript" src="/dojo/dojo.js" data-dojo-config="isDebug: 1"></script>');
     document.write('<script type="text/javascript" src="/app/run.js"></script>');
