@@ -11,21 +11,6 @@ module.exports = function (grunt) {
     ];
     var gruntFile = 'GruntFile.js';
     var eslintFiles = [jsFiles, gruntFile, 'src/EmbeddedMapLoader.js'];
-    var replaceFiles = [{
-        expand: true,
-        flatten: true,
-        src: 'src/EmbeddedMapLoader.js',
-        dest: 'dist/'
-    }];
-    var replaceCommonPatterns = [{
-        match: /\/\/ start replace[\w\W]*\/\/ end replace/,
-        replacement: 'document.write(\'<script type=\\\'text/javascript\\\' ' +
-            'src=\\\'\' + window.AGRC_server + dojoPath + \'\\\' ' +
-            'data-dojo-config="deps:[\\\'app/run\\\']"></script>\');'
-    },{
-        match: /bootstrap\/dist\/css/,
-        replacement: 'bootstrap/css'
-    }];
     var processhtmlFiles = {'dist/index.html': ['src/index.html']};
     var bumpFiles = [
         'package.json',
@@ -132,32 +117,6 @@ module.exports = function (grunt) {
             stage: {files: processhtmlFiles},
             dev: {files: processhtmlFiles}
         },
-        replace: {
-            prod: {
-                options: {
-                    patterns: [{
-                        match: /\/\/ start server replace[\w\W]*\/\/ end server replace/g,
-                        replacement: 'window.AGRC_server = \'//mapserv.utah.gov/DEQSpills\';'
-                    }].concat(replaceCommonPatterns)
-                },
-                files: replaceFiles
-            },
-            stage: {
-                options: {
-                    patterns: [{
-                        match: /\/\/ start server replace[\w\W]*\/\/ end server replace/g,
-                        replacement: 'window.AGRC_server = \'//test.mapserv.utah.gov/DEQSpills\';'
-                    }].concat(replaceCommonPatterns)
-                },
-                files: replaceFiles
-            },
-            dev: {
-                options: {
-                    patterns: replaceCommonPatterns
-                },
-                files: replaceFiles
-            }
-        },
         uglify: {
             options: {
                 preserveComments: false,
@@ -219,7 +178,6 @@ module.exports = function (grunt) {
         'uglify:prod',
         'copy',
         'processhtml:prod',
-        'replace:prod',
         'cachebreaker'
     ]);
 
@@ -230,7 +188,6 @@ module.exports = function (grunt) {
         'uglify:stage',
         'copy',
         'processhtml:stage',
-        'replace:stage',
         'cachebreaker'
     ]);
 
@@ -239,7 +196,6 @@ module.exports = function (grunt) {
         'dojo:prod',
         'imagemin:dynamic',
         'copy',
-        'processhtml:dev',
-        'replace:dev'
+        'processhtml:dev'
     ]);
 };
