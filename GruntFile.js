@@ -10,26 +10,13 @@ module.exports = function (grunt) {
         'src/web.config'
     ];
     var gruntFile = 'GruntFile.js';
-    var internFile = 'tests/intern.js';
-    var eslintFiles = [jsFiles, gruntFile, internFile, 'src/EmbeddedMapLoader.js'];
+    var eslintFiles = [jsFiles, gruntFile, 'src/EmbeddedMapLoader.js'];
     var replaceFiles = [{
         expand: true,
         flatten: true,
         src: 'src/EmbeddedMapLoader.js',
         dest: 'dist/'
     }];
-    var secrets;
-    try {
-        secrets = grunt.file.readJSON('secrets.json');
-    } catch (e) {
-        // swallow for build server
-        secrets = {
-            stageHost: '',
-            prodHost: '',
-            username: '',
-            password: ''
-        };
-    }
     var replaceCommonPatterns = [{
         match: /\/\/ start replace[\w\W]*\/\/ end replace/,
         replacement: 'document.write(\'<script type=\\\'text/javascript\\\' ' +
@@ -38,9 +25,6 @@ module.exports = function (grunt) {
     },{
         match: /bootstrap\/dist\/css/,
         replacement: 'bootstrap/css'
-    }, {
-        match: /<test quad word from src\/secrets\.json>/,
-        replacement: secrets.testQuadWord
     }];
     var processhtmlFiles = {'dist/embed-demo.html': ['src/embed-demo.html']};
     var bumpFiles = [
@@ -49,12 +33,6 @@ module.exports = function (grunt) {
         'src/app/config.js',
         'src/app/package.json'
     ];
-    var deployExcludes = [
-        '!util/**',
-        '!**/*consoleStripped.js',
-        '!build-report.txt'
-    ];
-    var deployDir = 'wwwroot/DEQSpills';
 
     grunt.initConfig({
         bump: {
@@ -79,21 +57,7 @@ module.exports = function (grunt) {
             }
         },
         clean: {
-            build: ['dist'],
-            deploy: ['deploy']
-        },
-        compress: {
-            options: {
-                archive: 'deploy/dist.zip'
-            },
-            main: {
-                files: [{
-                    src: ['**'].concat(deployExcludes),
-                    dest: './',
-                    cwd: 'dist/',
-                    expand: true
-                }]
-            }
+            build: ['dist']
         },
         connect: {
             uses_defaults: {}
@@ -194,52 +158,6 @@ module.exports = function (grunt) {
                 files: replaceFiles
             }
         },
-        secrets: secrets,
-        sftp: {
-            stage: {
-                files: {
-                    './': 'deploy/dist.zip'
-                },
-                options: {
-                    host: '<%= secrets.stageHost %>'
-                }
-            },
-            prod: {
-                files: {
-                    './': 'deploy/dist.zip'
-                },
-                options: {
-                    host: '<%= secrets.prodHost %>'
-                }
-            },
-            options: {
-                path: './' + deployDir + '/',
-                srcBasePath: 'deploy/',
-                username: '<%= secrets.username %>',
-                password: '<%= secrets.password %>',
-                showProgress: true,
-                readyTimeout: 120000
-            }
-        },
-        sshexec: {
-            options: {
-                username: '<%= secrets.username %>',
-                password: '<%= secrets.password %>',
-                readyTimeout: 120000
-            },
-            stage: {
-                command: ['cd ' + deployDir, 'unzip -o dist.zip', 'rm dist.zip'].join(';'),
-                options: {
-                    host: '<%= secrets.stageHost %>'
-                }
-            },
-            prod: {
-                command: ['cd ' + deployDir, 'unzip -o dist.zip', 'rm dist.zip'].join(';'),
-                options: {
-                    host: '<%= secrets.prodHost %>'
-                }
-            }
-        },
         uglify: {
             options: {
                 preserveComments: false,
@@ -288,7 +206,7 @@ module.exports = function (grunt) {
         'connect',
         'watch'
     ]);
-    grunt.registerTask('travis', [
+    grunt.registerTask('test', [
         'eslint',
         'connect',
         'jasmine:app'
@@ -304,12 +222,6 @@ module.exports = function (grunt) {
         'replace:prod',
         'cachebreaker'
     ]);
-    grunt.registerTask('deploy-prod', [
-        'clean:deploy',
-        'compress:main',
-        'sftp:prod',
-        'sshexec:prod'
-    ]);
 
     grunt.registerTask('build-stage', [
         'clean:build',
@@ -320,12 +232,6 @@ module.exports = function (grunt) {
         'processhtml:stage',
         'replace:stage',
         'cachebreaker'
-    ]);
-    grunt.registerTask('deploy-stage', [
-        'clean:deploy',
-        'compress:main',
-        'sftp:stage',
-        'sshexec:stage'
     ]);
 
     grunt.registerTask('build-dev', [

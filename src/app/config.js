@@ -19,8 +19,9 @@ define([
     esriConfig,
     SimpleMarkerSymbol
 ) {
-    esriConfig.defaults.io.corsEnabledServers.push('https://gis.trustlands.utah.gov');
+    esriConfig.defaults.io.corsEnabledServers.push('gis.trustlands.utah.gov');
     esriConfig.defaults.io.corsEnabledServers.push('api.mapserv.utah.gov');
+    esriConfig.defaults.io.corsEnabledServers.push('discover.agrc.utah.gov');
 
     var SITEADDRES = 'SITEADDRES';
     var SITENAME = 'SITENAME';
@@ -129,7 +130,8 @@ define([
     if (has('agrc-build') === 'prod') {
         window.AGRCGLOBAL.quadWord = 'result-table-secure-antenna';
     } else if (has('agrc-build') === 'stage') {
-        window.AGRCGLOBAL.quadWord = window.AGRC_testQuadWord;
+        // *.dev.utah.gov
+        window.AGRCGLOBAL.quadWord = 'wedding-tactic-enrico-yes';
     } else {
         xhr(require.baseUrl + 'secrets.json', {
             handleAs: 'json',
