@@ -21,4 +21,15 @@
 
     document.write('<script type="text/javascript" src="/dojo/dojo.js" data-dojo-config="isDebug: 1"></script>');
     document.write('<script type="text/javascript" src="/app/run.js"></script>');
+
+    // google analytics
+    document.write('<script async src="https://www.googletagmanager.com/gtag/js?id=G-PECSFZVT9S"></script>');
+
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        window.dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'G-PECSFZVT9S');
 }());
