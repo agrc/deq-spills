@@ -134,8 +134,8 @@ define([
         if (has('agrc-build') === 'prod') {
             window.AGRCGLOBAL.quadWord = 'result-table-secure-antenna';
         } else if (has('agrc-build') === 'stage') {
-            // *.dev.utah.gov
-            window.AGRCGLOBAL.quadWord = 'wedding-tactic-enrico-yes';
+            // *.dev.utah.gov & *.deq.utah.gov (their dev servers)
+            window.AGRCGLOBAL.quadWord = 'orca-brown-door-concert';
         } else if (!window.dojoConfig.isJasmineTestRunner) {
             xhr(require.baseUrl + 'secrets.json', {
                 handleAs: 'json',
