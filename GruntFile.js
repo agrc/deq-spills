@@ -98,6 +98,9 @@ module.exports = function (grunt) {
                     ],
                     host: 'http://localhost:8000'
                 }
+            },
+            options: {
+                version: '3.8.0'
             }
         },
         eslint: {

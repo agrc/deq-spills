@@ -136,7 +136,7 @@ define([
         } else if (has('agrc-build') === 'stage') {
             // *.dev.utah.gov
             window.AGRCGLOBAL.quadWord = 'wedding-tactic-enrico-yes';
-        } else {
+        } else if (!window.dojoConfig.isJasmineTestRunner) {
             xhr(require.baseUrl + 'secrets.json', {
                 handleAs: 'json',
                 sync: true
