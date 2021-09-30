@@ -3,7 +3,7 @@
     var head = document.getElementsByTagName('head').item(0);
 
     // start server replace
-    const ugrcServer = 'https://localhost';
+    const ugrcServer = 'http://localhost:8000';
     // end server replace
 
     function loadCss(href) {

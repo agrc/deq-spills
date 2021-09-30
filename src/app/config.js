@@ -136,7 +136,7 @@ define([
         } else if (has('agrc-build') === 'stage') {
             // *.dev.utah.gov & *.deq.utah.gov (their dev servers)
             window.AGRCGLOBAL.quadWord = 'orca-brown-door-concert';
-        } else if (!window.dojoConfig.isJasmineTestRunner) {
+        } else if (!window.dojoConfig || !window.dojoConfig.isJasmineTestRunner) {
             xhr(require.baseUrl + 'secrets.json', {
                 handleAs: 'json',
                 sync: true
