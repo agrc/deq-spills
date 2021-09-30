@@ -21,7 +21,7 @@
   },
   "scripts": {
     "build:prod": "grunt build-prod",
-    "build": "grunt build-stage",
+    "build:stage": "grunt build-stage",
     "postinstall": "bower install",
     "start": "grunt",
     "test": "grunt test"
