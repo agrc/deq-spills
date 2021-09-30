@@ -5,6 +5,8 @@ Embedded widget written for deq spills application.
 
 See [src/index.html](src/index.html) for an example of how to embed this widget and get data from it.
 
+*Note: For development on `localhost` you may define the following global variable and pass a wide-open quad word: `AGRC_testQuadWord`.
+
 ### API
 #### constructor
 `new AGRCMap(options, node)`  

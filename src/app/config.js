@@ -127,20 +127,25 @@ define([
         }
     };
 
-    if (has('agrc-build') === 'prod') {
-        window.AGRCGLOBAL.quadWord = 'result-table-secure-antenna';
-    } else if (has('agrc-build') === 'stage') {
-        // *.dev.utah.gov
-        window.AGRCGLOBAL.quadWord = 'wedding-tactic-enrico-yes';
+    if (window.location.hostname === 'localhost' && window.AGRC_testQuadWord) {
+        // allow deq dev to define quad word for their testing on localhost...
+        window.AGRCGLOBAL.quadWord = window.AGRC_testQuadWord;
     } else {
-        xhr(require.baseUrl + 'secrets.json', {
-            handleAs: 'json',
-            sync: true
-        }).then(function (secrets) {
-            window.AGRCGLOBAL.quadWord = secrets.quadWord;
-        }, function () {
-            throw 'Error getting secrets!';
-        });
+        if (has('agrc-build') === 'prod') {
+            window.AGRCGLOBAL.quadWord = 'result-table-secure-antenna';
+        } else if (has('agrc-build') === 'stage') {
+            // *.dev.utah.gov
+            window.AGRCGLOBAL.quadWord = 'wedding-tactic-enrico-yes';
+        } else {
+            xhr(require.baseUrl + 'secrets.json', {
+                handleAs: 'json',
+                sync: true
+            }).then(function (secrets) {
+                window.AGRCGLOBAL.quadWord = secrets.quadWord;
+            }, function () {
+                throw 'Error getting secrets!';
+            });
+        }
     }
 
     window.AGRCMap = App;
