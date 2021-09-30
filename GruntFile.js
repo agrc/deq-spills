@@ -17,6 +17,12 @@ module.exports = function (grunt) {
         'src/app/config.js',
         'src/app/package.json'
     ];
+    var replaceFiles = [{
+        expand: true,
+        flatten: true,
+        src: 'src/EmbeddedMapLoader.js',
+        dest: 'dist/'
+    }];
 
     grunt.initConfig({
         bump: {
@@ -43,7 +49,7 @@ module.exports = function (grunt) {
             main: {
                 expand: true,
                 cwd: 'src/',
-                src: ['ChangeLog.html', 'EmbeddedMapLoader.js'],
+                src: ['ChangeLog.html'],
                 dest: 'dist/'
             }
         },
@@ -109,6 +115,26 @@ module.exports = function (grunt) {
             stage: {files: processhtmlFiles},
             dev: {files: processhtmlFiles}
         },
+        replace: {
+            prod: {
+                options: {
+                    patterns: [{
+                        match: /\/\/ start server replace[\w\W]*\/\/ end server replace/g,
+                        replacement: 'const ugrcServer = \'https://deqspills.ugrc.utah.gov\''
+                    }]
+                },
+                files: replaceFiles
+            },
+            stage: {
+                options: {
+                    patterns: [{
+                        match: /\/\/ start server replace[\w\W]*\/\/ end server replace/g,
+                        replacement: 'const ugrcServer = \'https://deqspills.dev.utah.gov\''
+                    }]
+                },
+                files: replaceFiles
+            }
+        },
         uglify: {
             options: {
                 preserveComments: false,
@@ -168,6 +194,7 @@ module.exports = function (grunt) {
         'imagemin:dynamic',
         'dojo:prod',
         'uglify:prod',
+        'replace:prod',
         'copy',
         'processhtml:prod'
     ]);
@@ -177,6 +204,7 @@ module.exports = function (grunt) {
         'imagemin:dynamic',
         'dojo:stage',
         'uglify:stage',
+        'replace:stage',
         'copy',
         'processhtml:stage'
     ]);

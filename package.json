@@ -25,5 +25,8 @@
     "postinstall": "bower install",
     "start": "grunt",
     "test": "grunt test"
+  },
+  "dependencies": {
+    "grunt-replace": "^2.0.2"
   }
 }
