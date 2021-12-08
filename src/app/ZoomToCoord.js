@@ -6,8 +6,6 @@ define([
 
     'agrc/widgets/locate/ZoomToCoords',
 
-    'esri/geometry/Point',
-
     'app/TRSsearch',
 
     'dijit/form/Select',
@@ -19,8 +17,6 @@ define([
     aspect,
 
     ZoomToCoords,
-
-    Point,
 
     TRSsearch
 ) {
