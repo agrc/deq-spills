@@ -3,7 +3,9 @@
     "AGRCGLOBAL",
     "autoplay",
     "citytown",
+    "firebaserc",
     "fullscreen",
+    "hostingchannels",
     "nosniff",
     "SAMEORIGIN"
   ]
