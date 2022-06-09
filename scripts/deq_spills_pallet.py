@@ -32,7 +32,7 @@ class DEQSpillsPallet(Pallet):
                          'MMRP',
                          'TIER2',
                          'TRI',
-                         'FACILITYUST',
+                         'FacilityPST',
                          'VCP',
                          'EnvironmentalIncidents'],
                         {'source_workspace': self.sgid,
