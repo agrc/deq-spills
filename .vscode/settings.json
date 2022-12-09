@@ -7,6 +7,8 @@
     "fullscreen",
     "hostingchannels",
     "nosniff",
-    "SAMEORIGIN"
+    "prebuild",
+    "SAMEORIGIN",
+    "setversion"
   ]
 }
