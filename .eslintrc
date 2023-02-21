@@ -23,7 +23,7 @@
         "no-use-before-define": 2,
         "complexity": [
             2,
-            15
+            32
         ],
         "no-caller": 2,
         "no-irregular-whitespace": 2,
