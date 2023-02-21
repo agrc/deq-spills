@@ -10,19 +10,21 @@ module.exports = function (grunt) {
     ];
     var gruntFile = 'GruntFile.js';
     var eslintFiles = [jsFiles, gruntFile, 'src/EmbeddedMapLoader.js'];
-    var processhtmlFiles = {'dist/index.html': ['src/index.html']};
+    var processhtmlFiles = { 'dist/index.html': ['src/index.html'] };
     var bumpFiles = [
         'package.json',
         'bower.json',
         'src/app/config.js',
         'src/app/package.json'
     ];
-    var replaceFiles = [{
-        expand: true,
-        flatten: true,
-        src: 'src/EmbeddedMapLoader.js',
-        dest: 'dist/'
-    }];
+    var replaceFiles = [
+        {
+            expand: true,
+            flatten: true,
+            src: 'src/EmbeddedMapLoader.js',
+            dest: 'dist/'
+        }
+    ];
 
     grunt.initConfig({
         bump: {
@@ -57,13 +59,19 @@ module.exports = function (grunt) {
             prod: {
                 options: {
                     // You can also specify options to be used in all your tasks
-                    profiles: ['profiles/prod.build.profile.js', 'profiles/build.profile.js'] // Profile for build
+                    profiles: [
+                        'profiles/prod.build.profile.js',
+                        'profiles/build.profile.js'
+                    ] // Profile for build
                 }
             },
             stage: {
                 options: {
-                    // You can also specify options to be used in all your tasks
-                    profiles: ['profiles/stage.build.profile.js', 'profiles/build.profile.js'] // Profile for build
+                    //   You can also specify options to be used in all your tasks
+                    profiles: [
+                        'profiles/stage.build.profile.js',
+                        'profiles/build.profile.js'
+                    ] // Profile for build
                 }
             },
             options: {
@@ -78,13 +86,15 @@ module.exports = function (grunt) {
                 options: {
                     optimizationLevel: 3
                 },
-                files: [{
-                    expand: true,
-                    cwd: 'src/',
-                    // exclude tests because some images in dojox throw errors
-                    src: ['**/*.{png,jpg,gif}', '!**/tests/**/*.*'],
-                    dest: 'src/'
-                }]
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'src/',
+                        // exclude tests because some images in dojox throw errors
+                        src: ['**/*.{png,jpg,gif}', '!**/tests/**/*.*'],
+                        dest: 'src/'
+                    }
+                ]
             }
         },
         jasmine: {
@@ -92,10 +102,7 @@ module.exports = function (grunt) {
                 src: ['src/app/run.js'],
                 options: {
                     specs: ['src/app/**/Spec*.js', 'src/matchers/**/Spec*.js'],
-                    vendor: [
-                        'src/app/tests/jasmineTestBootstrap.js',
-                        'src/dojo/dojo.js'
-                    ],
+                    vendor: ['src/app/tests/jasmineTestBootstrap.js', 'src/dojo/dojo.js'],
                     host: 'http://localhost:8000'
                 }
             },
@@ -108,32 +115,36 @@ module.exports = function (grunt) {
                 src: eslintFiles
             },
             options: {
-                configFile: '.eslintrc'
+                overrideConfigFile: '.eslintrc'
             }
         },
         pkg: grunt.file.readJSON('package.json'),
         processhtml: {
             options: {},
-            prod: {files: processhtmlFiles},
-            stage: {files: processhtmlFiles},
-            dev: {files: processhtmlFiles}
+            prod: { files: processhtmlFiles },
+            stage: { files: processhtmlFiles },
+            dev: { files: processhtmlFiles }
         },
         replace: {
             prod: {
                 options: {
-                    patterns: [{
-                        match: /\/\/ start server replace[\w\W]*\/\/ end server replace/g,
-                        replacement: 'const ugrcServer = \'https://deqspills.ugrc.utah.gov\''
-                    }]
+                    patterns: [
+                        {
+                            match: /\/\/ start server replace[\w\W]*\/\/ end server replace/g,
+                            replacement: 'const ugrcServer = \'https://deqspills.ugrc.utah.gov\''
+                        }
+                    ]
                 },
                 files: replaceFiles
             },
             stage: {
                 options: {
-                    patterns: [{
-                        match: /\/\/ start server replace[\w\W]*\/\/ end server replace/g,
-                        replacement: 'const ugrcServer = \'https://deqspills.dev.utah.gov\''
-                    }]
+                    patterns: [
+                        {
+                            match: /\/\/ start server replace[\w\W]*\/\/ end server replace/g,
+                            replacement: 'const ugrcServer = \'https://deqspills.dev.utah.gov\''
+                        }
+                    ]
                 },
                 files: replaceFiles
             }
@@ -158,12 +169,14 @@ module.exports = function (grunt) {
                 dest: 'dist/dojo/dojo.js'
             },
             prod: {
-                files: [{
-                    expand: true,
-                    cwd: 'dist',
-                    src: ['**/*.js', '!proj4/**/*.js'],
-                    dest: 'dist'
-                }]
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'dist',
+                        src: ['**/*.js', '!proj4/**/*.js'],
+                        dest: 'dist'
+                    }
+                ]
             }
         },
         watch: {
@@ -186,11 +199,7 @@ module.exports = function (grunt) {
         'connect:main',
         'watch'
     ]);
-    grunt.registerTask('test', [
-        'eslint',
-        'connect:test',
-        'jasmine:app'
-    ]);
+    grunt.registerTask('test', ['eslint', 'connect:test', 'jasmine:app']);
 
     grunt.registerTask('build-prod', [
         'clean:build',
