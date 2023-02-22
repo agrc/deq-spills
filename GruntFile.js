@@ -105,10 +105,6 @@ module.exports = function (grunt) {
                     vendor: ['src/app/tests/jasmineTestBootstrap.js', 'src/dojo/dojo.js'],
                     host: 'http://localhost:8000'
                 }
-            },
-            options: {
-                version: '3.8.0',
-                noSandbox: true
             }
         },
         eslint: {
