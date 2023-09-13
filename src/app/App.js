@@ -480,13 +480,18 @@ define([
 
             var that = this;
             var promises = [];
-            var noFeatFound = 'no feature found';
+            var noFeatFound = null;
 
             // convert to utm
             var location = lang.clone(location);
             var utm = proj4(proj4('GOOGLE'), window.AGRCGLOBAL.projections.utm, [location.x, location.y]);
             location.x = utm[0];
             location.y = utm[1];
+
+            // get address and milemarker from widgets
+            location.ADDRESS = this.findAddressWidget.txtAddress.value;
+            location.HIGHWAY = this.findRouteMilepostWidget.routeTxt.value;
+            location.MILEMARKER = this.findRouteMilepostWidget.milepostTxt.value;
 
             array.forEach(window.AGRCGLOBAL.queries, function (q) {
                 that.map.showLoader();

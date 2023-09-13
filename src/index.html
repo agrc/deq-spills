@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Embed Demo</title>
-</head>
-<body>
-
+  <head>
+    <title>DEQ Spills Widget</title>
+  </head>
+  <body>
     <!-- styling demo -->
     <style type="text/css">
-        .agrc-app, body, html {
-            height: 700px;
-            width: 620px;
-        }
+      .agrc-app,
+      body,
+      html {
+        height: 700px;
+        width: 620px;
+      }
     </style>
 
     <!-- required widget div and .js file -->
-    <div id='AGRCMap'></div>
+    <div id="AGRCMap"></div>
 
     <!-- build:template:prod
     <script>var apiKey = 'AGRC-67369981957692'; // deqspills.ugrc.utah.gov </script>
@@ -27,122 +28,74 @@
     /build -->
 
     <!-- build:remove -->
-    <script>var apiKey = 'AGRC-E5B94F99865799'; // localhost </script>
+    <script>
+      var apiKey = "AGRC-E5B94F99865799"; // localhost
+    </script>
     <!-- /build -->
 
-    <!-- get xy values demo -->
     <script>
-        window.county = {
-            countyName: 'KANE',
-            apiKey: apiKey,
-            layers: [0, 4, 5, 11]
-        };
-        window.none = {
-            apiKey: apiKey,
-            layers: [0, 4, 5, 10]
-        };
-        window.coords = {
-            UTM_X: 427932,
-            UTM_Y: 4503433,
-            apiKey: apiKey,
-            layers: [0, 4, 5, 9, 10]
-        };
-        window.labels = {
-            UTM_X: 427932,
-            UTM_Y: 4503433,
-            apiKey: apiKey,
-            labels: ['sitename', 'siteid', 'siteaddress'],
-            layers: [0, 4, 5, 9, 10]
-        };
-        window.city = {
-            cityName: 'Cottonwood Heights',
-            apiKey: apiKey,
-            layers: [0, 4, 5, 10]
-        };
-        window.address = {
-            addressStreet: '2832 banbury rd',
-            addressZone: '84121',
-            apiKey: apiKey,
-            layers: [0, 4, 5, 10]
-        };
-        window.routeMilepost = {
-            milepost: '300',
-            route: '15',
-            apiKey: apiKey,
-            layers: [0, 4, 5, 10]
-        };
-        window.all = {
-            apiKey: apiKey,
-            UTM_X: 418502,
-            UTM_Y: 4519515,
-            countyName: 'KANE',
-            cityName: 'Cottonwood Heights',
-            addressStreet: '2832 banbury rd',
-            addressZone: '84121',
-            milepost: '300',
-            route: '15',
-            layers: [0, 4, 5, 10]
-        };
-        window.latlong = {
-            apiKey: apiKey,
-            DD_LAT: 40.633879,
-            DD_LONG: -111.852191,
-            layers: [0, 3, 5, 7, 8]
-        };
-        window.dms = {
-            apiKey: apiKey,
-            DMS_DEGREE_LAT: 40,
-            DMS_MINUTE_LAT: 3,
-            DMS_SECOND_LAT: 50,
-            DMS_DEGREE_LONG: -111,
-            DMS_MINUTE_LONG: 50,
-            DMS_SECOND_LONG: 30,
-            layers: [0, 4, 5, 7, 8, 9]
-        };
-        window.trs = {
-            apiKey: apiKey,
-            BASEMERIDIAN: '26',
-            TOWNSHIP: 'T24S',
-            RANGE: 'R22E',
-            SECTION: '4'
-        };
-        window.zip = {
-            apiKey: apiKey,
-            ZIP: 84124
-        };
+      const eventName = "widget-loaded";
+      const widgetLoadedEvent = new Event(eventName);
+      function processMessage(event) {
+        // don't really care about origin check because there's not much that can be done on this side
+        console.log("iframe: message received:", event.data);
 
-        /* globals AGRCMap */
-        window.agrcOnLoad = function () {
-            var app = new AGRCMap(window.address, document.getElementById('AGRCMap'));
+        if (window.widgetIsLoaded) {
+          initializeWidget(event.data);
+        } else {
+          window.addEventListener(eventName, function () {
+            initializeWidget(event.data);
+          });
+        }
+      }
 
-            // must always call startup
-            app.startup();
+      window.addEventListener("message", processMessage);
 
-            app.on('location-defined', function (result) {
-                console.log('result.BASEMERIDIAN', result.BASEMERIDIAN);
-                console.log('result.CITY', result.CITY);
-                console.log('result.COUNTY', result.COUNTY);
-                console.log('result.DD_LAT', result.DD_LAT);
-                console.log('result.DD_LONG', result.DD_LONG);
-                console.log('result.DERRID', result.DERRID);
-                console.log('result.DMS_LAT', result.DMS_LAT);
-                console.log('result.DMS_LONG', result.DMS_LONG);
-                console.log('result.INDIAN', result.INDIAN);
-                console.log('result.OWNER_AGENCY', result.OWNER_AGENCY);
-                console.log('result.SECTION', result.SECTION);
-                console.log('result.SITEDESC', result.SITEDESC);
-                console.log('result.ST_KEY', result.ST_KEY);
-                console.log('result.TOWNSHIP', result.TOWNSHIP);
-                console.log('result.UTM_X', result.UTM_X);
-                console.log('result.UTM_Y', result.UTM_Y);
-                console.log('result.ZIP', result.ZIP);
-                console.log('result.ZIPCITY', result.ZIPCITY);
-                console.log('result.SITENAME', result.SITENAME);
-                console.log('result.SITEADDRES', result.SITEADDRES);
-            });
-        };
+      window.agrcOnLoad = function () {
+        window.dispatchEvent(widgetLoadedEvent);
+        window.widgetIsLoaded = true;
+
+        if (window.location === window.parent.location) {
+          // this is not an iframe
+          initializeWidget();
+          window.removeEventListener("message", processMessage)
+        }
+      };
+
+      function initializeWidget(props) {
+        console.log("iframe: initializeWidget:", props);
+        var app = new AGRCMap(
+          {
+            UTM_X: props?.UTM_X,
+            UTM_Y: props?.UTM_Y,
+            apiKey: apiKey,
+          },
+          document.getElementById("AGRCMap")
+        );
+
+        // must always call startup
+        app.startup();
+
+        app.on("location-defined", function (result) {
+          console.log("location-defined:", result);
+          const data = {
+            ADDRESS: result.ADDRESS,
+            CITY: result.CITY,
+            COUNTY: result.COUNTY,
+            HIGHWAY: result.HIGHWAY,
+            INDIAN: result.INDIAN,
+            MILEMARKER: result.MILEMARKER,
+            OWNER_AGENCY: result.OWNER_AGENCY,
+            UTM_X: result.UTM_X,
+            UTM_Y: result.UTM_Y,
+            ZIP: result.ZIP,
+          };
+
+          window.parent.postMessage(data, props?.targetOrigin);
+        });
+      }
     </script>
     <script type="text/javascript" src="EmbeddedMapLoader.js"></script>
     <!-- <script type='text/javascript' src='https://deqspills.dev.utah.gov/EmbeddedMapLoader.js'></script> -->
-</body>
+  </body>
 </html>
