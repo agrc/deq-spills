@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.9.0-0](https://github.com/agrc/deq-spills/compare/v2.8.0-0...v2.9.0-0) (2023-09-13)
+
+
+### 🚀 Features
+
+* **salesforce:** implement basic iframe lightning component ([858dbd3](https://github.com/agrc/deq-spills/commit/858dbd30ad4de0d7e159d7e6e9b13000a0124a96))
+
+
+### 🐛 Bug Fixes
+
+* change demo page to work with salesforce web component as iframe ([96fbf7d](https://github.com/agrc/deq-spills/commit/96fbf7d0cd48c741c4f3910265ef145db265b293))
+
 ## [2.8.0-0](https://github.com/agrc/deq-spills/compare/v2.7.3...v2.8.0-0) (2023-02-22)
 
 
