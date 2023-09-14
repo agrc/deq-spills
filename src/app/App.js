@@ -560,7 +560,12 @@ define([
                     alert(window.AGRCGLOBAL.outsideUtahMsg);
                     return;
                 }
-                that.emit('location-defined', location);
+
+                if (that.skipDefine) {
+                    that.skipDefine = false;
+                } else {
+                    that.emit('location-defined', location);
+                }
             });
         },
         onMapClick: function (evt) {

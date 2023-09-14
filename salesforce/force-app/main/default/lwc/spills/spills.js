@@ -72,6 +72,14 @@ export default class Spills extends LightningElement {
     console.table(data);
 
     if (!data.UTM_X) return;
+    const utmX = Math.round(data.UTM_X);
+    const utmY = Math.round(data.UTM_Y);
+
+    console.log(`wc: utmX ${utmX}, utmY ${utmY}, this.utm_x ${this.utm_x}, this.utm_y ${this.utm_y}`);
+    if (utmX === this.utm_x && utmY === this.utm_y) {
+      console.log('wc: no change in UTM_X or UTM_Y');
+      return;
+    }
 
     const fields = {
       [ID_FIELD.fieldApiName]: this.recordId,
@@ -82,8 +90,8 @@ export default class Spills extends LightningElement {
       [INDIAN.fieldApiName]: data.INDIAN,
       [MILEMARKER.fieldApiName]: data.MILEMARKER, // comes from widget text input
       [OWNER_AGENCY.fieldApiName]: data.OWNER_AGENCY,
-      [UTM_X.fieldApiName]: Math.round(data.UTM_X),
-      [UTM_Y.fieldApiName]: Math.round(data.UTM_Y),
+      [UTM_X.fieldApiName]: utmX,
+      [UTM_Y.fieldApiName]: utmY,
     }
 
     updateRecord({fields}).then(() => {
