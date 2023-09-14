@@ -108,7 +108,7 @@ export default class Spills extends LightningElement {
       this.refs.iframe.contentWindow.postMessage({
         UTM_X: this.utm_x,
         UTM_Y: this.utm_y,
-        targetOrigin: window.origin,
+        targetOrigin: window.document.location.origin,
       }, this.iframeSrc);
     });
   }
