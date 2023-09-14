@@ -38,7 +38,12 @@
       const widgetLoadedEvent = new Event(eventName);
       function processMessage(event) {
         // don't really care about origin check because there's not much that can be done on this side
-        console.log("iframe: message received:", event.data);
+        console.log("iframe: message received:", event);
+
+        if (!Object.hasOwn(event.data, 'UTM_X')) {
+          // ignore messages from other sources
+          return;
+        }
 
         if (window.widgetIsLoaded) {
           initializeWidget(event.data);
