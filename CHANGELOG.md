@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.9.0-1](https://github.com/agrc/deq-spills/compare/v2.9.0-0...v2.9.0-1) (2023-09-14)
+
+
+### 🐛 Bug Fixes
+
+* ignore messages from other windows ([2dbd34f](https://github.com/agrc/deq-spills/commit/2dbd34f26b13af4c504bef67125f09d293706247))
+* **salesforce:** prevent address and other data from being cleared out on fresh page load ([f6cb0d4](https://github.com/agrc/deq-spills/commit/f6cb0d4f225a1c00c05618e73417994045e3f5f9))
+* **salesforce:** recreate project with manifest and point at deq spills sandbox ([04a4318](https://github.com/agrc/deq-spills/commit/04a43183718bc92f59b8bbb265747a5f2a28d24c))
+
+
+### 📖 Documentation Improvements
+
+* remove old stuff and add link to SF sandbox ([657fba8](https://github.com/agrc/deq-spills/commit/657fba8d004266144821fbce0c608da752be393a))
+
 ## [2.9.0-0](https://github.com/agrc/deq-spills/compare/v2.8.0-0...v2.9.0-0) (2023-09-13)
 
 
