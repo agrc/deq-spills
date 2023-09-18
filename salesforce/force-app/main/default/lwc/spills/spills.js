@@ -70,8 +70,7 @@ export default class Spills extends LightningElement {
     }
 
     const { data } = event;
-    console.log('wc: data from iframe:');
-    console.table(data);
+    console.log('wc: data from iframe:', data);
 
     if (!data.UTM_X) return;
     const utmX = Math.round(data.UTM_X);
