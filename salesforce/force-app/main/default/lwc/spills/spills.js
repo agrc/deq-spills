@@ -5,6 +5,8 @@ import ID_FIELD from "@salesforce/schema/Case.Id";
 import ADDRESS from '@salesforce/schema/Case.Address_Location__c'
 import CITY from '@salesforce/schema/Case.Nearest_Town_City__c';
 import COUNTY from '@salesforce/schema/Case.County__c';
+import DD_LAT from '@salesforce/schema/Case.Latitude__c';
+import DD_LONG from '@salesforce/schema/Case.Longitude__c';
 import HIGHWAY from '@salesforce/schema/Case.Highway__c';
 import INDIAN from '@salesforce/schema/Case.Indian_Land__c';
 import MILEMARKER from '@salesforce/schema/Case.Mile_Marker__c';
@@ -75,7 +77,6 @@ export default class Spills extends LightningElement {
     const utmX = Math.round(data.UTM_X);
     const utmY = Math.round(data.UTM_Y);
 
-    console.log(`wc: utmX ${utmX}, utmY ${utmY}, this.utm_x ${this.utm_x}, this.utm_y ${this.utm_y}`);
     if (utmX === this.utm_x && utmY === this.utm_y) {
       console.log('wc: no change in UTM_X or UTM_Y');
       return;
@@ -86,6 +87,8 @@ export default class Spills extends LightningElement {
       [ADDRESS.fieldApiName]: `${data.ADDRESS}, ${data.ZIP}`, // comes from widget text inputs
       [CITY.fieldApiName]: data.CITY,
       [COUNTY.fieldApiName]: data.COUNTY,
+      [DD_LAT.fieldApiName]: data.DD_LAT.toString(),
+      [DD_LONG.fieldApiName]: data.DD_LONG.toString(),
       [HIGHWAY.fieldApiName]: data.HIGHWAY, // comes from widget text input
       [INDIAN.fieldApiName]: data.INDIAN,
       [MILEMARKER.fieldApiName]: data.MILEMARKER, // comes from widget text input
