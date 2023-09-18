@@ -90,8 +90,8 @@ export default class Spills extends LightningElement {
       [INDIAN.fieldApiName]: data.INDIAN,
       [MILEMARKER.fieldApiName]: data.MILEMARKER, // comes from widget text input
       [OWNER_AGENCY.fieldApiName]: data.OWNER_AGENCY,
-      [UTM_X.fieldApiName]: utmX,
-      [UTM_Y.fieldApiName]: utmY,
+      [UTM_X.fieldApiName]: utmX.toString(),
+      [UTM_Y.fieldApiName]: utmY.toString(),
     }
 
     updateRecord({fields}).then(() => {
