@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.10.0-0](https://github.com/agrc/deq-spills/compare/v2.9.0-2...v2.10.0-0) (2023-09-18)
+
+
+### 🚀 Features
+
+* **salesforce:** write to new lat/long fields ([dcb67c7](https://github.com/agrc/deq-spills/commit/dcb67c716186ebdf1cd21f11ebdd82112f35857c))
+
+
+### 🐛 Bug Fixes
+
+* disable scroll wheel zooming ([d188c7d](https://github.com/agrc/deq-spills/commit/d188c7d4859aac3dfbce724d2a96db3e0941058a))
+* **salesforce:** switch UTM coordinate fields to text ([ec873c7](https://github.com/agrc/deq-spills/commit/ec873c7cf85a23fe327a632d6455ddecefc607a8))
+
 ## [2.9.0-2](https://github.com/agrc/deq-spills/compare/v2.9.0-1...v2.9.0-2) (2023-09-18)
 
 
