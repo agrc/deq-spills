@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.9.0-2](https://github.com/agrc/deq-spills/compare/v2.9.0-1...v2.9.0-2) (2023-09-18)
+
+
+### 🐛 Bug Fixes
+
+* **salesforce:** fix bug preventing first location definition if no previous coordinates have been recorded ([fbc700c](https://github.com/agrc/deq-spills/commit/fbc700cec02e1d56fbdcdd622c42c7724ddd7d8b))
+
 ## [2.9.0-1](https://github.com/agrc/deq-spills/compare/v2.9.0-0...v2.9.0-1) (2023-09-14)
 
 
