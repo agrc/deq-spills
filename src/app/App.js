@@ -362,6 +362,9 @@ define([
                 }),
                 spatialReference: new SpatialReference(3857)
             });
+            this.map.on('load', function () {
+                that.map.disableScrollWheelZoom();
+            });
             this.layerSelector = new LayerSelector({
                 map: this.map,
                 quadWord: window.AGRCGLOBAL.quadWord,
