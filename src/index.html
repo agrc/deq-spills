@@ -74,7 +74,8 @@
             UTM_X: props?.UTM_X,
             UTM_Y: props?.UTM_Y,
             apiKey: apiKey,
-            skipDefine: true // this skips the first define
+            // this prevents the widget from re-defining a location on load
+            skipDefine: props?.UTM_X ? true : false
           },
           document.getElementById("AGRCMap")
         );
