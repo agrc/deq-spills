@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.10.0-1](https://github.com/agrc/deq-spills/compare/v2.10.0-0...v2.10.0-1) (2023-10-09)
+
+
+### 🐛 Bug Fixes
+
+* try to prevent mismatched coordinate inputs ([4fb0697](https://github.com/agrc/deq-spills/commit/4fb06976be930800407a0d1815dd0acdb99cc08e))
+
 ## [2.10.0-0](https://github.com/agrc/deq-spills/compare/v2.9.0-2...v2.10.0-0) (2023-09-18)
 
 
