@@ -55,6 +55,8 @@ define([
             this._panelController.visible = this.ddNode;
 
             this._panelController.panels.trs = this.trsNode;
+
+            this._updateView({target: {value: this.typeSelect.value}})
         },
         zoom: function () {
             // summary:
