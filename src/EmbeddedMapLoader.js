@@ -36,5 +36,5 @@
     }
     gtag('js', new Date());
 
-    gtag('config', 'G-PECSFZVT9S');
+    gtag('config', 'G-PECSFZVT9S', {'debug_mode': window.location.hostname === 'localhost'});
 }());
