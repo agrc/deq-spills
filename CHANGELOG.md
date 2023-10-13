@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.10.0-2](https://github.com/agrc/deq-spills/compare/v2.10.0-1...v2.10.0-2) (2023-10-13)
+
+
+### 🐛 Bug Fixes
+
+* bug that was causing blank x/y values and and incorrect coord type on load in salesforce ([537cece](https://github.com/agrc/deq-spills/commit/537ceced270962d13df96f63224ad7b37d7c028b))
+* don't send analytics in development ([faf481b](https://github.com/agrc/deq-spills/commit/faf481b197d8bcc63db51ba657bcc073ff95f04e))
+
 ## [2.10.0-1](https://github.com/agrc/deq-spills/compare/v2.10.0-0...v2.10.0-1) (2023-10-09)
 
 
