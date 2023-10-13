@@ -595,7 +595,6 @@ define([
             this.findAddressWidget.graphicsLayer.clear();
             this.map.graphics.clear();
             this.map.graphics.add(new Graphic(point, this.findRouteMilepostWidget.symbol));
-            this.zoomWidget.clear();
         },
         zoomToFeature: function (name, type) {
             // summary:

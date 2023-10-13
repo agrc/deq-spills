@@ -62,7 +62,11 @@
 
         if (window.location === window.parent.location) {
           // this is not an iframe
-          initializeWidget();
+          initializeWidget({
+            UTM_X: '424000',
+            UTM_Y: '4510000',
+            targetOrigin: '*'
+          });
           window.removeEventListener("message", processMessage)
         }
       };
