@@ -24,10 +24,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Set up code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: ⎔ Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
           cache: npm
@@ -48,11 +48,11 @@ jobs:
 
     steps:
       - name: ⬇️ Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - id: auth
         name: 🗝️ Authenticate to Google Cloud
-        uses: google-github-actions/auth@v0.4.4
+        uses: google-github-actions/auth@v1.1.1
         with:
           access_token_scopes: 'email, openid, https://www.googleapis.com/auth/cloud-platform, https://www.googleapis.com/auth/firebase'
           workload_identity_provider: ${{ secrets.IDENTITY_PROVIDER }}
@@ -60,7 +60,7 @@ jobs:
           create_credentials_file: true
 
       - name: ⎔ Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: lts/*
           cache: npm
@@ -98,11 +98,11 @@ jobs:
 
     steps:
       - name: ⬇️ Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - id: auth
         name: 🗝️ Authenticate to Google Cloud
-        uses: google-github-actions/auth@v0.4.4
+        uses: google-github-actions/auth@v1.1.1
         with:
           access_token_scopes: 'email, openid, https://www.googleapis.com/auth/cloud-platform, https://www.googleapis.com/auth/firebase'
           workload_identity_provider: ${{ secrets.IDENTITY_PROVIDER }}
@@ -110,7 +110,7 @@ jobs:
           create_credentials_file: true
 
       - name: ⎔ Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: lts/*
           cache: npm
