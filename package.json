@@ -2,7 +2,7 @@
   "name": "deq-spills",
   "version": "2.7.3",
   "devDependencies": {
-    "bower": "^1.8.12",
+    "bower": "^1.8.14",
     "grunt": "^1.6.1",
     "grunt-bump": "^0.8.0",
     "grunt-cache-breaker": "^2.0.1",
@@ -11,11 +11,11 @@
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-imagemin": "^1.0.1",
     "grunt-contrib-jasmine": "^4.0.0",
-    "grunt-contrib-uglify": "^5.0.1",
+    "grunt-contrib-uglify": "^5.2.2",
     "grunt-contrib-watch": "^1.1.0",
     "grunt-dojo": "^1.1.1",
     "grunt-eslint": "^19.0.0",
-    "grunt-processhtml": "^0.4.1",
+    "grunt-processhtml": "^0.4.4",
     "load-grunt-tasks": "^3.5.2",
     "uglify-js": "^2"
   },
