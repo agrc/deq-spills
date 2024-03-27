@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.10.0-3](https://github.com/agrc/deq-spills/compare/v2.10.0-2...v2.10.0-3) (2024-03-27)
+
+
+### 🐛 Bug Fixes
+
+* bump deps 🌲 ([bd056fe](https://github.com/agrc/deq-spills/commit/bd056feb4bdda7077d306e641ee2979cdc601f6a))
+
 ## [2.10.0-2](https://github.com/agrc/deq-spills/compare/v2.10.0-1...v2.10.0-2) (2023-10-13)
 
 
