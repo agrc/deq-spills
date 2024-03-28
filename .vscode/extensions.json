@@ -1,0 +1,7 @@
+{
+  "recommendations": [
+    "salesforce.salesforcedx-vscode-expanded",
+    "salesforce.salesforcedx-vscode-core",
+    "salesforce.salesforcedx-vscode"
+  ]
+}
