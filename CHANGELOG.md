@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.10.1](https://github.com/agrc/deq-spills/compare/v2.10.0...v2.10.1) (2024-03-28)
+
+
+### 🐛 Bug Fixes
+
+* **ci:** add missing repo token ([8d4933c](https://github.com/agrc/deq-spills/commit/8d4933c3f4fb84690a7211566028c042e1646852))
+
 ## [2.10.0](https://github.com/agrc/deq-spills/compare/v2.10.0-4...v2.10.0) (2024-03-28)
 
 
