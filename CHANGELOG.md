@@ -1,5 +1,25 @@
 # Changelog
 
+## [2.10.0](https://github.com/agrc/deq-spills/compare/v2.10.0-3...v2.10.0) (2024-03-28)
+
+
+### 🐛 Bug Fixes
+
+* February dependency bumps 🌲 ([e36c997](https://github.com/agrc/deq-spills/commit/e36c99779cdd28bce8cd365f33a177df0f1ac71b))
+* load correct URL based on environment ([01b4292](https://github.com/agrc/deq-spills/commit/01b42920848026d95c69a2c510086db8b9f396f1))
+* update map service with new tanks feature class ([523f3e8](https://github.com/agrc/deq-spills/commit/523f3e8eef0cb77c0666eb4edb3248aa3466a2e4))
+* update tanks feature class ([76a2f4c](https://github.com/agrc/deq-spills/commit/76a2f4ce6bb651fd0cbc45f1d00825d1e60566dd))
+
+
+### 📖 Documentation Improvements
+
+* refresh does with salesforce info ([31dffb1](https://github.com/agrc/deq-spills/commit/31dffb1ef32b0cef951023842ea3c890d730f0b6))
+
+
+### 🎨 Design Improvements
+
+* fix eslint errors ([d7a2b6f](https://github.com/agrc/deq-spills/commit/d7a2b6f962dcac2b3110cd4c0dee91c028ccf824))
+
 ## [2.10.0-3](https://github.com/agrc/deq-spills/compare/v2.10.0-2...v2.10.0-3) (2024-03-27)
 
 
