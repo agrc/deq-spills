@@ -79,7 +79,6 @@ export default class Spills extends LightningElement {
 
         const { data } = event;
         console.log('wc(spills): data from iframe:', data);
-        console.log('wc(spills): data string ' + JSON.stringify(data));
 
         if (!data.UTM_X) {
             return;
