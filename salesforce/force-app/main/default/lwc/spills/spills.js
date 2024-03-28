@@ -1,7 +1,7 @@
 import { updateRecord, getRecord } from 'lightning/uiRecordApi';
 import { LightningElement, wire, api } from 'lwc';
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
-import ID_FIELD from "@salesforce/schema/Case.Id";
+import ID_FIELD from '@salesforce/schema/Case.Id';
 import ADDRESS from '@salesforce/schema/Case.Address_Location__c'
 import CITY from '@salesforce/schema/Case.Nearest_Town_City__c';
 import COUNTY from '@salesforce/schema/Case.County__c';
@@ -41,6 +41,7 @@ export default class Spills extends LightningElement {
       );
     } else if (data) {
       console.log('wc: wireRecord data', data);
+      console.log('recordId is '+ this.recordId + '/' + '$recordId');
 
       this.utm_x = data.fields[UTM_X.fieldApiName].value;
       this.utm_y = data.fields[UTM_Y.fieldApiName].value;
@@ -71,6 +72,7 @@ export default class Spills extends LightningElement {
 
     const { data } = event;
     console.log('wc: data from iframe:', data);
+    console.log('wc: data string ' + JSON.stringify(data));
 
     if (!data.UTM_X) return;
     const utmX = Math.round(data.UTM_X);
@@ -96,9 +98,14 @@ export default class Spills extends LightningElement {
       [UTM_Y.fieldApiName]: utmY.toString(),
     }
 
+    console.log(JSON.stringify(fields));
+
     updateRecord({fields}).then(() => {
+      console.log('record updating');
       console.log('wc: record updated successfully');
+      
     }).catch(error => {
+      console.log(JSON.stringify(error));
       this.dispatchEvent(
         new ShowToastEvent({
           title: 'Error updating record',
