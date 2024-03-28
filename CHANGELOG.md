@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.10.0](https://github.com/agrc/deq-spills/compare/v2.10.0-4...v2.10.0) (2024-03-28)
+
+
+### 🐛 Bug Fixes
+
+* clean up log ([8a53e99](https://github.com/agrc/deq-spills/commit/8a53e999c6c7ebb4b5ca7ae31736fb57a478676a))
+
 ## [2.10.0-4](https://github.com/agrc/deq-spills/compare/v2.10.0-3...v2.10.0-4) (2024-03-28)
 
 
