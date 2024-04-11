@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.11.0](https://github.com/agrc/deq-spills/compare/v2.10.1...v2.11.0) (2024-04-11)
+
+
+### 🚀 Features
+
+* add analytics ([6bffcab](https://github.com/agrc/deq-spills/commit/6bffcab0eedeb626556090a64ce03844dbe75a8d))
+
 ## [2.10.1](https://github.com/agrc/deq-spills/compare/v2.10.0...v2.10.1) (2024-03-28)
 
 
