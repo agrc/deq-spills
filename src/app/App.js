@@ -35,8 +35,8 @@ define([
     'esri/geometry/Polygon',
     'esri/graphic',
     'esri/layers/ArcGISDynamicMapServiceLayer',
-    'esri/layers/FeatureLayer',
     'esri/layers/LabelLayer',
+    'esri/layers/VectorTileLayer',
     'esri/renderers/SimpleRenderer',
     'esri/SpatialReference',
     'esri/symbols/TextSymbol',
@@ -83,8 +83,8 @@ define([
     Polygon,
     Graphic,
     ArcGISDynamicMapServiceLayer,
-    FeatureLayer,
     LabelLayer,
+    VectorTileLayer,
     SimpleRenderer,
     SpatialReference,
     TextSymbol,
@@ -370,7 +370,7 @@ define([
                 quadWord: window.AGRCGLOBAL.quadWord,
                 baseLayers: ['Terrain', 'Hybrid', 'Lite', 'Topo'],
                 overlays: [{
-                    Factory: FeatureLayer,
+                    Factory: VectorTileLayer,
                     url: window.AGRCGLOBAL.urls.landOwnership,
                     id: 'Land Ownership',
                     opacity: 0.6

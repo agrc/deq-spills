@@ -49,7 +49,7 @@ define([
         // urls: Object
         urls: {
             mapservice: 'https://mapserv.utah.gov/arcgis/rest/services/DEQSpills/MapService/MapServer',
-            landOwnership: 'https://gis.trustlands.utah.gov/server/rest/services/Ownership/UT_SITLA_Ownership_LandOwnership_WM/MapServer/0',
+            landOwnership: 'https://gis.trustlands.utah.gov/hosting/rest/services/Hosted/Land_Ownership_WM_VectorTile/VectorTileServer',
             referenceLayers: 'https://mapserv.utah.gov/arcgis/rest/services/DEQSpills/ReferenceLayers/MapServer'
         },
 
