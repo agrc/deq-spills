@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.11.1](https://github.com/agrc/deq-spills/compare/v2.11.0...v2.11.1) (2024-04-16)
+
+
+### 🐛 Bug Fixes
+
+* Migrate to SITLA vector tiles ([fec5a92](https://github.com/agrc/deq-spills/commit/fec5a92ebf6a97361a150941626dc2a09bbd0cca))
+
 ## [2.11.0](https://github.com/agrc/deq-spills/compare/v2.10.1...v2.11.0) (2024-04-11)
 
 
