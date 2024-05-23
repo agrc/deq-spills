@@ -40,6 +40,12 @@
         // don't really care about origin check because there's not much that can be done on this side
         console.log("iframe: message received:", event);
 
+        if (window.frameElement.dataset.iframeId !== event.data.iframeId) {
+          // ignore messages from other iframes
+          console.log('iframe: ignored message from other iframe: ${event.data.iframeId}');
+          return;
+        }
+
         if (!Object.hasOwn(event.data, 'UTM_X')) {
           // ignore messages from other sources
           return;
@@ -102,6 +108,7 @@
             UTM_X: result.UTM_X,
             UTM_Y: result.UTM_Y,
             ZIP: result.ZIP,
+            iframeId: window.frameElement.dataset.iframeId
           };
 
           window.parent.postMessage(data, props?.targetOrigin);
