@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.11.2-0](https://github.com/agrc/deq-spills/compare/v2.11.1...v2.11.2-0) (2024-05-23)
+
+
+### 🐛 Bug Fixes
+
+* check iframe unique id in posting and receiving messages ([bccf4a0](https://github.com/agrc/deq-spills/commit/bccf4a0ba7d693a7e766b85067800e72b811de42))
+
 ## [2.11.1](https://github.com/agrc/deq-spills/compare/v2.11.0...v2.11.1) (2024-04-16)
 
 
