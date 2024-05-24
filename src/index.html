@@ -36,11 +36,19 @@
     <script>
       const eventName = "widget-loaded";
       const widgetLoadedEvent = new Event(eventName);
+      let iframeId;
       function processMessage(event) {
         // don't really care about origin check because there's not much that can be done on this side
         console.log("iframe: message received:", event);
 
-        if (!Object.hasOwn(event.data, 'UTM_X')) {
+        if (!Object.hasOwn(event.data, 'iframeId')) {
+          // ignore messages from other sources
+          return;
+        }
+
+        if (!iframeId && event.data.iframeId) {
+          iframeId = event.data.iframeId;
+        } else if (iframeId && event.data.iframeId !== iframeId) {
           // ignore messages from other sources
           return;
         }
@@ -102,6 +110,7 @@
             UTM_X: result.UTM_X,
             UTM_Y: result.UTM_Y,
             ZIP: result.ZIP,
+            iframeId
           };
 
           window.parent.postMessage(data, props?.targetOrigin);
@@ -112,13 +121,18 @@
     <!-- <script type='text/javascript' src='https://deqspills.dev.utah.gov/EmbeddedMapLoader.js'></script> -->
 
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PECSFZVT9S"></script>
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-PECSFZVT9S"
+    ></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-    
-      gtag('config', 'G-PECSFZVT9S');
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-PECSFZVT9S");
     </script>
   </body>
 </html>

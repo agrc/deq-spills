@@ -19,6 +19,9 @@ export default class Spills extends LightningElement {
     utm_y;
     @api recordId;
     @api isSandbox;
+    @api instanceId;
+    iframeId;
+    sampleId = 1234;
 
     @wire(getRecord, { recordId: '$recordId', fields: [ID_FIELD, UTM_X, UTM_Y] })
     wiredRecord({ error, data}) {
@@ -41,7 +44,8 @@ export default class Spills extends LightningElement {
             this.utm_x = data.fields[UTM_X.fieldApiName].value;
             this.utm_y = data.fields[UTM_Y.fieldApiName].value;
         }
-    }
+        console.log('instance ' + this.instanceId);
+        console.log('iframe ' + this.iframeId);    }
 
     get iframeSrc() {
         console.log('wc(spills): isSandbox', this.isSandbox)
@@ -56,13 +60,18 @@ export default class Spills extends LightningElement {
 
     constructor() {
         console.log('wc(spills): constructor', window);
-
         super();
+        this.iframeId = crypto.randomUUID();
+        console.log('instance ' + this.instanceId);
+        console.log('iframe ' + this.iframeId);
     }
 
     connectedCallback() {
         console.log('wc(spills): connectedCallback')
         window.addEventListener('message', this.receiveMessage);
+        console.log('instance ' + this.instanceId);
+        console.log('iframe ' + this.iframeId);
+
     }
 
     disconnectedCallback() {
@@ -71,6 +80,7 @@ export default class Spills extends LightningElement {
 
     receiveMessage = (event) => {
         console.log('wc(spills): event from iframe:', event);
+        console.log(JSON.stringify(event.data));
 
         if (event.origin !== this.iframeSrc) {
             console.warn(`wc: received message from unknown origin: ${event.origin}`);
@@ -79,6 +89,12 @@ export default class Spills extends LightningElement {
 
         const { data } = event;
         console.log('wc(spills): data from iframe:', data);
+        console.log('wc(spills): data string ' + JSON.stringify(data));
+
+        if (data.iframeId !== this.iframeId) {
+            console.log('wc(spills): iframeId mismatch', data.iframeId, this.iframeId);
+            return;
+        }
 
         if (!data.UTM_X) {
             return;
@@ -126,15 +142,19 @@ export default class Spills extends LightningElement {
 
     renderedCallback() {
         console.log('wc(spills): renderedCallback');
+        console.log('instance ' + this.instanceId);
+        console.log('iframe ' + this.iframeId);
 
         this.refs.iframe.addEventListener('load', () => {
             console.log('wc(spills): iframe loaded', this.utm_x, this.utm_y);
-
+            console.log('wc(spills:) sending iframeId ' + this.iframeId);
             this.refs.iframe.contentWindow.postMessage({
                 UTM_X: this.utm_x,
                 UTM_Y: this.utm_y,
+                iframeId : this.iframeId,
                 targetOrigin: window.document.location.origin
             }, this.iframeSrc);
+
         });
     }
 }

@@ -9,6 +9,10 @@ This projects consists of two parts:
 
 This web site is embedded via iframe in several DEQ web applications. See [src/index.html](src/index.html) for an example of how this is done.
 
+Staging: <https://deqspills.dev.utah.gov/>
+
+Production: <https://deqspills.deq.utah.gov/>
+
 ## Salesforce
 
 This project also contains a Salesforce Lightning Component ([/salesforce](/salesforce/)) that embeds the Firebase web application via iframe in a similar way to other DEQ web applications.
