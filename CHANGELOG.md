@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.11.2-0](https://github.com/agrc/deq-spills/compare/v2.11.1...v2.11.2-0) (2024-05-24)
+
+
+### 🐛 Bug Fixes
+
+* fix bug causing salesforce component to update more than one record at a time ([6d8ae40](https://github.com/agrc/deq-spills/commit/6d8ae4057f388345c2f5450fec37d3c833af3c37))
+
 ## [2.11.1](https://github.com/agrc/deq-spills/compare/v2.11.0...v2.11.1) (2024-04-16)
 
 
