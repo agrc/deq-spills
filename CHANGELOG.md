@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.11.3-0](https://github.com/agrc/deq-spills/compare/v2.11.2...v2.11.3-0) (2024-07-26)
+
+
+### Features
+
+* pass URL parameters to firebase app to widget ([8561536](https://github.com/agrc/deq-spills/commit/8561536437d38718fab72c956e671546965a7407)), closes [#113](https://github.com/agrc/deq-spills/issues/113)
+
 ## [2.11.2](https://github.com/agrc/deq-spills/compare/v2.11.1...v2.11.2) (2024-05-24)
 
 
