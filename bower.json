@@ -2,7 +2,7 @@
   "name": "deq-spills",
   "version": "2.7.3",
   "dependencies": {
-    "agrc": "agrc-widgets#6.1.5",
+    "agrc": "agrc-widgets#6.1.9",
     "bootstrap": "3.3.6",
     "dijit-themes": "https://github.com/dojo/dijit-themes.git#1.14.0",
     "es5-shim": "~3.4.0",
