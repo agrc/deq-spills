@@ -11,7 +11,32 @@ This web site is embedded via iframe in several DEQ web applications. See [src/i
 
 Staging: <https://deqspills.dev.utah.gov/>
 
-Production: <https://deqspills.deq.utah.gov/>
+Production: <https://deqspills.ugrc.utah.gov/>
+
+### Parameters
+
+The following may be passed as URL parameters to the web application. The order below indicates the precedence if multiple values are passed.
+
+- `UTM_X` & `UTM_Y`: This will center the map on the given UTM coordinates and show a point symbol.
+- `DD_LAT` & `DD_LON`: This will center the map on the given Decimal Degrees coordinates and show a point symbol.
+- `DMS_DEGREE_LAT`, `DMS_MINUTE_LAT`, `DMS_SECOND_LAT`, `DMS_DEGREE_LON`, `DMS_MINUTE_LON`, `DMS_SECOND_LON`: This will center the map on the given Degrees Minutes Seconds coordinates and show a point symbol.
+- `addressStreet` & `addressZone`: This will center the map on the given address and show a point symbol. `addressZone` can be a city or zip code.
+- `route` & `milepost`: This will center the map on the given route and milepost and show a point symbol.
+- `BASEMERIDIAN` & `TOWNSHIP` & `RANGE` & `SECTION`: This will center the map on the given PLSS coordinates.
+- `ZIP`: This will center the map on the given zip code.
+- `cityName`: This will center the map on the given city.
+- `countyName`: This will center the map on the given county.
+
+Some examples:
+
+Street address
+<https://deqspills.ugrc.utah.gov/?addressStreet=123%20s%20main%20st&addressZone=slc/>
+
+UTM coordinates
+<https://deqspills.ugrc.utah.gov/?UTM_X=424333&UTM_Y=4513333/>
+
+UTM coordinates will take precedence
+<https://deqspills.ugrc.utah.gov/?UTM_X=424333&UTM_Y=4513333&DD_LAT=39.1&DD_LONG=-112.4/>
 
 ## Salesforce
 

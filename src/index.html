@@ -69,12 +69,28 @@
         window.widgetIsLoaded = true;
 
         if (window.location === window.parent.location) {
-          // this is not an iframe
-          initializeWidget({
-            UTM_X: '424000',
-            UTM_Y: '4510000',
-            targetOrigin: '*'
-          });
+          // this is not an iframe, check for URL parameters
+          if (window.location.search) {
+            const urlParams = new URLSearchParams(window.location.search);
+
+            const widgetParams = {};
+            urlParams.forEach((value, key) => {
+              widgetParams[key] = value;
+            });
+
+            console.log('using url params:', widgetParams);
+
+            initializeWidget({
+              ...widgetParams,
+              targetOrigin: '*'
+            });
+          } else {
+            initializeWidget({
+              UTM_X: '434000',
+              UTM_Y: '4510000',
+              targetOrigin: '*'
+            });
+          }
           window.removeEventListener("message", processMessage)
         }
       };
@@ -83,8 +99,7 @@
         console.log("iframe: initializeWidget:", props);
         var app = new AGRCMap(
           {
-            UTM_X: props?.UTM_X,
-            UTM_Y: props?.UTM_Y,
+            ...props,
             apiKey: apiKey,
             // this prevents the widget from re-defining a location on load
             skipDefine: props?.UTM_X ? true : false
