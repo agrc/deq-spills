@@ -112,6 +112,7 @@
             ZIP: result.ZIP,
             iframeId
           };
+          console.log('data', JSON.stringify(data, null, 2));
 
           window.parent.postMessage(data, props?.targetOrigin);
         });
