@@ -60,14 +60,14 @@ define([
         zoomLevel: 12,
 
         queries: [
-            ['BOUNDARIES.ZipCodes', ['ZIP5', 'NAME'], ['ZIP', 'ZIPCITY']],
-            ['BOUNDARIES.Municipalities', ['NAME'], ['CITY']],
-            ['BOUNDARIES.Counties', ['NAME'], ['COUNTY']],
-            ['CADASTRE.PLSSSections_GCDB',
-                ['LABEL', 'SNUM', 'BASEMERIDIAN'],
+            ['boundaries.zip_code_areas', ['zip5', 'name'], ['ZIP', 'ZIPCITY']],
+            ['boundaries.municipal_boundaries', ['name'], ['CITY']],
+            ['boundaries.county_boundaries', ['name'], ['COUNTY']],
+            ['cadastre.plss_sections_gcdb',
+                ['label', 'snum', 'basemeridian'],
                 ['TOWNSHIP/RANGE', 'SECTION', 'BASEMERIDIAN']
             ],
-            ['CADASTRE.LandOwnership', ['AGENCY'], ['OWNER_AGENCY']]
+            ['cadastre.land_ownership', ['agency'], ['OWNER_AGENCY']]
         ],
 
         projections: {

@@ -110,22 +110,22 @@ define([
         zoomTypes: {
             county: {
                 name: 'county',
-                fcName: 'SGID10.BOUNDARIES.Counties',
-                fldName: 'NAME',
+                fcName: 'boundaries.county_boundaries',
+                fldName: 'name',
                 errTxt: 'County: ${0} not found!',
                 type: 'polygon'
             },
             citytown: {
                 name: 'citytown',
-                fcName: 'SGID10.LOCATION.CitiesTownsLocations',
-                fldName: 'NAME',
+                fcName: 'location.city_and_town_locations',
+                fldName: 'name',
                 errTxt: 'City/Town: ${0} not found!',
                 type: 'point'
             },
             zip: {
                 name: 'zip',
-                fcName: 'SGID10.BOUNDARIES.ZipCodes',
-                fldName: 'ZIP5',
+                fcName: 'boundaries.zip_code_areas',
+                fldName: 'zip5',
                 errTxt: 'Zip: ${0} not found!',
                 type: 'polygon'
             }
@@ -317,7 +317,7 @@ define([
                         queryTxt = queryTxt + ' AND ';
                     }
                 });
-                this.api.search('SGID10.' + plssQuery[0], ['shape@envelope'], {
+                this.api.search(plssQuery[0], ['shape@envelope'], {
                     predicate: queryTxt,
                     spatialReference: this.map.spatialReference.wkid
                 }).then(function (data) {
@@ -425,8 +425,8 @@ define([
             this.zoomWidget.startup();
             this.magicZoom = new MagicZoom({
                 promptMessage: 'Please type a city, town, or county...',
-                searchLayer: 'SGID10.LOCATION.ZoomLocations',
-                searchField: 'Name',
+                searchLayer: 'location.zoom_locations',
+                searchField: 'name',
                 map: this.map,
                 apiKey: this.apiKey,
                 wkid: 3857
@@ -499,7 +499,7 @@ define([
             array.forEach(window.AGRCGLOBAL.queries, function (q) {
                 that.map.showLoader();
                 promises.push(
-                    that.api.search('SGID10.' + q[0], q[1], {
+                    that.api.search(q[0], q[1], {
                         geometry: 'point:[' + location.x + ',' + location.y + ']'
                     }).then(function (data) {
                         that.map.showLoader();

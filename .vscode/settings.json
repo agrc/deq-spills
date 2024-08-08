@@ -6,6 +6,7 @@
     "citytown",
     "firebaserc",
     "fullscreen",
+    "gcdb",
     "hostingchannels",
     "MILEMARKER",
     "nosniff",
@@ -13,6 +14,7 @@
     "plss",
     "SAMEORIGIN",
     "SNUM",
-    "Ssearch"
+    "Ssearch",
+    "ZIPCITY"
   ]
 }
