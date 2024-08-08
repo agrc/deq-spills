@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.11.3](https://github.com/agrc/deq-spills/compare/v2.11.2...v2.11.3) (2024-08-08)
+
+
+### Bug Fixes
+
+* correct params for web api requests to match open sgid ([2d367d5](https://github.com/agrc/deq-spills/commit/2d367d508248e0df3f106dff3e9116a06e73c034))
+
+
+### Dependencies
+
+* **dev:** bump uglify-js in the safe-dependencies group ([fab0aa7](https://github.com/agrc/deq-spills/commit/fab0aa7c548c4e9fdb33349b5d5fd74df8394b9a))
+
 ## [2.11.3-1](https://github.com/agrc/deq-spills/compare/v2.11.2...v2.11.3-1) (2024-08-08)
 
 
