@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.11.4](https://github.com/agrc/deq-spills/compare/v2.11.3...v2.11.4) (2024-08-08)
+
+
+### Bug Fixes
+
+* pin uglify to workaround breaking change ([fa9053c](https://github.com/agrc/deq-spills/commit/fa9053cb3a8329866e9d2023d11cdbc0812ff707))
+
 ## [2.11.3](https://github.com/agrc/deq-spills/compare/v2.11.2...v2.11.3) (2024-08-08)
 
 
