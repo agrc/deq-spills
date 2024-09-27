@@ -110,9 +110,6 @@ module.exports = function (grunt) {
         eslint: {
             main: {
                 src: eslintFiles
-            },
-            options: {
-                overrideConfigFile: '.eslintrc'
             }
         },
         pkg: grunt.file.readJSON('package.json'),

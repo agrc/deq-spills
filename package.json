@@ -3,6 +3,7 @@
   "version": "2.11.4",
   "devDependencies": {
     "bower": "^1.8.14",
+    "globals": "^15.9.0",
     "grunt": "^1.6.1",
     "grunt-bump": "^0.8.0",
     "grunt-cache-breaker": "^2.0.1",
