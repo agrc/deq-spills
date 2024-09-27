@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.11.5](https://github.com/agrc/deq-spills/compare/v2.11.4...v2.11.5) (2024-09-27)
+
+
+### Dependencies
+
+* **dev:** bump serve-static in the npm_and_yarn group ([cfb1d53](https://github.com/agrc/deq-spills/commit/cfb1d535164453a12654123c92bbdc2b8dbf7b5a))
+* **dev:** bump the major-dependencies group with 2 updates ([d991f55](https://github.com/agrc/deq-spills/commit/d991f55e84ba8d5a883e8118d9b6637def28d8e9))
+
 ## [2.11.4](https://github.com/agrc/deq-spills/compare/v2.11.3...v2.11.4) (2024-08-08)
 
 
