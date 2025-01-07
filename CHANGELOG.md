@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.11.6](https://github.com/agrc/deq-spills/compare/v2.11.5...v2.11.6) (2025-01-07)
+
+
+### Dependencies
+
+* **dev:** bump the safe-dependencies group across 1 directory with 2 updates ([1ac522a](https://github.com/agrc/deq-spills/commit/1ac522a9b8ce5b4d9aecd4d28b35b97f52160c6b))
+
 ## [2.11.5](https://github.com/agrc/deq-spills/compare/v2.11.4...v2.11.5) (2024-09-27)
 
 
