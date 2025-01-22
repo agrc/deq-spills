@@ -1,4 +1,7 @@
 {
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "cSpell.words": [
     "AGRCGLOBAL",
     "autoplay",
@@ -15,6 +18,12 @@
     "SAMEORIGIN",
     "SNUM",
     "Ssearch",
+    "VITE",
     "ZIPCITY"
-  ]
+  ],
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true
 }
