@@ -1,36 +1,27 @@
-.grunt/
-*.DS_Store
-*.pyc
-*.sublime-workspace
-deploy/
-dist/
-node_modules/
-secrets.json
-src/agrc
-src/agrc-jasmine-matchers/
-src/bootstrap
-src/components-jasmine/
-src/dgrid
-src/dgrid1
-src/dijit
-src/dijit-themes
-src/dojo
-src/dojo-themes/
-src/dojox
-src/dstore/
-src/esri
-src/favico.js/
-src/ijit
-src/jasmine-favicon-reporter/
-src/jasmine-jsreporter/
-src/jquery
-src/layer-selector
-src/moment/
-src/mustache
-src/proj4/
-src/put-selector
-src/spinjs
-src/util
-src/xstyle
+# dependencies
+/node_modules
 
-.firebase/
+# testing
+/coverage
+
+# production
+/build
+/deploy
+/dist
+
+# secrets
+.env.local
+*.odc
+*.pyc
+*.sde
+
+# misc
+.eslintcache
+.DS_Store
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# deploy
+/.firebase
+/public/assets
