@@ -1,10 +1,11 @@
 import getSandboxFlag from '@salesforce/apex/CheckIfSandbox.getSandboxFlag';
-import { LightningElement, wire, api } from 'lwc';
+import { LightningElement, wire, api, track } from 'lwc';
 
 export default class EnvironmentSwitch extends LightningElement {
     @api recordId; // special prop that is automatically set from the current record
     isValueLoaded = false;
-    isSandbox = null;
+    @track isSandbox = false;
+    instanceId;
 
     @wire(getSandboxFlag)
     wiredSandboxFlag({ error, data }) {
@@ -15,6 +16,8 @@ export default class EnvironmentSwitch extends LightningElement {
             this.isSandbox = data;
         }
         this.isValueLoaded = true;
+        this.instanceId = crypto.randomUUID();
+        console.log('sandbox ' + this.isSandbox);
     }
 
     constructor() {
