@@ -57,7 +57,11 @@ export default class Spills extends LightningElement {
 
         return null;
     }
-
+    
+    // get iframeId() {
+    //     this.iframeId = crypto.randomUUID();
+    // }
+    
     constructor() {
         console.log('wc(spills): constructor', window);
         super();
@@ -91,7 +95,7 @@ export default class Spills extends LightningElement {
         console.log('wc(spills): data from iframe:', data);
         console.log('wc(spills): data string ' + JSON.stringify(data));
 
-        if (data.iframeId !== this.iframeId) {
+        if(data.iframeId !== this.iframeId) {
             console.log('wc(spills): iframeId mismatch', data.iframeId, this.iframeId);
             return;
         }
@@ -154,7 +158,7 @@ export default class Spills extends LightningElement {
                 iframeId : this.iframeId,
                 targetOrigin: window.document.location.origin
             }, this.iframeSrc);
-
+            
         });
     }
 }

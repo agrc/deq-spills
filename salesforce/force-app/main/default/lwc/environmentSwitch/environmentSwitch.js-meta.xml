@@ -7,4 +7,5 @@
         <target>lightningCommunity__Page</target>
         <target>lightningCommunity__Default</target>
     </targets>
+    
 </LightningComponentBundle>
