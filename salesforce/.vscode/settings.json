@@ -8,5 +8,7 @@
     "MILEMARKER",
     "SFDX",
     "utahdeqorg"
-  ]
+  ],
+  "salesforcedx-vscode-lwc.preview.typeScriptSupport": true,
+  "editor.formatOnSave": true
 }
