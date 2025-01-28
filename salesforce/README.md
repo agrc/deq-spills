@@ -13,7 +13,7 @@ Production: <https://utahdeqorg.lightning.force.com/>
 1. Install Salesforce CLI (`pnpm install -g @salesforce/cli`)
 1. Install [Salesforce Extension Pack for VS Code](https://marketplace.visualstudio.com/items?itemName=salesforce.salesforcedx-vscode)
 1. Authorize Org Sandbox
-    1. `org:login:web --alias utahdeqorg --instance-url https://utahdeqorg--eid.sandbox.my.salesforce.com/ --set-default`
+   1. `org:login:web --alias utahdeqorg --instance-url https://utahdeqorg--eid.sandbox.my.salesforce.com/ --set-default`
 
 ### Pulling Changes from Org
 
