@@ -146,9 +146,6 @@ jobs:
     if: ${{ github.event.sender.type == 'User' && github.head_ref != 'dev' }}
     environment:
       name: preview
-    defaults:
-      run:
-        working-directory: ./website
 
     steps:
       - name: 🚀 Deploy
@@ -160,6 +157,7 @@ jobs:
           preview: yes
           build-command: pnpm run build -- --mode dev
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+          working-directory: website
         env:
           VITE_DISCOVER: ${{ secrets.DISCOVER_QUAD_WORD }}
           VITE_WEB_API: ${{ secrets.WEB_API_KEY }}
