@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   test-check-website:
-    name: Lint and check types
+    name: Lint and check types (website)
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -46,7 +46,7 @@ jobs:
         run: pnpm run check
 
   test-unit-website:
-    name: Unit tests
+    name: Unit tests (website)
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -76,7 +76,7 @@ jobs:
         run: pnpm test
 
   test-check-salesforce:
-    name: Lint and check types
+    name: Lint (salesforce)
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -106,7 +106,7 @@ jobs:
         run: pnpm run lint
 
   test-unit-salesforce:
-    name: Unit tests
+    name: Unit tests (salesforce)
     runs-on: ubuntu-latest
     defaults:
       run:
