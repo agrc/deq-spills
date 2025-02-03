@@ -1,18 +1,18 @@
-import { updateRecord, getRecord } from "lightning/uiRecordApi";
-import { ShowToastEvent } from "lightning/platformShowToastEvent";
-import { LightningElement, wire, api } from "lwc";
-import ID_FIELD from "@salesforce/schema/Case.Id";
 import ADDRESS from "@salesforce/schema/Case.Address_Location__c";
-import CITY from "@salesforce/schema/Case.Nearest_Town_City__c";
 import COUNTY from "@salesforce/schema/Case.County__c";
+import HIGHWAY from "@salesforce/schema/Case.Highway__c";
+import ID_FIELD from "@salesforce/schema/Case.Id";
+import INDIAN from "@salesforce/schema/Case.Indian_Land__c";
+import OWNER_AGENCY from "@salesforce/schema/Case.Land_Ownership__c";
 import DD_LAT from "@salesforce/schema/Case.Latitude__c";
 import DD_LONG from "@salesforce/schema/Case.Longitude__c";
-import HIGHWAY from "@salesforce/schema/Case.Highway__c";
-import INDIAN from "@salesforce/schema/Case.Indian_Land__c";
 import MILEMARKER from "@salesforce/schema/Case.Mile_Marker__c";
-import OWNER_AGENCY from "@salesforce/schema/Case.Land_Ownership__c";
+import CITY from "@salesforce/schema/Case.Nearest_Town_City__c";
 import UTM_X from "@salesforce/schema/Case.Utm_E_X_6_dgts__c";
 import UTM_Y from "@salesforce/schema/Case.Utm_N_Y_7_dgts__c";
+import { ShowToastEvent } from "lightning/platformShowToastEvent";
+import { getRecord, updateRecord } from "lightning/uiRecordApi";
+import { api, LightningElement, wire } from "lwc";
 
 export default class Spills extends LightningElement {
   utm_x;
@@ -58,10 +58,6 @@ export default class Spills extends LightningElement {
 
     return null;
   }
-
-  // get iframeId() {
-  //     this.iframeId = crypto.randomUUID();
-  // }
 
   constructor() {
     console.log("wc(spills): constructor");
