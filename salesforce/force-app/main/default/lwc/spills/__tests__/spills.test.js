@@ -2,6 +2,14 @@ import Spills from "c/spills";
 import { createElement } from "lwc";
 
 describe("c-spills", () => {
+  const mockedValue = "mocked-value";
+  beforeAll(() => {
+    delete window.crypto;
+    window.crypto = {
+      randomUUID: jest.fn(() => mockedValue)
+    };
+  });
+
   afterEach(() => {
     // The jsdom instance is shared across test cases in a single file so reset the DOM
     while (document.body.firstChild) {
@@ -20,6 +28,6 @@ describe("c-spills", () => {
 
     // Assert
     // const div = element.shadowRoot.querySelector('div');
-    expect(1).toBe(1);
+    expect(element.nodeName).toBe("C-SPILLS");
   });
 });
