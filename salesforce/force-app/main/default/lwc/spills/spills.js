@@ -64,10 +64,9 @@ export default class Spills extends LightningElement {
   // }
 
   constructor() {
-    console.log("wc(spills): constructor", window);
+    console.log("wc(spills): constructor");
     super();
     this.iframeId = crypto.randomUUID();
-    console.log("instance " + this.instanceId);
     console.log("iframe " + this.iframeId);
   }
 
