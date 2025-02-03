@@ -16,6 +16,9 @@ jobs:
       name: dev
       url: https://spillsmap.dev.utah.gov
     if: github.event.release.prerelease == true
+    defaults:
+      run:
+        working-directory: ./website
 
     steps:
       - name: 🚀 Deploy
@@ -37,6 +40,9 @@ jobs:
       name: prod
       url: https://spillsmap.deq.utah.gov
     if: github.event.release.prerelease == false
+    defaults:
+      run:
+        working-directory: ./website
 
     steps:
       - name: 🚀 Deploy
