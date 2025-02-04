@@ -1,0 +1,13 @@
+{
+  "packages": {
+    "legacy": {
+      "path": "legacy"
+    },
+    "salesforce": {
+      "path": "salesforce"
+    },
+    "website": {
+      "path": "website"
+    }
+  }
+}
