@@ -1,4 +1,3 @@
-import { Extent } from '@arcgis/core/geometry';
 import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
 import EsriMap from '@arcgis/core/Map';
 import MapView from '@arcgis/core/views/MapView';
@@ -7,6 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import useMap from './hooks/useMap';
 
 import '@ugrc/layer-selector/src/LayerSelector.css';
+import { utahMercatorExtent } from '@ugrc/utilities/hooks';
 
 const urls = {
   landownership:
@@ -29,16 +29,6 @@ type SelectorOptions = {
   position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
 };
 
-const stateOfUtahExtent = {
-  xmax: -12612006,
-  xmin: -12246370,
-  ymax: 5125456,
-  ymin: 4473357,
-  spatialReference: {
-    wkid: 3857,
-  },
-};
-
 export default function MapContainer({ onClick }: { onClick?: __esri.ViewImmediateClickEventHandler }) {
   const mapNode = useRef<HTMLDivElement | null>(null);
   const mapComponent = useRef<EsriMap | null>(null);
@@ -58,7 +48,7 @@ export default function MapContainer({ onClick }: { onClick?: __esri.ViewImmedia
     mapView.current = new MapView({
       container: mapNode.current,
       map: mapComponent.current,
-      extent: new Extent(stateOfUtahExtent),
+      extent: utahMercatorExtent,
     });
 
     setMapView(mapView.current);
