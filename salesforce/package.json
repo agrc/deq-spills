@@ -9,7 +9,7 @@
     "precommit": "lint-staged",
     "prettier": "prettier --write \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
     "prettier:verify": "prettier --check \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
-    "test": "npm run test:unit",
+    "test": "pnpm run test:unit",
     "test:unit": "sfdx-lwc-jest",
     "test:unit:coverage": "sfdx-lwc-jest --coverage",
     "test:unit:debug": "sfdx-lwc-jest --debug",
