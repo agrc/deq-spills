@@ -1,0 +1,16 @@
+{
+  "projects": {
+    "default": "ut-dts-agrc-spills-dev"
+  },
+  "targets": {
+    "ut-dts-agrc-spills-dev": {
+      "hosting": {
+        "default": [
+          "ut-dts-agrc-spills-sf-dev",
+          "ut-dts-agrc-spills-sf-prod"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

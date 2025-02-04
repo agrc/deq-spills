@@ -1,5 +1,11 @@
 <template>
   <template lwc:if={isValueLoaded}>
-    <c-spills is-sandbox={isSandbox} record-id={recordId} utm-x={utmX} utm-y={utmY}></c-spills>
+    <c-spills
+      is-sandbox={isSandbox}
+      record-id={recordId}
+      utm-x={utmX}
+      utm-y={utmY}
+      instance-id={instanceId}
+    ></c-spills>
   </template>
 </template>
