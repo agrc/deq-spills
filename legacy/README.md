@@ -1,6 +1,6 @@
 # DEQ Spills Web Application & Salesforce Integration
 
-This projects consists of two parts:
+This project consists of two parts:
 
 - Firebase web mapping application
 - Salesforce Lightning Component
@@ -23,8 +23,8 @@ Production Salesforce Instance: <https://utahdeqorg.lightning.force.com/>
 
 ## Development
 
->[!NOTE]
->For DEQ web developers developing on `localhost`: You need to define the following global variable and pass a wide-open quad word: `AGRC_testQuadWord`.
+> [!NOTE]
+> For DEQ web developers developing on `localhost`: You need to define the following global variable and pass a wide-open quad word: `AGRC_testQuadWord`.
 
 ### Firebase
 
