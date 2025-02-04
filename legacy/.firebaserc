@@ -5,9 +5,9 @@
   "targets": {
     "ut-dts-agrc-spills-dev": {
       "hosting": {
-        "default": [
-          "ut-dts-agrc-spills-sf-dev",
-          "ut-dts-agrc-spills-sf-prod"
+        "legacy": [
+          "ut-dts-agrc-spills-dev",
+          "ut-dts-agrc-spills-prod"
         ]
       }
     }

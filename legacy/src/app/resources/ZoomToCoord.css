@@ -1,0 +1,13 @@
+@import '../../agrc/resources/locate/ZoomToCoords.css';
+
+.zoom-to-coordinate label.float-label {
+    width: 100px;
+    display: inline-block;
+    float: left;
+}
+.zoom-to-coordinate .form-group {
+    margin-top: 4px;
+}
+.zoom-to-coordinate form>select {
+    margin-bottom: 4px;
+}
