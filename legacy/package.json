@@ -1,0 +1,33 @@
+{
+  "name": "deq-spills",
+  "version": "2.11.6",
+  "devDependencies": {
+    "bower": "^1.8.14",
+    "globals": "^15.14.0",
+    "grunt": "^1.6.1",
+    "grunt-bump": "^0.8.0",
+    "grunt-cache-breaker": "^2.0.1",
+    "grunt-contrib-clean": "^2.0.1",
+    "grunt-contrib-connect": "^5.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-imagemin": "^4.0.0",
+    "grunt-contrib-jasmine": "^4.0.0",
+    "grunt-contrib-uglify": "^5.2.2",
+    "grunt-contrib-watch": "^1.1.0",
+    "grunt-dojo": "^1.1.2",
+    "grunt-eslint": "^25.0.0",
+    "grunt-processhtml": "^0.4.4",
+    "load-grunt-tasks": "^5.1.0",
+    "uglify-js": "^3.17.4"
+  },
+  "scripts": {
+    "build:prod": "grunt build-prod",
+    "build:stage": "grunt build-stage",
+    "postinstall": "bower install",
+    "start": "grunt",
+    "test": "grunt test"
+  },
+  "dependencies": {
+    "grunt-replace": "^2.0.2"
+  }
+}
