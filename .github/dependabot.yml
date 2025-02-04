@@ -1,7 +1,10 @@
 version: 2
 updates:
   - package-ecosystem: npm
-    directory: /
+    directories:
+      - legacy
+      - website
+      - salesforce
     schedule:
       interval: monthly
     groups:
@@ -26,7 +29,7 @@ updates:
       semver-minor-days: 14
       semver-patch-days: 7
       exclude:
-        - '@ugrc/*'
+        - "@ugrc/*"
   - package-ecosystem: github-actions
     directory: /
     schedule:

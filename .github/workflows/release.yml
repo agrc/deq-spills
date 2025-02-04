@@ -9,8 +9,8 @@ permissions:
   deployments: write
 
 jobs:
-  deploy-dev:
-    name: Deploy to staging
+  deploy-website-dev:
+    name: Deploy website to staging
     runs-on: ubuntu-latest
     environment:
       name: dev
@@ -31,8 +31,26 @@ jobs:
           VITE_WEB_API: ${{ secrets.WEB_API_KEY }}
           VITE_FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
 
-  deploy-prod:
-    name: Deploy to production
+  deploy-legacy-dev:
+    name: Deploy legacy to staging
+    runs-on: ubuntu-latest
+    if: github.event.release.prerelease == true
+    environment:
+      name: dev
+      url: https://deqspills.dev.utah.gov
+
+    steps:
+      - name: 🚀 Deploy
+        uses: agrc/firebase-website-deploy-composite-action@v1
+        with:
+          identity-provider: ${{ secrets.IDENTITY_PROVIDER }}
+          service-account-email: ${{ secrets.SERVICE_ACCOUNT_EMAIL }}
+          project-id: ${{ secrets.PROJECT_ID }}
+          build-command: npm run build:stage
+          working-directory: ./legacy
+
+  deploy-website-prod:
+    name: Deploy website to production
     runs-on: ubuntu-latest
     environment:
       name: prod
@@ -58,6 +76,30 @@ jobs:
           VITE_DISCOVER: ${{ secrets.DISCOVER_QUAD_WORD }}
           VITE_WEB_API: ${{ secrets.WEB_API_KEY }}
           VITE_FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
+
+  deploy-prod:
+    name: Deploy legacy to production
+    runs-on: ubuntu-latest
+    if: github.event.release.prerelease == false
+    environment:
+      name: prod
+      url: https://deqspills.ugrc.utah.gov
+
+    steps:
+      - name: 🚀 Deploy
+        uses: agrc/firebase-website-deploy-composite-action@v1
+        with:
+          identity-provider: ${{ secrets.IDENTITY_PROVIDER }}
+          service-account-email: ${{ secrets.SERVICE_ACCOUNT_EMAIL }}
+          project-id: ${{ secrets.PROJECT_ID }}
+          build-command: npm run build:prod
+          service-now-instance: ${{ secrets.SN_INSTANCE }}
+          service-now-table: ${{ secrets.SN_TABLE }}
+          service-now-system-id: ${{ secrets.SN_SYS_ID }}
+          service-now-username: ${{ secrets.SN_USERNAME }}
+          service-now-password: ${{ secrets.SN_PASSWORD }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          working-directory: ./legacy
 
   notify:
     name: Notifications
