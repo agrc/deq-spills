@@ -6,7 +6,13 @@
     "ut-dts-agrc-spills-dev": {
       "hosting": {
         "default": [
-          "ut-dts-agrc-spills-sf-dev",
+          "ut-dts-agrc-spills-sf-dev"
+        ]
+      }
+    },
+    "ut-dts-agrc-spills-prod": {
+      "hosting": {
+        "default": [
           "ut-dts-agrc-spills-sf-prod"
         ]
       }
