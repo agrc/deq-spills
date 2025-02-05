@@ -9,31 +9,13 @@ permissions:
   deployments: write
 
 jobs:
-  get-project:
-    name: Get the project name
-    runs-on: ubuntu-latest
-    outputs:
-      project: ${{ steps.folder.outputs.matched_first }}
-    steps:
-      - name: 🏷️ Extract package name from tag
-        uses: MeilCli/regex-match@v2
-        id: folder
-        with:
-          regex_pattern: ".*(?=-v*)"
-          search_string: ${{ github.ref_name }}
-
-      - name: 🛑 Fail if no package name found
-        run: exit 1
-        if: ${{ !steps.folder.outputs.matched }}
-
   deploy-website-dev:
     name: Deploy website to staging
     runs-on: ubuntu-latest
     environment:
       name: dev
       url: https://spillsmap.dev.utah.gov
-    if: github.event.release.prerelease == true && needs.get-project.outputs.project == 'website'
-    needs: get-project
+    if: github.event.release.prerelease == true
 
     steps:
       - name: 🚀 Deploy
@@ -55,8 +37,7 @@ jobs:
     environment:
       name: dev
       url: https://deqspills.dev.utah.gov
-    if: github.event.release.prerelease == true && needs.get-project.outputs.project == 'legacy'
-    needs: get-project
+    if: github.event.release.prerelease == true
 
     steps:
       - name: 🚀 Deploy
@@ -74,8 +55,7 @@ jobs:
     environment:
       name: prod
       url: https://spillsmap.deq.utah.gov
-    if: github.event.release.prerelease == false && needs.get-project.outputs.project == 'website'
-    needs: get-project
+    if: github.event.release.prerelease == false
 
     steps:
       - name: 🚀 Deploy
@@ -103,8 +83,7 @@ jobs:
     environment:
       name: prod
       url: https://deqspills.ugrc.utah.gov
-    if: github.event.release.prerelease == false && needs.get-project.outputs.project == 'legacy'
-    needs: get-project
+    if: github.event.release.prerelease == false
 
     steps:
       - name: 🚀 Deploy
