@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.0-1](https://github.com/agrc/deq-spills/compare/v3.0.0-0...v3.0.0-1) (2025-02-05)
+
+
+### Bug Fixes
+
+* **legacy:** remove broken image min build step ([f1cd52c](https://github.com/agrc/deq-spills/commit/f1cd52c8b92e388550cc1cc8c40fbf7b5a96d724))
+
 ## [3.0.0-0](https://github.com/agrc/deq-spills/compare/v2.11.6...v3.0.0-0) (2025-02-05)
 
 ### ⚠ BREAKING CHANGES
