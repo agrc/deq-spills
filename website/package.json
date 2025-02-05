@@ -1,6 +1,6 @@
 {
   "name": "@ugrc/deq-spills",
-  "version": "2.11.6",
+  "version": "3.0.0-0",
   "private": true,
   "type": "module",
   "scripts": {
