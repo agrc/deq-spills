@@ -6,7 +6,13 @@
     "ut-dts-agrc-spills-dev": {
       "hosting": {
         "legacy": [
-          "ut-dts-agrc-spills-dev",
+          "ut-dts-agrc-spills-dev"
+        ]
+      }
+    },
+    "ut-dts-agrc-spills-prod": {
+      "hosting": {
+        "legacy": [
           "ut-dts-agrc-spills-prod"
         ]
       }
