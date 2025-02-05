@@ -81,22 +81,6 @@ module.exports = function (grunt) {
                 basePath: './src'
             }
         },
-        imagemin: {
-            dynamic: {
-                options: {
-                    optimizationLevel: 3
-                },
-                files: [
-                    {
-                        expand: true,
-                        cwd: 'src/',
-                        // exclude tests because some images in dojox throw errors
-                        src: ['**/*.{png,jpg,gif}', '!**/tests/**/*.*'],
-                        dest: 'src/'
-                    }
-                ]
-            }
-        },
         jasmine: {
             app: {
                 src: ['src/app/run.js'],
@@ -197,7 +181,6 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build-prod', [
         'clean:build',
-        'imagemin:dynamic',
         'dojo:prod',
         'uglify:prod',
         'replace:prod',
@@ -207,7 +190,6 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build-stage', [
         'clean:build',
-        'imagemin:dynamic',
         'dojo:stage',
         'uglify:stage',
         'replace:stage',
@@ -218,7 +200,6 @@ module.exports = function (grunt) {
     grunt.registerTask('build-dev', [
         'clean:build',
         'dojo:prod',
-        'imagemin:dynamic',
         'copy',
         'processhtml:dev'
     ]);
