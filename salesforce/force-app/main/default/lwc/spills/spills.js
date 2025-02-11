@@ -51,9 +51,9 @@ export default class Spills extends LightningElement {
   get iframeSrc() {
     console.log("wc(spills): isSandbox", this.isSandbox);
     if (this.isSandbox) {
-      return "https://deqspills.dev.utah.gov"; // staging
+      return "https://deqspills.dev.utah.gov?embedded=true"; // staging
     } else if (this.isSandbox === false) {
-      return "https://deqspills.ugrc.utah.gov"; // prod
+      return "https://deqspills.ugrc.utah.gov?embedded=true"; // prod
     }
 
     return null;
