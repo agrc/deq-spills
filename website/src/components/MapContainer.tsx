@@ -29,7 +29,12 @@ type SelectorOptions = {
   position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
 };
 
-export default function MapContainer({ onClick }: { onClick?: __esri.ViewImmediateClickEventHandler }) {
+type MapContainerProps = {
+  onClick?: __esri.ViewImmediateClickEventHandler;
+  isEmbedded?: boolean;
+};
+
+export default function MapContainer({ onClick, isEmbedded }: MapContainerProps) {
   const mapNode = useRef<HTMLDivElement | null>(null);
   const mapComponent = useRef<EsriMap | null>(null);
   const mapView = useRef<MapView>(null);
@@ -49,6 +54,9 @@ export default function MapContainer({ onClick }: { onClick?: __esri.ViewImmedia
       container: mapNode.current,
       map: mapComponent.current,
       extent: utahMercatorExtent,
+      navigation: {
+        mouseWheelZoomEnabled: isEmbedded,
+      },
     });
 
     setMapView(mapView.current);
