@@ -50,7 +50,7 @@ export default function App() {
 
   return (
     <>
-      <main className="flex h-screen flex-col md:gap-2">
+      <main className="flex h-screen flex-col">
         {!isEmbedded ? (
           <Header links={links}>
             <div className="flex h-full grow items-center gap-3">
@@ -61,17 +61,13 @@ export default function App() {
             </div>
           </Header>
         ) : null}
-        <section className="relative flex min-h-0 flex-1 overflow-x-hidden md:mr-2">
-          <div className="relative flex flex-1 flex-col rounded border border-b-0 border-zinc-200 dark:border-0 dark:border-zinc-700">
-            <div className="relative flex-1 overflow-hidden dark:rounded">
-              <ErrorBoundary FallbackComponent={ErrorFallback}>
-                <MapContainer onClick={onClick} isEmbedded={isEmbedded} />
-              </ErrorBoundary>
-            </div>
-          </div>
+        <section className="relative flex min-h-0 flex-1 overflow-x-hidden">
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+            <MapContainer onClick={onClick} isEmbedded={isEmbedded} />
+          </ErrorBoundary>
         </section>
       </main>
-      <Footer />
+      {!isEmbedded ? <Footer /> : null}
     </>
   );
 }
