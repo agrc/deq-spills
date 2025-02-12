@@ -64,8 +64,8 @@ importers:
         specifier: ^8.21.0
         version: 8.21.0(@typescript-eslint/parser@8.21.0(eslint@9.18.0(jiti@1.21.7))(typescript@5.7.3))(eslint@9.18.0(jiti@1.21.7))(typescript@5.7.3)
       '@ugrc/tailwind-preset':
-        specifier: ^1.1.0
-        version: 1.1.0(tailwindcss@3.4.17)
+        specifier: ^1.2.0
+        version: 1.2.0(tailwindcss@3.4.17)
       '@ugrc/tsconfigs':
         specifier: ^1.0.3
         version: 1.0.3
@@ -1605,8 +1605,8 @@ packages:
       prop-types: ^15.8.1
       react: '>=16.8.0'
 
-  '@ugrc/tailwind-preset@1.1.0':
-    resolution: {integrity: sha512-6eWUrbJ1oJF+rqxHfAMsLRq8FxG/KheckF5QVXQOA8O6kFnVV1DH0qIc4PRDtDxAhH/oHicPfUq0FdNPqlYVGA==}
+  '@ugrc/tailwind-preset@1.2.0':
+    resolution: {integrity: sha512-FW3zNwn44egtRA6A/taa7OiyM1A8LewjL91fbZNcJKQjge6P7Aa1HiaoqEDsTrPykL3KqlDqZ3B/vNpg/I2yQQ==}
 
   '@ugrc/tsconfigs@1.0.3':
     resolution: {integrity: sha512-9Z84bZpLJ6wRi4sm6RWvckPHs/Q6XZCHW5yjeHZzboZi/1bsJUOoh3F5wT/qQ5EKewDcHk65WcvUTWPc+JYjtQ==}
@@ -5516,7 +5516,7 @@ snapshots:
       prop-types: 15.8.1
       react: 19.0.0
 
-  '@ugrc/tailwind-preset@1.1.0(tailwindcss@3.4.17)':
+  '@ugrc/tailwind-preset@1.2.0(tailwindcss@3.4.17)':
     dependencies:
       tailwindcss-react-aria-components: 1.2.0(tailwindcss@3.4.17)
     transitivePeerDependencies:
