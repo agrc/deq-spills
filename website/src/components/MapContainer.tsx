@@ -64,23 +64,27 @@ export default function MapContainer({ onClick, isEmbedded }: MapContainerProps)
     const selectorOptions: SelectorOptions = {
       view: mapView.current,
       quadWord: import.meta.env.VITE_DISCOVER,
-      baseLayers: [
-        'Hybrid',
-        {
-          Factory: VectorTileLayer,
-          url: urls.liteVector,
-          id: 'Lite',
-          opacity: 1,
-        },
-        'Terrain',
-      ],
+      baseLayers: ['Terrain', 'Hybrid', 'Lite'],
       overlays: [
-        'Address Points',
+        {
+          // @ts-expect-error - layer selector types are messed up
+          Factory: 'FeatureLayer',
+          id: 'Public Water System Facilities',
+          url: 'https://services2.arcgis.com/NnxP4LZ3zX8wWmP9/ArcGIS/rest/services/Utah_DDW_Public_Water_System_Sources/FeatureServer/0',
+          labelingInfo: [
+            {
+              labelExpressionInfo: {
+                expression: '$feature.FACNAME',
+              },
+              minScale: 200000,
+            },
+          ],
+        },
         {
           Factory: VectorTileLayer,
           url: urls.landownership,
           id: 'Land Ownership',
-          opacity: 0.3,
+          opacity: 0.75,
         },
       ],
       position: 'top-right',
@@ -92,7 +96,7 @@ export default function MapContainer({ onClick, isEmbedded }: MapContainerProps)
       mapView.current?.destroy();
       mapComponent.current?.destroy();
     };
-  }, [setMapView]);
+  }, [isEmbedded, setMapView]);
 
   // add click event handlers
   useEffect(() => {
