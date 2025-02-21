@@ -1,5 +1,26 @@
 # Changelog
 
+## [3.0.0-2](https://github.com/agrc/deq-spills/compare/v3.0.0-1...v3.0.0-2) (2025-02-21)
+
+
+### Features
+
+* **website:** add legend and labels for land ownership ([a588083](https://github.com/agrc/deq-spills/commit/a588083e82c4c64b70ec74ca04a89d77d59aeb4b)), closes [#128](https://github.com/agrc/deq-spills/issues/128)
+* **website:** add water system layer and refine land ownership ([4500a11](https://github.com/agrc/deq-spills/commit/4500a11a2446d98d840d02dbadafbd16ac1a114c)), closes [#128](https://github.com/agrc/deq-spills/issues/128)
+* **website:** enable mouse wheel zooming when embedded ([0672090](https://github.com/agrc/deq-spills/commit/0672090af1d38729c534171d26068b52f795e034)), closes [#130](https://github.com/agrc/deq-spills/issues/130)
+
+
+### Bug Fixes
+
+* **website:** enable mouse wheel zooming even when no embedded ([7f450e3](https://github.com/agrc/deq-spills/commit/7f450e30a1b8c253e03232455d458bac455c56ce))
+* **website:** hide legend when empty ([ff82529](https://github.com/agrc/deq-spills/commit/ff82529d9d78c59a840d2b618d938e94f6d23e13)), closes [#128](https://github.com/agrc/deq-spills/issues/128)
+
+
+### Styles
+
+* **website:** override default colors with DEQ logo colors ([031e12c](https://github.com/agrc/deq-spills/commit/031e12c18028fc1d72f1b7e96745cde57e075666))
+* **website:** simplify layout and add optimizations for salesforce embed ([0a51029](https://github.com/agrc/deq-spills/commit/0a5102930f01cc513c946e72801d106c79d5de0a))
+
 ## [3.0.0-1](https://github.com/agrc/deq-spills/compare/v3.0.0-0...v3.0.0-1) (2025-02-05)
 
 
