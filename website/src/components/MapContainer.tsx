@@ -55,9 +55,18 @@ export default function MapContainer({ onClick, isEmbedded }: MapContainerProps)
       const legend = new Legend({
         view: mapView.current!,
         basemapLegendVisible: true,
+        visible: false,
       });
 
       mapView.current!.ui.add(legend, 'bottom-right');
+
+      legend.activeLayerInfos.on('after-changes', () => {
+        if (legend.activeLayerInfos.length === 0) {
+          legend.visible = false;
+        } else {
+          legend.visible = true;
+        }
+      });
     });
 
     setMapView(mapView.current);
