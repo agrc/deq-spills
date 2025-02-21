@@ -49,9 +49,6 @@ export default function MapContainer({ onClick, isEmbedded }: MapContainerProps)
       container: mapNode.current,
       map: mapComponent.current,
       extent: utahMercatorExtent,
-      navigation: {
-        mouseWheelZoomEnabled: isEmbedded,
-      },
     });
 
     mapView.current.when(() => {
