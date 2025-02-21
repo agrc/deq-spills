@@ -15,7 +15,7 @@ const ErrorFallback = ({ error }: { error: Error }) => {
   );
 };
 
-esriConfig.assetsPath = './assets';
+esriConfig.assetsPath = '/assets';
 const links = [
   {
     key: 'DEQ Public Spills Search',
