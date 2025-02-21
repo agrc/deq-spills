@@ -78,13 +78,15 @@ export default class Spills extends LightningElement {
   }
 
   receiveMessage = (event) => {
-    console.log("wc(spills): event from iframe:", event);
-    console.log(JSON.stringify(event.data));
-
-    if (event.origin !== this.iframeSrc) {
-      console.warn(`wc: received message from unknown origin: ${event.origin}`);
+    if (
+      event.origin === window.location.origin ||
+      event.origin !== this.iframeSrc
+    ) {
       return;
     }
+
+    console.log("wc(spills): event from iframe:", event);
+    console.log(JSON.stringify(event.data));
 
     const { data } = event;
     console.log("wc(spills): data from iframe:", data);
