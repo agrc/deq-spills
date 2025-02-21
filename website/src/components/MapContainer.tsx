@@ -4,7 +4,7 @@ import MapView from '@arcgis/core/views/MapView';
 import Legend from '@arcgis/core/widgets/Legend';
 import LayerSelector from '@ugrc/layer-selector';
 import { useEffect, useRef, useState } from 'react';
-import useMap from './hooks/useMap';
+import useMap from '../hooks/useMap';
 
 import '@ugrc/layer-selector/src/LayerSelector.css';
 import { utahMercatorExtent } from '@ugrc/utilities/hooks';
