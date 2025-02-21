@@ -1,19 +1,14 @@
-import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
+import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import EsriMap from '@arcgis/core/Map';
 import MapView from '@arcgis/core/views/MapView';
+import Legend from '@arcgis/core/widgets/Legend';
 import LayerSelector from '@ugrc/layer-selector';
 import { useEffect, useRef, useState } from 'react';
 import useMap from './hooks/useMap';
 
 import '@ugrc/layer-selector/src/LayerSelector.css';
 import { utahMercatorExtent } from '@ugrc/utilities/hooks';
-
-const urls = {
-  landownership:
-    'https://gis.trustlands.utah.gov/hosting/rest/services/Hosted/Land_Ownership_WM_VectorTile/VectorTileServer',
-  liteVector:
-    'https://www.arcgis.com/sharing/rest/content/items/77202507796a4d5796b7d8e6871e352e/resources/styles/root.json',
-};
+import config from '../config';
 
 type LayerFactory = {
   Factory: new () => __esri.Layer;
@@ -59,6 +54,15 @@ export default function MapContainer({ onClick, isEmbedded }: MapContainerProps)
       },
     });
 
+    mapView.current.when(() => {
+      const legend = new Legend({
+        view: mapView.current!,
+        basemapLegendVisible: true,
+      });
+
+      mapView.current!.ui.add(legend, 'bottom-right');
+    });
+
     setMapView(mapView.current);
 
     const selectorOptions: SelectorOptions = {
@@ -67,10 +71,10 @@ export default function MapContainer({ onClick, isEmbedded }: MapContainerProps)
       baseLayers: ['Terrain', 'Hybrid', 'Lite'],
       overlays: [
         {
-          // @ts-expect-error - layer selector types are messed up
-          Factory: 'FeatureLayer',
+          Factory: FeatureLayer,
           id: 'Public Water System Facilities',
-          url: 'https://services2.arcgis.com/NnxP4LZ3zX8wWmP9/ArcGIS/rest/services/Utah_DDW_Public_Water_System_Sources/FeatureServer/0',
+          url: config.URL.waterSystems,
+          // @ts-expect-error - layer selector types are messed up
           labelingInfo: [
             {
               labelExpressionInfo: {
@@ -81,10 +85,19 @@ export default function MapContainer({ onClick, isEmbedded }: MapContainerProps)
           ],
         },
         {
-          Factory: VectorTileLayer,
-          url: urls.landownership,
+          Factory: FeatureLayer,
+          url: config.URL.landownership,
           id: 'Land Ownership',
           opacity: 0.75,
+          // @ts-expect-error - layer selector types are messed up
+          labelingInfo: [
+            {
+              labelExpressionInfo: {
+                expression: '$feature.agency',
+              },
+              minScale: 200000,
+            },
+          ],
         },
       ],
       position: 'top-right',
