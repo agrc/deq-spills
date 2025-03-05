@@ -1,4 +1,3 @@
-import '@arcgis/core/assets/esri/themes/light/main.css';
 import { FirebaseAnalyticsProvider, FirebaseAppProvider } from '@ugrc/utah-design-system';
 import React from 'react';
 import { createRoot } from 'react-dom/client';

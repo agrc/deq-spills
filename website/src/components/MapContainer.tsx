@@ -2,27 +2,12 @@ import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import EsriMap from '@arcgis/core/Map';
 import MapView from '@arcgis/core/views/MapView';
 import Legend from '@arcgis/core/widgets/Legend';
-import LayerSelector from '@ugrc/layer-selector';
+import { LayerSelector, type LayerSelectorProps } from '@ugrc/utah-design-system';
 import { useEffect, useRef, useState } from 'react';
 import useMap from '../hooks/useMap';
 
-import '@ugrc/layer-selector/src/LayerSelector.css';
 import { utahMercatorExtent } from '@ugrc/utilities/hooks';
 import config from '../config';
-
-type LayerFactory = {
-  Factory: new () => __esri.Layer;
-  url: string;
-  id: string;
-  opacity: number;
-};
-type SelectorOptions = {
-  view: MapView;
-  quadWord: string;
-  baseLayers: Array<string | { token: string; selected: boolean } | LayerFactory>;
-  overlays?: Array<string | LayerFactory>;
-  position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
-};
 
 type MapContainerProps = {
   onClick?: __esri.ViewImmediateClickEventHandler;
@@ -34,7 +19,7 @@ export default function MapContainer({ onClick, isEmbedded }: MapContainerProps)
   const mapComponent = useRef<EsriMap | null>(null);
   const mapView = useRef<MapView>(null);
   const clickHandler = useRef<IHandle>(null);
-  const [selectorOptions, setSelectorOptions] = useState<SelectorOptions | null>(null);
+  const [selectorOptions, setSelectorOptions] = useState<LayerSelectorProps | null>(null);
   const { setMapView } = useMap();
 
   // setup the Map
@@ -71,42 +56,45 @@ export default function MapContainer({ onClick, isEmbedded }: MapContainerProps)
 
     setMapView(mapView.current);
 
-    const selectorOptions: SelectorOptions = {
-      view: mapView.current,
-      quadWord: import.meta.env.VITE_DISCOVER,
-      baseLayers: ['Terrain', 'Hybrid', 'Lite'],
-      overlays: [
-        {
-          Factory: FeatureLayer,
-          id: 'Public Water System Facilities',
-          url: config.URL.waterSystems,
-          // @ts-expect-error - layer selector types are messed up
-          labelingInfo: [
-            {
-              labelExpressionInfo: {
-                expression: '$feature.FACNAME',
-              },
-              minScale: 200000,
-            },
-          ],
-        },
-        {
-          Factory: FeatureLayer,
-          url: config.URL.landownership,
-          id: 'Land Ownership',
-          opacity: 0.75,
-          // @ts-expect-error - layer selector types are messed up
-          labelingInfo: [
-            {
-              labelExpressionInfo: {
-                expression: '$feature.agency',
-              },
-              minScale: 200000,
-            },
-          ],
-        },
-      ],
-      position: 'top-right',
+    const selectorOptions: LayerSelectorProps = {
+      options: {
+        view: mapView.current,
+        quadWord: import.meta.env.VITE_DISCOVER,
+        baseLayers: ['Terrain', 'Hybrid', 'Lite'],
+        referenceLayers: [
+          {
+            label: 'Public Water System Facilities',
+            function: () =>
+              new FeatureLayer({
+                url: config.URL.waterSystems,
+                labelingInfo: [
+                  {
+                    labelExpressionInfo: {
+                      expression: '$feature.FACNAME',
+                    },
+                    minScale: 200000,
+                  },
+                ],
+              }),
+          },
+          {
+            label: 'Land Ownership',
+            function: () =>
+              new FeatureLayer({
+                url: config.URL.landownership,
+                opacity: 0.75,
+                labelingInfo: [
+                  {
+                    labelExpressionInfo: {
+                      expression: '$feature.agency',
+                    },
+                    minScale: 200000,
+                  },
+                ],
+              }),
+          },
+        ],
+      },
     };
 
     setSelectorOptions(selectorOptions);
@@ -130,7 +118,7 @@ export default function MapContainer({ onClick, isEmbedded }: MapContainerProps)
 
   return (
     <div ref={mapNode} className="size-full">
-      {selectorOptions?.view && <LayerSelector {...selectorOptions}></LayerSelector>}
+      {selectorOptions ? <LayerSelector {...selectorOptions}></LayerSelector> : null}
     </div>
   );
 }
