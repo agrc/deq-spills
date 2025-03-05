@@ -1,9 +1,10 @@
 import ugrcPreset from '@ugrc/tailwind-preset';
+import rac from 'tailwindcss-react-aria-components';
 
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
-    './node_modules/@ugrc/**/*.{tsx,jsx,js}',
+    './node_modules/@ugrc/**/*.{tsx,jsx,js,ts}',
     './index.html',
     './tests/embed-test.html',
     './src/**/*.{tsx,jsx,js}',
@@ -54,5 +55,5 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [rac],
 };
