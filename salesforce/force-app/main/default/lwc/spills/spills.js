@@ -63,7 +63,6 @@ export default class Spills extends LightningElement {
     console.log("wc(spills): constructor");
     super();
     this.iframeId = crypto.randomUUID();
-    console.log("iframe " + this.iframeId);
   }
 
   connectedCallback() {
@@ -86,11 +85,8 @@ export default class Spills extends LightningElement {
     }
 
     console.log("wc(spills): event from iframe:", event);
-    console.log(JSON.stringify(event.data));
 
     const { data } = event;
-    console.log("wc(spills): data from iframe:", data);
-    console.log("wc(spills): data string " + JSON.stringify(data));
 
     if (data.iframeId !== this.iframeId) {
       console.log(
@@ -127,15 +123,12 @@ export default class Spills extends LightningElement {
       [UTM_Y.fieldApiName]: utmY.toString()
     };
 
-    console.log(JSON.stringify(fields));
-
     updateRecord({ fields })
       .then(() => {
-        console.log("record updating");
         console.log("wc(spills): record updated successfully");
       })
       .catch((error) => {
-        console.log(JSON.stringify(error));
+        console.error(JSON.stringify(error));
         this.dispatchEvent(
           new ShowToastEvent({
             title: "Error updating record",
@@ -153,13 +146,14 @@ export default class Spills extends LightningElement {
 
     this.refs.iframe.addEventListener("load", () => {
       console.log("wc(spills): iframe loaded", this.utm_x, this.utm_y);
-      console.log("wc(spills:) sending iframeId " + this.iframeId);
+      console.log("wc(spills): sending iframeId " + this.iframeId);
       this.refs.iframe.contentWindow.postMessage(
         {
-          UTM_X: this.utm_x,
-          UTM_Y: this.utm_y,
-          iframeId: this.iframeId,
-          targetOrigin: window.document.location.origin
+          data: {
+            UTM_X: this.utm_x,
+            UTM_Y: this.utm_y
+          },
+          iframeId: this.iframeId
         },
         this.iframeSrc
       );

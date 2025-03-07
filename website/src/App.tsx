@@ -3,6 +3,7 @@ import { Footer, Header, useFirebaseApp } from '@ugrc/utah-design-system';
 import { useEffect } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import MapContainer from './components/MapContainer';
+import { getIsEmbedded } from './urlParameters';
 
 const version = import.meta.env.PACKAGE_VERSION;
 
@@ -27,9 +28,7 @@ const links = [
   },
 ];
 
-// get url query params
-const urlParams = new URLSearchParams(window.location.search);
-const isEmbedded = urlParams.get('embedded') === 'true';
+const isEmbedded = getIsEmbedded();
 
 export default function App() {
   const app = useFirebaseApp();
