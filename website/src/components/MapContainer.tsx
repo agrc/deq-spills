@@ -6,8 +6,10 @@ import { LayerSelector, type LayerSelectorProps } from '@ugrc/utah-design-system
 import { useEffect, useRef, useState } from 'react';
 import useMap from '../hooks/useMap';
 
-import { utahMercatorExtent } from '@ugrc/utilities/hooks';
+import Graphic from '@arcgis/core/Graphic';
+import { useGraphicManager, utahMercatorExtent } from '@ugrc/utilities/hooks';
 import config from '../config';
+import useData from '../hooks/useDataProvider';
 
 type MapContainerProps = {
   onClick?: __esri.ViewImmediateClickEventHandler;
@@ -115,6 +117,42 @@ export default function MapContainer({ onClick, isEmbedded }: MapContainerProps)
       clickHandler.current?.remove();
     };
   }, [onClick, mapView]);
+
+  const { data } = useData();
+  const { setGraphic } = useGraphicManager(mapView.current);
+  useEffect(() => {
+    if (!data.UTM_X || !data.UTM_Y) {
+      return;
+    }
+
+    const graphic = new Graphic({
+      geometry: {
+        type: 'point',
+        x: parseFloat(data.UTM_X),
+        y: parseFloat(data.UTM_Y),
+        spatialReference: {
+          wkid: 26912,
+        },
+      },
+      symbol: {
+        type: 'simple-marker',
+        color: [0, 255, 255],
+        size: 10,
+        outline: {
+          color: [0, 0, 0],
+          width: 2,
+        },
+      },
+    });
+    setGraphic(graphic);
+
+    mapView.current?.when(() => {
+      mapView.current?.goTo({
+        target: graphic,
+        zoom: config.DEFAULT_ZOOM_LEVEL,
+      });
+    });
+  }, [data, setGraphic]);
 
   return (
     <div ref={mapNode} className="size-full">
