@@ -3,7 +3,7 @@ import { Footer, Header, useFirebaseApp } from '@ugrc/utah-design-system';
 import { useEffect } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import MapContainer from './components/MapContainer';
-import { getIsEmbedded } from './urlParameters';
+import { getIsEmbedded } from './utilities/urlParameters';
 
 const version = import.meta.env.PACKAGE_VERSION;
 
@@ -43,10 +43,6 @@ export default function App() {
     initPerformance();
   }, [app]);
 
-  const onClick = (event: __esri.ViewImmediateClickEvent) => {
-    console.log('click', event);
-  };
-
   return (
     <>
       <main className="flex h-screen flex-col">
@@ -62,7 +58,7 @@ export default function App() {
         ) : null}
         <section className="relative flex min-h-0 flex-1 overflow-x-hidden">
           <ErrorBoundary FallbackComponent={ErrorFallback}>
-            <MapContainer onClick={onClick} isEmbedded={isEmbedded} />
+            <MapContainer isEmbedded={isEmbedded} />
           </ErrorBoundary>
         </section>
       </main>

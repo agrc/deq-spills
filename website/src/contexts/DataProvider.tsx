@@ -1,5 +1,5 @@
 import { createContext, useEffect, useRef, useState } from 'react';
-import { getData, getIsEmbedded } from '../urlParameters';
+import { getData, getIsEmbedded } from '../utilities/urlParameters';
 
 export const blankState = {
   ADDRESS: null,
@@ -8,7 +8,7 @@ export const blankState = {
   DD_LAT: null,
   DD_LONG: null,
   HIGHWAY: null,
-  INDIAN: null,
+  INDIAN: false,
   MILEMARKER: null,
   OWNER_AGENCY: null,
   UTM_X: null,
@@ -17,13 +17,27 @@ export const blankState = {
 };
 
 type StringOrNull = string | null;
-type DataProp = keyof typeof blankState;
+type NumberOrNull = number | null;
+
 export type DataContext = {
   data: {
-    [key in DataProp]: StringOrNull;
+    ADDRESS: StringOrNull;
+    CITY: StringOrNull;
+    COUNTY: StringOrNull;
+    DD_LAT: NumberOrNull;
+    DD_LONG: NumberOrNull;
+    HIGHWAY: StringOrNull;
+    INDIAN: boolean;
+    MILEMARKER: StringOrNull;
+    OWNER_AGENCY: StringOrNull;
+    UTM_X: NumberOrNull;
+    UTM_Y: NumberOrNull;
+    ZIP: StringOrNull;
   };
   setData: React.Dispatch<React.SetStateAction<DataContext['data']>>;
 };
+export const numericKeys = ['DD_LAT', 'DD_LONG', 'UTM_X', 'UTM_Y'];
+export const booleanKeys = ['INDIAN'];
 
 const isEmbedded = getIsEmbedded();
 const urlData = getData();
@@ -51,16 +65,33 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
       salesforceOrigin.current = event.origin;
     }
 
+    const newData = event.data.data;
+    for (const key in newData) {
+      if (numericKeys.includes(key) && newData[key] !== null) {
+        newData[key] = parseFloat(newData[key]);
+      } else if (booleanKeys.includes(key) && typeof newData[key] === 'string') {
+        newData[key] = newData[key] === 'true';
+      }
+    }
+
     setData((prevValue) => ({
       ...prevValue,
-      ...event.data.data,
+      ...newData,
     }));
   };
 
   // send data back to salesforce on state change
   useEffect(() => {
+    console.log('website: data has changed', data, isEmbedded, salesforceOrigin.current);
     if (isEmbedded && salesforceOrigin.current) {
-      window.parent.postMessage(data, salesforceOrigin.current);
+      window.parent.postMessage(
+        {
+          data,
+          iframeId: iframeId.current,
+        },
+        salesforceOrigin.current,
+      );
+      console.log('posted message');
     }
   }, [data]);
 

@@ -4,7 +4,6 @@ import { createRoot } from 'react-dom/client';
 import App from './App';
 import EsriCss from './components/EsriCss';
 import { DataProvider } from './contexts/DataProvider';
-import { MapProvider } from './contexts/MapProvider';
 import './index.css';
 
 let firebaseConfig = {
@@ -26,11 +25,9 @@ createRoot(document.getElementById('root')!).render(
     <EsriCss />
     <FirebaseAppProvider config={firebaseConfig}>
       <FirebaseAnalyticsProvider>
-        <MapProvider>
-          <DataProvider>
-            <App />
-          </DataProvider>
-        </MapProvider>
+        <DataProvider>
+          <App />
+        </DataProvider>
       </FirebaseAnalyticsProvider>
     </FirebaseAppProvider>
   </React.StrictMode>,

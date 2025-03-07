@@ -54,6 +54,7 @@
     "autoprefixer": "^10.4.20",
     "cpy-cli": "^5.0.0",
     "eslint": "^9.21.0",
+    "happy-dom": "^17.3.0",
     "postcss": "^8.5.3",
     "prettier": "^3.5.3",
     "prettier-plugin-organize-imports": "^4.1.0",
