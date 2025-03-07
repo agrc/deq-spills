@@ -9,13 +9,13 @@ import Graphic from '@arcgis/core/Graphic';
 import { useGraphicManager, utahMercatorExtent } from '@ugrc/utilities/hooks';
 import config from '../config';
 import useData from '../hooks/useDataProvider';
+import { defineLocation } from '../utilities/defineLocation';
 
 type MapContainerProps = {
-  onClick?: __esri.ViewImmediateClickEventHandler;
   isEmbedded?: boolean;
 };
 
-export default function MapContainer({ onClick, isEmbedded }: MapContainerProps) {
+export default function MapContainer({ isEmbedded }: MapContainerProps) {
   const mapNode = useRef<HTMLDivElement | null>(null);
   const mapComponent = useRef<EsriMap | null>(null);
   const mapView = useRef<MapView>(null);
@@ -102,18 +102,24 @@ export default function MapContainer({ onClick, isEmbedded }: MapContainerProps)
     };
   }, [isEmbedded]);
 
+  const { data, setData } = useData();
+
   // add click event handlers
   useEffect(() => {
-    if (onClick) {
-      clickHandler.current = mapView.current!.on('immediate-click', onClick);
-    }
+    const handle = mapView.current!.on('immediate-click', async (event) => {
+      const newData = await defineLocation(event.mapPoint);
+      setData((prevData) => ({
+        ...prevData,
+        ...newData,
+      }));
+    });
 
     return () => {
-      clickHandler.current?.remove();
+      handle?.remove();
     };
-  }, [onClick, mapView]);
+  }, [mapView, setData]);
 
-  const { data } = useData();
+  // add graphic
   const { setGraphic } = useGraphicManager(mapView.current);
   useEffect(() => {
     if (!data.UTM_X || !data.UTM_Y) {
@@ -123,8 +129,8 @@ export default function MapContainer({ onClick, isEmbedded }: MapContainerProps)
     const graphic = new Graphic({
       geometry: {
         type: 'point',
-        x: parseFloat(data.UTM_X),
-        y: parseFloat(data.UTM_Y),
+        x: data.UTM_X,
+        y: data.UTM_Y,
         spatialReference: {
           wkid: 26912,
         },
