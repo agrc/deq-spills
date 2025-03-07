@@ -107,6 +107,11 @@ export default function MapContainer({ isEmbedded }: MapContainerProps) {
   // add click event handlers
   useEffect(() => {
     const handle = mapView.current!.on('immediate-click', async (event) => {
+      if (
+        !window.confirm('Are you sure that you would like to update the event location to match the clicked location?')
+      ) {
+        return;
+      }
       const newData = await defineLocation(event.mapPoint);
       setData((prevData) => ({
         ...prevData,
