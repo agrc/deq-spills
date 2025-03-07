@@ -40,10 +40,11 @@ export default class Spills extends LightningElement {
         })
       );
     } else if (data) {
-      console.log("wc(spills): wiredRecord data", data);
+      console.log("wc(spills): salesforce data updated", data);
       this.utm_x = data.fields[UTM_X.fieldApiName].value;
       this.utm_y = data.fields[UTM_Y.fieldApiName].value;
     }
+
     console.log("instance " + this.instanceId);
     console.log("iframe " + this.iframeId);
   }
@@ -139,6 +140,21 @@ export default class Spills extends LightningElement {
       });
   };
 
+  sendCoordinatesToIFrame() {
+    console.log(`wc(spills): sending coordinates to iframe ${this.iframeId}`);
+
+    this.refs.iframe.contentWindow.postMessage(
+      {
+        data: {
+          UTM_X: this.utm_x,
+          UTM_Y: this.utm_y
+        },
+        iframeId: this.iframeId
+      },
+      this.iframeSrc
+    );
+  }
+
   renderedCallback() {
     console.log("wc(spills): renderedCallback");
     console.log("instance " + this.instanceId);
@@ -146,17 +162,8 @@ export default class Spills extends LightningElement {
 
     this.refs.iframe.addEventListener("load", () => {
       console.log("wc(spills): iframe loaded", this.utm_x, this.utm_y);
-      console.log("wc(spills): sending iframeId " + this.iframeId);
-      this.refs.iframe.contentWindow.postMessage(
-        {
-          data: {
-            UTM_X: this.utm_x,
-            UTM_Y: this.utm_y
-          },
-          iframeId: this.iframeId
-        },
-        this.iframeSrc
-      );
+
+      this.sendCoordinatesToIFrame();
     });
   }
 }
