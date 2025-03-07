@@ -105,16 +105,25 @@ export default class Spills extends LightningElement {
       return;
     }
 
-    const utm_x = data.UTM_X.toString();
+    const utm_x = data.UTM_X.toString(); // salesforce stores the coordinate fields as strings ¯\_(ツ)_/¯
     const utm_y = data.UTM_Y.toString();
     if (utm_x === this.utm_x && utm_y === this.utm_y) {
       console.log("salesforce: no change in UTM_X or UTM_Y");
       return;
     }
 
+    let address = null;
+    if (data.ADDRESS && data.ZIP) {
+      address = `${data.ADDRESS}, ${data.ZIP}`;
+    } else if (data.ADDRESS) {
+      address = data.ADDRESS;
+    } else if (data.ZIP) {
+      address = data.ZIP;
+    }
+
     const fields = {
       [ID_FIELD.fieldApiName]: this.recordId,
-      [ADDRESS.fieldApiName]: `${data.ADDRESS}, ${data.ZIP}`, // comes from widget text inputs
+      [ADDRESS.fieldApiName]: address,
       [CITY.fieldApiName]: data.CITY,
       [COUNTY.fieldApiName]: data.COUNTY,
       [DD_LAT.fieldApiName]: data.DD_LAT.toString(),
