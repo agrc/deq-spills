@@ -1,4 +1,5 @@
 const config = {
+  DEFAULT_ZOOM_LEVEL: 16,
   MIN_DESKTOP_WIDTH: 768,
   WEB_MERCATOR_WKID: 3857,
   MARKER_FILL_COLOR: [234, 202, 0, 0.5] as [number, number, number, number],
