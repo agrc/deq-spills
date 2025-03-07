@@ -4,7 +4,6 @@ import MapView from '@arcgis/core/views/MapView';
 import Legend from '@arcgis/core/widgets/Legend';
 import { LayerSelector, type LayerSelectorProps } from '@ugrc/utah-design-system';
 import { useEffect, useRef, useState } from 'react';
-import useMap from '../hooks/useMap';
 
 import Graphic from '@arcgis/core/Graphic';
 import { useGraphicManager, utahMercatorExtent } from '@ugrc/utilities/hooks';
@@ -20,13 +19,11 @@ export default function MapContainer({ onClick, isEmbedded }: MapContainerProps)
   const mapNode = useRef<HTMLDivElement | null>(null);
   const mapComponent = useRef<EsriMap | null>(null);
   const mapView = useRef<MapView>(null);
-  const clickHandler = useRef<IHandle>(null);
   const [selectorOptions, setSelectorOptions] = useState<LayerSelectorProps | null>(null);
-  const { setMapView } = useMap();
 
   // setup the Map
   useEffect(() => {
-    if (!mapNode.current || !setMapView) {
+    if (!mapNode.current) {
       return;
     }
 
@@ -55,8 +52,6 @@ export default function MapContainer({ onClick, isEmbedded }: MapContainerProps)
         }
       });
     });
-
-    setMapView(mapView.current);
 
     const selectorOptions: LayerSelectorProps = {
       options: {
@@ -105,7 +100,7 @@ export default function MapContainer({ onClick, isEmbedded }: MapContainerProps)
       mapView.current?.destroy();
       mapComponent.current?.destroy();
     };
-  }, [isEmbedded, setMapView]);
+  }, [isEmbedded]);
 
   // add click event handlers
   useEffect(() => {
