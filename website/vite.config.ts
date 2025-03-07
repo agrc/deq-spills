@@ -10,6 +10,7 @@ export default defineConfig({
     dedupe: ['firebase', '@arcgis/core'],
   },
   test: {
+    environment: 'happy-dom',
     exclude: [...configDefaults.exclude, 'salesforce/**'],
   },
 });

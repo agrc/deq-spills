@@ -40,7 +40,7 @@ export default class Spills extends LightningElement {
         })
       );
     } else if (data) {
-      console.log("wc(spills): salesforce data updated", data);
+      console.log("salesforce: salesforce data updated", data);
       this.utm_x = data.fields[UTM_X.fieldApiName].value;
       this.utm_y = data.fields[UTM_Y.fieldApiName].value;
     }
@@ -49,8 +49,12 @@ export default class Spills extends LightningElement {
     console.log("iframe " + this.iframeId);
   }
 
+  get iframeOrigin() {
+    return new URL(this.iframeSrc).origin;
+  }
+
   get iframeSrc() {
-    console.log("wc(spills): isSandbox", this.isSandbox);
+    console.log("salesforce: isSandbox", this.isSandbox);
     if (this.isSandbox) {
       return "https://spillsmap.dev.utah.gov?embedded=true"; // staging
     } else if (this.isSandbox === false) {
@@ -61,13 +65,13 @@ export default class Spills extends LightningElement {
   }
 
   constructor() {
-    console.log("wc(spills): constructor");
+    console.log("salesforce: constructor");
     super();
     this.iframeId = crypto.randomUUID();
   }
 
   connectedCallback() {
-    console.log("wc(spills): connectedCallback");
+    console.log("salesforce: connectedCallback");
     window.addEventListener("message", this.receiveMessage);
     console.log("instance " + this.instanceId);
     console.log("iframe " + this.iframeId);
@@ -80,32 +84,31 @@ export default class Spills extends LightningElement {
   receiveMessage = (event) => {
     if (
       event.origin === window.location.origin ||
-      event.origin !== this.iframeSrc
+      event.origin !== this.iframeOrigin
     ) {
       return;
     }
 
-    console.log("wc(spills): event from iframe:", event);
+    console.log(
+      "salesforce: event from iframe",
+      JSON.stringify(event.data, null, 2)
+    );
 
-    const { data } = event;
+    const { iframeId, data } = event.data;
 
-    if (data.iframeId !== this.iframeId) {
-      console.log(
-        "wc(spills): iframeId mismatch",
-        data.iframeId,
-        this.iframeId
-      );
+    if (iframeId !== this.iframeId) {
+      console.log("salesforce: iframeId mismatch", iframeId, this.iframeId);
       return;
     }
 
     if (!data.UTM_X) {
       return;
     }
-    const utmX = Math.round(data.UTM_X);
-    const utmY = Math.round(data.UTM_Y);
 
-    if (utmX === this.utm_x && utmY === this.utm_y) {
-      console.log("wc(spills): no change in UTM_X or UTM_Y");
+    const utm_x = data.UTM_X.toString();
+    const utm_y = data.UTM_Y.toString();
+    if (utm_x === this.utm_x && utm_y === this.utm_y) {
+      console.log("salesforce: no change in UTM_X or UTM_Y");
       return;
     }
 
@@ -120,13 +123,13 @@ export default class Spills extends LightningElement {
       [INDIAN.fieldApiName]: data.INDIAN,
       [MILEMARKER.fieldApiName]: data.MILEMARKER, // comes from widget text input
       [OWNER_AGENCY.fieldApiName]: data.OWNER_AGENCY,
-      [UTM_X.fieldApiName]: utmX.toString(),
-      [UTM_Y.fieldApiName]: utmY.toString()
+      [UTM_X.fieldApiName]: utm_x,
+      [UTM_Y.fieldApiName]: utm_y
     };
 
     updateRecord({ fields })
       .then(() => {
-        console.log("wc(spills): record updated successfully");
+        console.log("salesforce: record updated successfully");
       })
       .catch((error) => {
         console.error(JSON.stringify(error));
@@ -141,27 +144,27 @@ export default class Spills extends LightningElement {
   };
 
   sendCoordinatesToIFrame() {
-    console.log(`wc(spills): sending coordinates to iframe ${this.iframeId}`);
+    console.log(`salesforce: sending coordinates to iframe ${this.iframeId}`);
 
     this.refs.iframe.contentWindow.postMessage(
       {
         data: {
-          UTM_X: this.utm_x,
-          UTM_Y: this.utm_y
+          UTM_X: parseInt(this.utm_x, 10),
+          UTM_Y: parseInt(this.utm_y, 10)
         },
         iframeId: this.iframeId
       },
-      this.iframeSrc
+      this.iframeOrigin
     );
   }
 
   renderedCallback() {
-    console.log("wc(spills): renderedCallback");
+    console.log("salesforce: renderedCallback");
     console.log("instance " + this.instanceId);
     console.log("iframe " + this.iframeId);
 
     this.refs.iframe.addEventListener("load", () => {
-      console.log("wc(spills): iframe loaded", this.utm_x, this.utm_y);
+      console.log("salesforce: iframe loaded", this.utm_x, this.utm_y);
 
       this.sendCoordinatesToIFrame();
     });
