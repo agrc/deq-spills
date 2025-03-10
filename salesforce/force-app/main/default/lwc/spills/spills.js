@@ -123,6 +123,7 @@ export default class Spills extends LightningElement {
 
     const fields = {
       [ID_FIELD.fieldApiName]: this.recordId,
+      // make sure that the following properties stay in sync with the properties in website/src/utilities/defineLocation.ts
       [ADDRESS.fieldApiName]: address,
       [CITY.fieldApiName]: data.CITY,
       [COUNTY.fieldApiName]: data.COUNTY,
