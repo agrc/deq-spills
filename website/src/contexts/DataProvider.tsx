@@ -101,6 +101,11 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
 
     window.addEventListener('message', handleMessageFromSalesforce);
 
+    console.log('website: listening for messages from salesforce');
+
+    // this is exclusively for tests/embed-test.html
+    window.parent.dispatchEvent(new Event('iframe-is-listening'));
+
     return () => {
       window.removeEventListener('message', handleMessageFromSalesforce);
     };
