@@ -5,6 +5,37 @@
   <link rel="stylesheet" href="../src/index.css" />
 </head>
 
+<script>
+  window.addEventListener('iframe-is-listening', () => {
+    console.log('window loaded');
+    const iframe = document.querySelector('iframe');
+
+    iframe.contentWindow.postMessage(
+      {
+        data: {
+          UTM_X: 424000,
+          UTM_Y: 4510000
+        },
+        iframeId: '1234'
+      },
+      'http://localhost:5173'
+    );
+  });
+
+  window.addEventListener('message', (event) => {
+    if (
+      !event.data.iframeId
+    ) {
+      return;
+    }
+
+    console.log(
+      "salesforce: event from iframe",
+      JSON.stringify(event.data, null, 2)
+    );
+  });
+</script>
+
 <body class="bg-cyan-200">
   <div class="w-full md:w-1/2 lg:w-3/4 p-4 bg-white h-[2000px]">
     <div class="h-[700px]">
