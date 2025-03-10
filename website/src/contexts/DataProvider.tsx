@@ -32,7 +32,6 @@ export type DataContext = {
     OWNER_AGENCY: StringOrNull;
     UTM_X: NumberOrNull;
     UTM_Y: NumberOrNull;
-    ZIP: StringOrNull;
   };
   setData: React.Dispatch<React.SetStateAction<DataContext['data']>>;
 };
