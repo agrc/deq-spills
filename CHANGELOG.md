@@ -1,5 +1,29 @@
 # Changelog
 
+## [3.0.0-3](https://github.com/agrc/deq-spills/compare/v3.0.0-2...v3.0.0-3) (2025-03-10)
+
+
+### Features
+
+* implement data context and hooks for managing state and iframe communication ([48fe06e](https://github.com/agrc/deq-spills/commit/48fe06e6acb4265aa2d4fb75015b434ba20d186d)), closes [#148](https://github.com/agrc/deq-spills/issues/148)
+* implement updating coordinates via map click ([ee7854a](https://github.com/agrc/deq-spills/commit/ee7854a49609807fe87b7772305b098cae26d8c5)), closes [#131](https://github.com/agrc/deq-spills/issues/131)
+* **website:** add a confirmation dialog to handle accidental map clicks ([c846535](https://github.com/agrc/deq-spills/commit/c846535faaf807c8e4454ed3be6318868414cd29)), closes [#142](https://github.com/agrc/deq-spills/issues/142)
+* **website:** implement define location by address or route/milepost ([5e431fd](https://github.com/agrc/deq-spills/commit/5e431fd69611acd5e7ebbe50f9b16daef11eabd7)), closes [#136](https://github.com/agrc/deq-spills/issues/136)
+* **website:** implement define location by coordinates ([4491d00](https://github.com/agrc/deq-spills/commit/4491d000bbbd11ba366ccb2737254565fbc6bd05)), closes [#131](https://github.com/agrc/deq-spills/issues/131)
+* **website:** implement other location queries ([ff365ba](https://github.com/agrc/deq-spills/commit/ff365ba36703bbc2930ead1173e2d5224393d19b)), closes [#137](https://github.com/agrc/deq-spills/issues/137)
+
+
+### Bug Fixes
+
+* **salesforce:** avoid storing "null" strings or a single comma in address field ([4d8d12d](https://github.com/agrc/deq-spills/commit/4d8d12d4726b214d0a859a707740f2fdaa85ac1d))
+* **salesforce:** set iframe to full width ([b55c129](https://github.com/agrc/deq-spills/commit/b55c1291c274b32c5f21c336024d296a7d548d92))
+* **website:** wire event listening sooner in react lifecycle ([3eb2617](https://github.com/agrc/deq-spills/commit/3eb2617046d93b8dd3c6370c9c9e2fcbcafde088))
+
+
+### Styles
+
+* **website:** update location point symbol to match the old style ([bf6934e](https://github.com/agrc/deq-spills/commit/bf6934e37e1dd239099b757cbbce86be60cde041))
+
 ## [3.0.0-2](https://github.com/agrc/deq-spills/compare/v3.0.0-1...v3.0.0-2) (2025-02-21)
 
 
