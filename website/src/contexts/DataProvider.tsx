@@ -1,4 +1,4 @@
-import { createContext, useEffect, useRef, useState } from 'react';
+import { createContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { getData, getIsEmbedded } from '../utilities/urlParameters';
 
 export const blankState = {
@@ -96,15 +96,17 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
   }, [data]);
 
   // listen for messages from salesforce
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!isEmbedded) return;
 
     window.addEventListener('message', handleMessageFromSalesforce);
 
     console.log('website: listening for messages from salesforce');
 
-    // this is exclusively for tests/embed-test.html
-    window.parent.dispatchEvent(new Event('iframe-is-listening'));
+    if (import.meta.env.DEV) {
+      // this is exclusively for tests/embed-test.html
+      window.parent.dispatchEvent(new Event('iframe-is-listening'));
+    }
 
     return () => {
       window.removeEventListener('message', handleMessageFromSalesforce);
