@@ -3,6 +3,7 @@ import { Footer, Header, useFirebaseApp } from '@ugrc/utah-design-system';
 import { useEffect } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import Coordinates from './components/Coordinates';
+import Geocode from './components/Geocode';
 import MapContainer from './components/MapContainer';
 import { getIsEmbedded } from './utilities/urlParameters';
 
@@ -62,8 +63,9 @@ export default function App() {
             <div className="flex size-full flex-col">
               <MapContainer isEmbedded={isEmbedded} />
               {isEmbedded ? (
-                <div className="border-t border-t-slate-300 p-3">
+                <div className="flex flex-wrap gap-2 border-t border-t-slate-300 p-3">
                   <Coordinates />
+                  <Geocode />
                 </div>
               ) : null}
             </div>

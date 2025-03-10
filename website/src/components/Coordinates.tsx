@@ -338,11 +338,9 @@ export default function Coordinates() {
   };
 
   return (
-    <DialogTrigger isOpen={isOpen}>
-      <Button variant="secondary" onPress={() => setIsOpen(true)}>
-        Coordinates
-      </Button>
-      <Popover showArrow isOpen={isOpen}>
+    <DialogTrigger isOpen={isOpen} onOpenChange={setIsOpen}>
+      <Button variant="secondary">Coordinates</Button>
+      <Popover showArrow>
         <Dialog>
           <form onSubmit={handleSubmit} className="space-y-2">
             <Select
