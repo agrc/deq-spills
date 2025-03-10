@@ -161,7 +161,7 @@ export default function MapContainer({ isEmbedded }: MapContainerProps) {
   }, [data, setGraphic]);
 
   return (
-    <div ref={mapNode} className="size-full">
+    <div ref={mapNode} className="flex-1">
       {selectorOptions ? <LayerSelector {...selectorOptions}></LayerSelector> : null}
     </div>
   );

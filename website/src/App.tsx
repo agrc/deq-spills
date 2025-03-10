@@ -2,6 +2,7 @@ import esriConfig from '@arcgis/core/config';
 import { Footer, Header, useFirebaseApp } from '@ugrc/utah-design-system';
 import { useEffect } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
+import Coordinates from './components/Coordinates';
 import MapContainer from './components/MapContainer';
 import { getIsEmbedded } from './utilities/urlParameters';
 
@@ -58,7 +59,14 @@ export default function App() {
         ) : null}
         <section className="relative flex min-h-0 flex-1 overflow-x-hidden">
           <ErrorBoundary FallbackComponent={ErrorFallback}>
-            <MapContainer isEmbedded={isEmbedded} />
+            <div className="flex size-full flex-col">
+              <MapContainer isEmbedded={isEmbedded} />
+              {isEmbedded ? (
+                <div className="border-t border-t-slate-300 p-3">
+                  <Coordinates />
+                </div>
+              ) : null}
+            </div>
           </ErrorBoundary>
         </section>
       </main>
