@@ -2,6 +2,7 @@ import * as projectOperator from '@arcgis/core/geometry/operators/projectOperato
 import SpatialReference from '@arcgis/core/geometry/SpatialReference';
 import type { DataContext } from '../contexts/DataProvider';
 
+const webMercatorWkid = 3857;
 const utm = new SpatialReference({ wkid: 26912 });
 const wgs = new SpatialReference({ wkid: 4326 });
 export async function defineLocation(point: __esri.Point): Promise<DataContext['data']> {
@@ -9,8 +10,20 @@ export async function defineLocation(point: __esri.Point): Promise<DataContext['
     await projectOperator.load();
   }
 
-  const utmPoint = projectOperator.execute(point, utm) as __esri.Point;
-  const wgsPoint = projectOperator.execute(point, wgs) as __esri.Point;
+  let wgsPoint;
+  let utmPoint;
+
+  if (point.spatialReference.wkid === webMercatorWkid) {
+    // point from map click
+    utmPoint = projectOperator.execute(point, utm) as __esri.Point;
+    wgsPoint = projectOperator.execute(point, wgs) as __esri.Point;
+  } else if (point.spatialReference.wkid === utm.wkid) {
+    // point from coordinates component
+    utmPoint = point;
+    wgsPoint = projectOperator.execute(point, wgs) as __esri.Point;
+  } else {
+    throw new Error(`Unsupported spatial reference: ${point.spatialReference.wkid}`);
+  }
 
   const locationData: DataContext['data'] = {
     ADDRESS: null,
