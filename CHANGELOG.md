@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.0-4](https://github.com/agrc/deq-spills/compare/v3.0.0-3...v3.0.0-4) (2025-03-12)
+
+
+### Bug Fixes
+
+* **website:** include city/zip in address sent to salesforce ([93a345e](https://github.com/agrc/deq-spills/commit/93a345e3e0ec410f137996a347d8fa78ba10f2c4))
+
 ## [3.0.0-3](https://github.com/agrc/deq-spills/compare/v3.0.0-2...v3.0.0-3) (2025-03-10)
 
 

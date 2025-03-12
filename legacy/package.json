@@ -1,6 +1,6 @@
 {
   "name": "deq-spills",
-  "version": "3.0.0-3",
+  "version": "3.0.0-4",
   "devDependencies": {
     "bower": "^1.8.14",
     "globals": "^15.14.0",
