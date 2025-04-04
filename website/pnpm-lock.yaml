@@ -57,9 +57,6 @@ importers:
         specifier: ^3.1.1
         version: 3.1.1(react@19.1.0)
     devDependencies:
-      '@types/eslint__js':
-        specifier: ^9.14.0
-        version: 9.14.0
       '@types/lodash.startcase':
         specifier: ^4.4.9
         version: 4.4.9
@@ -1806,10 +1803,6 @@ packages:
 
   '@types/color@4.2.0':
     resolution: {integrity: sha512-6+xrIRImMtGAL2X3qYkd02Mgs+gFGs+WsK0b7VVMaO4mYRISwyTjcqNrO0mNSmYEoq++rSLDB2F5HDNmqfOe+A==}
-
-  '@types/eslint__js@9.14.0':
-    resolution: {integrity: sha512-s0jepCjOJWB/GKcuba4jISaVpBudw3ClXJ3fUK4tugChUMQsp6kSwuA8Dcx6wFd/JsJqcY8n4rEpa5RTHs5ypA==}
-    deprecated: This is a stub types definition. @eslint/js provides its own type definitions, so you do not need this installed.
 
   '@types/estree@1.0.6':
     resolution: {integrity: sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==}
@@ -6484,10 +6477,6 @@ snapshots:
   '@types/color@4.2.0':
     dependencies:
       '@types/color-convert': 2.0.4
-
-  '@types/eslint__js@9.14.0':
-    dependencies:
-      '@eslint/js': 9.21.0
 
   '@types/estree@1.0.6': {}
 
