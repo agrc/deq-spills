@@ -3,12 +3,7 @@ import rac from 'tailwindcss-react-aria-components';
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    './node_modules/@ugrc/**/*.{tsx,jsx,js,ts}',
-    './index.html',
-    './tests/embed-test.html',
-    './src/**/*.{tsx,jsx,js}',
-  ],
+  content: ['./node_modules/@ugrc/**/*.{tsx,jsx,js,ts}', './index.html', './tests/*.html', './src/**/*.{tsx,jsx,js}'],
   presets: [ugrcPreset],
   theme: {
     extend: {

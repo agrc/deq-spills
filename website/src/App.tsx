@@ -4,7 +4,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import Coordinates from './components/Coordinates';
 import Geocode from './components/Geocode';
 import MapContainer from './components/MapContainer';
-import { getIsEmbedded } from './utilities/urlParameters';
+import { getIsEmbedded, getIsReadOnly } from './utilities/urlParameters';
 
 const version = import.meta.env.PACKAGE_VERSION;
 
@@ -29,6 +29,7 @@ const links = [
 ];
 
 const isEmbedded = getIsEmbedded();
+const isReadOnly = getIsReadOnly();
 
 export default function App() {
   const app = useFirebaseApp();
@@ -59,13 +60,13 @@ export default function App() {
         <section className="relative flex min-h-0 flex-1 overflow-x-hidden">
           <ErrorBoundary FallbackComponent={ErrorFallback}>
             <div className="flex size-full flex-col">
-              <MapContainer isEmbedded={isEmbedded} />
-              {isEmbedded ? (
+              <MapContainer isEmbedded={isEmbedded} isReadOnly={isReadOnly} />
+              {!isEmbedded || isReadOnly ? null : (
                 <div className="flex flex-wrap gap-2 border-t border-t-slate-300 p-3">
                   <Coordinates />
                   <Geocode />
                 </div>
-              ) : null}
+              )}
             </div>
           </ErrorBoundary>
         </section>

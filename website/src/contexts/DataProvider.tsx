@@ -103,7 +103,7 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
     console.log('website: listening for messages from salesforce');
 
     if (import.meta.env.DEV) {
-      // this is exclusively for tests/embed-test.html
+      // this is exclusively for tests/*.html
       window.parent.dispatchEvent(new Event('iframe-is-listening'));
     }
 
