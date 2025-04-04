@@ -1,4 +1,3 @@
-import esriConfig from '@arcgis/core/config';
 import { Footer, Header, useFirebaseApp } from '@ugrc/utah-design-system';
 import { useEffect } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -18,7 +17,6 @@ const ErrorFallback = ({ error }: { error: Error }) => {
   );
 };
 
-esriConfig.assetsPath = '/assets';
 const links = [
   {
     key: 'DEQ Public Spills Search',
