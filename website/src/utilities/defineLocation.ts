@@ -2,7 +2,7 @@ import * as projectOperator from '@arcgis/core/geometry/operators/projectOperato
 import SpatialReference from '@arcgis/core/geometry/SpatialReference';
 import { search, type ApiErrorResponse, type SearchResponse } from '@ugrc/utilities';
 import config from '../config';
-import type { DataContext } from '../contexts/DataProvider';
+import type { DataContextType } from '../contexts/DataProvider';
 
 type StringOrNull = string | null;
 
@@ -14,7 +14,7 @@ export async function defineLocation(
   address: StringOrNull = null,
   highway: StringOrNull = null,
   milemarker: StringOrNull = null,
-): Promise<DataContext['data']> {
+): Promise<DataContextType['data']> {
   if (!projectOperator.isLoaded()) {
     await projectOperator.load();
   }
@@ -36,7 +36,7 @@ export async function defineLocation(
 
   const queries = config.LOCATION_QUERIES;
   const agency = await queryApi(queries.agency.table, queries.agency.field, utmPoint);
-  const locationData: DataContext['data'] = {
+  const locationData: DataContextType['data'] = {
     // make sure that the following properties stay in sync with the properties in salesforce/force-app/main/default/lwc/spills/spills.js
     ADDRESS: address,
     CITY: await queryApi(queries.city.table, queries.city.field, utmPoint),

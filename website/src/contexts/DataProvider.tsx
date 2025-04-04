@@ -11,6 +11,7 @@ export const blankState = {
   INDIAN: false,
   MILEMARKER: null,
   OWNER_AGENCY: null,
+  SPILL_NUMBER: null,
   UTM_X: null,
   UTM_Y: null,
   ZIP: null,
@@ -19,7 +20,7 @@ export const blankState = {
 type StringOrNull = string | null;
 type NumberOrNull = number | null;
 
-export type DataContext = {
+export type DataContextType = {
   data: {
     ADDRESS: StringOrNull;
     CITY: StringOrNull;
@@ -30,10 +31,11 @@ export type DataContext = {
     INDIAN: boolean;
     MILEMARKER: StringOrNull;
     OWNER_AGENCY: StringOrNull;
+    SPILL_NUMBER?: StringOrNull; // this is only used in standalone mode
     UTM_X: NumberOrNull;
     UTM_Y: NumberOrNull;
   };
-  setData: React.Dispatch<React.SetStateAction<DataContext['data']>>;
+  setData: React.Dispatch<React.SetStateAction<DataContextType['data']>>;
 };
 export const numericKeys = ['DD_LAT', 'DD_LONG', 'UTM_X', 'UTM_Y'];
 export const booleanKeys = ['INDIAN'];
@@ -41,10 +43,10 @@ export const booleanKeys = ['INDIAN'];
 const isEmbedded = getIsEmbedded();
 const urlData = getData();
 
-export const DataContext = createContext<DataContext | null>(null);
+export const DataContext = createContext<DataContextType | null>(null);
 
 export const DataProvider = ({ children }: { children: React.ReactNode }) => {
-  const [data, setData] = useState<DataContext['data']>(!isEmbedded ? urlData : blankState);
+  const [data, setData] = useState<DataContextType['data']>(!isEmbedded ? urlData : blankState);
   const iframeId = useRef<StringOrNull>(null);
   const salesforceOrigin = useRef<StringOrNull>(null);
 
