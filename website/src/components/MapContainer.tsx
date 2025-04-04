@@ -10,6 +10,7 @@ import { useGraphicManager, utahMercatorExtent } from '@ugrc/utilities/hooks';
 import config from '../config';
 import useData from '../hooks/useDataProvider';
 import { defineLocation } from '../utilities/defineLocation';
+import { getUrlParam } from '../utilities/urlParameters';
 
 type MapContainerProps = {
   isEmbedded?: boolean;
@@ -106,6 +107,9 @@ export default function MapContainer({ isEmbedded }: MapContainerProps) {
 
   // add click event handlers
   useEffect(() => {
+    if (!getUrlParam('embedded')) {
+      return;
+    }
     const handle = mapView.current!.on('immediate-click', async (event) => {
       if (
         !window.confirm('Are you sure that you would like to update the event location to match the clicked location?')
