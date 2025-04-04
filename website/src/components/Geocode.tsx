@@ -46,7 +46,6 @@ export default function Geocode() {
   const { getFirstFieldProps, getSecondFieldProps, getButtonProps, status, firstInput, secondInput } = useGeocoding({
     apiKey: import.meta.env.VITE_WEB_API,
     events: {
-      // @ts-expect-error geocode types are messed up
       success: onSuccess,
       // @ts-expect-error geocode types are messed up
       error: onError,
