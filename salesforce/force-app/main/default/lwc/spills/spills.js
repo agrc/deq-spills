@@ -20,6 +20,7 @@ export default class Spills extends LightningElement {
   @api recordId;
   @api isSandbox;
   @api instanceId;
+  @api isReadOnly;
   iframeId;
   sampleId = 1234;
 
@@ -56,9 +57,9 @@ export default class Spills extends LightningElement {
   get iframeSrc() {
     console.log("salesforce: isSandbox", this.isSandbox);
     if (this.isSandbox) {
-      return "https://spillsmap.dev.utah.gov?embedded=true"; // staging
+      return `https://spillsmap.dev.utah.gov?embedded=true&readonly=${JSON.stringify(this.isReadOnly)}`; // staging
     } else if (this.isSandbox === false) {
-      return "https://deqspills.ugrc.utah.gov?embedded=true"; // prod
+      return `https://deqspills.ugrc.utah.gov?embedded=true&readonly=${JSON.stringify(this.isReadOnly)}`; // prod
     }
 
     return null;
