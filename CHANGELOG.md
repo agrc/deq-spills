@@ -1,5 +1,25 @@
 # Changelog
 
+## [3.0.0-5](https://github.com/agrc/deq-spills/compare/v3.0.0-4...v3.0.0-5) (2025-04-04)
+
+
+### Features
+
+* **salesforce:** add `isReadOnly` prop to spills component ([21ec85a](https://github.com/agrc/deq-spills/commit/21ec85abc40101291dd08212c9c2da7e79536cad)), closes [#133](https://github.com/agrc/deq-spills/issues/133)
+* **website:** add sidebar that displays data from URL parameters for standalone mode ([b9f3815](https://github.com/agrc/deq-spills/commit/b9f3815269e3b232c7a584ecffea71e47b039042))
+* **website:** add spill number and field aliases to standalone sidebar ([a75a603](https://github.com/agrc/deq-spills/commit/a75a60334d1419ef0130f76f6a9b9951f374ac03))
+* **website:** implement readonly url parameter ([f6182c7](https://github.com/agrc/deq-spills/commit/f6182c76148711cfe4dc70086fe072a72ab5f10e)), closes [#133](https://github.com/agrc/deq-spills/issues/133)
+
+
+### Bug Fixes
+
+* **website:** disable map click when not embedded ([fee0029](https://github.com/agrc/deq-spills/commit/fee0029a8caa893e7ec060715702b25545b2d8f8))
+
+
+### Dependencies
+
+* **website:** bump dependencies 🌲 ([1d37e65](https://github.com/agrc/deq-spills/commit/1d37e657f11c6b98b31bee5bf5353f58e28f40ec))
+
 ## [3.0.0-4](https://github.com/agrc/deq-spills/compare/v3.0.0-3...v3.0.0-4) (2025-03-12)
 
 
