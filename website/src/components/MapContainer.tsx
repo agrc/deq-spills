@@ -10,13 +10,13 @@ import { useGraphicManager, utahMercatorExtent } from '@ugrc/utilities/hooks';
 import config from '../config';
 import useData from '../hooks/useDataProvider';
 import { defineLocation } from '../utilities/defineLocation';
-import { getUrlParam } from '../utilities/urlParameters';
 
 type MapContainerProps = {
-  isEmbedded?: boolean;
+  isEmbedded: boolean;
+  isReadOnly: boolean;
 };
 
-export default function MapContainer({ isEmbedded }: MapContainerProps) {
+export default function MapContainer({ isEmbedded, isReadOnly }: MapContainerProps) {
   const mapNode = useRef<HTMLDivElement | null>(null);
   const mapComponent = useRef<EsriMap | null>(null);
   const mapView = useRef<MapView>(null);
@@ -107,7 +107,7 @@ export default function MapContainer({ isEmbedded }: MapContainerProps) {
 
   // add click event handlers
   useEffect(() => {
-    if (!getUrlParam('embedded')) {
+    if (!isEmbedded || isReadOnly) {
       return;
     }
     const handle = mapView.current!.on('immediate-click', async (event) => {
@@ -126,7 +126,7 @@ export default function MapContainer({ isEmbedded }: MapContainerProps) {
     return () => {
       handle?.remove();
     };
-  }, [mapView, setData]);
+  }, [isEmbedded, isReadOnly, mapView, setData]);
 
   // add graphic
   const { setGraphic } = useGraphicManager(mapView.current);

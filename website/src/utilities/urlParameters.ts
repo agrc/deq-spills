@@ -20,6 +20,10 @@ export function getIsEmbedded(): boolean {
   return getUrlParam('embedded') === 'true';
 }
 
+export function getIsReadOnly(): boolean {
+  return getUrlParam('readonly') === 'true';
+}
+
 export function getData(): DataContext['data'] {
   const data: { [key: string]: number | string | boolean | null } = {};
 

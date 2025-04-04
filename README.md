@@ -53,3 +53,10 @@ The Salesforce Lightning Component is developed in the `/salesforce` directory. 
 1. Quick Find -> Outbound Change Sets
 1. Create a new set and add the component(s) that you want to deploy
 1. Upload the change set and then ask Barry to deploy your change set to production.
+
+#### Testing Lead Agency Form
+
+1. Log into sandbox.
+1. Contacts -> Nathan Hall
+1. "Log in to Experience as User" -> "DEQ EID Portal Authorized Users"
+1. "Spill Reports" -> Select a report
