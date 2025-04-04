@@ -47,4 +47,8 @@
     font-style: normal;
     font-display: swap;
   }
+
+  .esri-view .esri-view-surface:focus:after {
+    @apply outline-hidden;
+  }
 }
