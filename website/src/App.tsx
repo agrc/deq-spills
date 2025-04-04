@@ -4,6 +4,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import Coordinates from './components/Coordinates';
 import Geocode from './components/Geocode';
 import MapContainer from './components/MapContainer';
+import Sidebar from './components/Sidebar';
 import { getIsEmbedded, getIsReadOnly } from './utilities/urlParameters';
 
 const version = import.meta.env.PACKAGE_VERSION;
@@ -59,14 +60,17 @@ export default function App() {
         ) : null}
         <section className="relative flex min-h-0 flex-1 overflow-x-hidden">
           <ErrorBoundary FallbackComponent={ErrorFallback}>
-            <div className="flex size-full flex-col">
-              <MapContainer isEmbedded={isEmbedded} isReadOnly={isReadOnly} />
-              {!isEmbedded || isReadOnly ? null : (
-                <div className="flex flex-wrap gap-2 border-t border-t-slate-300 p-3">
-                  <Coordinates />
-                  <Geocode />
-                </div>
-              )}
+            <div className="flex size-full flex-1">
+              <div className="flex size-full flex-col">
+                <MapContainer isEmbedded={isEmbedded} isReadOnly={isReadOnly} />
+                {!isEmbedded || isReadOnly ? null : (
+                  <div className="flex flex-wrap gap-2 border-t border-t-slate-300 p-3">
+                    <Coordinates />
+                    <Geocode />
+                  </div>
+                )}
+              </div>
+              {!isEmbedded && <Sidebar />}
             </div>
           </ErrorBoundary>
         </section>
