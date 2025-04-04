@@ -1,0 +1,54 @@
+<html>
+
+<head>
+  <title>Embed Test</title>
+  <link rel="stylesheet" href="../src/index.css" />
+</head>
+
+<script>
+  window.addEventListener('iframe-is-listening', () => {
+    console.log('window loaded');
+    const iframe = document.querySelector('iframe');
+
+    iframe.contentWindow.postMessage(
+      {
+        data: {
+          UTM_X: 424000,
+          UTM_Y: 4510000
+        },
+        iframeId: '1234'
+      },
+      'http://localhost:5173'
+    );
+  });
+
+  window.addEventListener('message', (event) => {
+    if (
+      !event.data.iframeId
+    ) {
+      return;
+    }
+
+    console.log(
+      "salesforce: event from iframe",
+      JSON.stringify(event.data, null, 2)
+    );
+  });
+</script>
+
+<body class="">
+  <div class="w-full md:h-[144px] h-[66px] bg-emerald-600">header</div>
+  <div class="flex flex-col md:flex-row">
+    <div class="flex-col flex-1">
+      <div class="h-[600px]">
+        <iframe src="./?embedded=true&readonly=true"
+          style="border-color: rgb(201, 201, 201); border-width: 1px; border-style: solid;" width="100%" height="100%"
+          frameborder="0" scrolling="no"></iframe>
+      </div>
+      <div class="h-[600px]">more form content</div>
+    </div>
+    <div class="w-full md:w-1/3 h-[1200px] bg-yellow-600">sidebar</div>
+  </div>
+</body>
+
+</html>
