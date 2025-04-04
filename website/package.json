@@ -30,6 +30,7 @@
   "dependencies": {
     "@arcgis/core": "^4.32.6",
     "@ugrc/eslint-config": "^1.1.0",
+    "@ugrc/esri-theme-toggle": "^1.1.0",
     "@ugrc/layer-selector": "^6.3.0",
     "@ugrc/utah-design-system": "^1.20.2",
     "@ugrc/utilities": "^3.0.2",
