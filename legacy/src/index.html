@@ -73,7 +73,9 @@
           initializeWidget({
             UTM_X: '424000',
             UTM_Y: '4510000',
-            targetOrigin: '*'
+            targetOrigin: '*',
+            layers: [0, 1],
+            labels: ['Test Layer', 'Test Layer 2'],
           });
           window.removeEventListener("message", processMessage)
         }
@@ -87,7 +89,9 @@
             UTM_Y: props?.UTM_Y,
             apiKey: apiKey,
             // this prevents the widget from re-defining a location on load
-            skipDefine: props?.UTM_X ? true : false
+            skipDefine: props?.UTM_X ? true : false,
+            layers: props?.layers,
+            labels: props?.labels,
           },
           document.getElementById("AGRCMap")
         );
