@@ -48,7 +48,7 @@
             },
             {
               "key": "Content-Security-Policy",
-              "value": "frame-ancestors https://utahdeqorg--eid.sandbox.lightning.force.com https://utahdeqorg.lightning.force.com https://utahdeqorg--eid.sandbox.my.salesforce.com https://utahdeqorg--derrdev.sandbox.lightning.force.com https://utahdeqorg--derrdev.sandbox.my.salesforce.com;"
+              "value": "frame-ancestors https://utahdeqorg--eid.sandbox.lightning.force.com https://utahdeqorg.lightning.force.com https://utahdeqorg--eid.sandbox.my.salesforce.com https://utahdeqorg--derrdev.sandbox.lightning.force.com https://utahdeqorg--derrdev.sandbox.my.salesforce.com https://utahdeqorg--uatpartial.sandbox.my.salesforce.com https://utahdeqorg--utderrqa.sandbox.my.salesforce.com https://utahdeqorg--uatpartial.sandbox.lightning.force.com https://utahdeqorg--utderrqa.sandbox.lightning.force.com;"
             }
           ]
         }
