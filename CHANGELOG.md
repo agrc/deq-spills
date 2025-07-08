@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.0-6](https://github.com/agrc/deq-spills/compare/v3.0.0-5...v3.0.0-6) (2025-07-08)
+
+
+### Bug Fixes
+
+* **website:** add QA and UatPartial DNS for tanks project to CSP ([bf6d6bf](https://github.com/agrc/deq-spills/commit/bf6d6bf84b7b9cd61ee67a5118a3a2d0ce0aebda))
+
 ## [3.0.0-5](https://github.com/agrc/deq-spills/compare/v3.0.0-4...v3.0.0-5) (2025-04-04)
 
 
