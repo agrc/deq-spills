@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.0-7](https://github.com/agrc/deq-spills/compare/v3.0.0-6...v3.0.0-7) (2025-07-16)
+
+
+### Bug Fixes
+
+* **legacy:** add pbf dependency ([6f32814](https://github.com/agrc/deq-spills/commit/6f328143bf080062c7bdeeb51e9c3b99da800a4c))
+
 ## [3.0.0-6](https://github.com/agrc/deq-spills/compare/v3.0.0-5...v3.0.0-6) (2025-07-08)
 
 
