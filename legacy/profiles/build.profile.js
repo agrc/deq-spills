@@ -23,6 +23,7 @@ var profile = {
                 'esri/layers/VectorTileLayerImpl',
                 'esri/PopupInfo',
                 'esri/tasks/RelationshipQuery',
+                'esri/tasks/support/pbfDeps', 
                 'xstyle/core/load-css'
             ],
             includeLocales: ['en-us'],
