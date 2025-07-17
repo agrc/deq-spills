@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.0.0-7](https://github.com/agrc/deq-spills/compare/v3.0.0-6...v3.0.0-7) (2025-07-17)
+
+
+### Bug Fixes
+
+* **legacy:** add pbf dependency ([6f32814](https://github.com/agrc/deq-spills/commit/6f328143bf080062c7bdeeb51e9c3b99da800a4c))
+* **legacy:** better headers for iframe security ([15ac9fa](https://github.com/agrc/deq-spills/commit/15ac9fa3d7cf41da1111cadc453c71c5c8ee5575))
+* **website:** better headers for iframe security ([c3c77d8](https://github.com/agrc/deq-spills/commit/c3c77d807c2ecfb99c4e5465915468aa2fe832a4))
+
 ## [3.0.0-6](https://github.com/agrc/deq-spills/compare/v3.0.0-5...v3.0.0-6) (2025-07-08)
 
 
