@@ -5,6 +5,10 @@
     "**/.sfdx": true
   },
   "cSpell.words": [
-    "MILEMARKER"
-  ]
+    "MILEMARKER",
+    "SFDX",
+    "utahdeqorg"
+  ],
+  "salesforcedx-vscode-lwc.preview.typeScriptSupport": true,
+  "editor.formatOnSave": true
 }

@@ -1,7 +1,10 @@
 version: 2
 updates:
   - package-ecosystem: npm
-    directory: /
+    directories:
+      - legacy
+      - website
+      - salesforce
     schedule:
       interval: monthly
     groups:

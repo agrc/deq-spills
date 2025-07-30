@@ -9,13 +9,35 @@ permissions:
   deployments: write
 
 jobs:
-  deploy-dev:
-    name: Deploy to staging
+  deploy-website-dev:
+    name: Deploy website to staging
     runs-on: ubuntu-latest
+    environment:
+      name: dev
+      url: https://spillsmap.dev.utah.gov
     if: github.event.release.prerelease == true
+
+    steps:
+      - name: 🚀 Deploy
+        uses: agrc/firebase-website-deploy-composite-action@v1
+        with:
+          identity-provider: ${{ secrets.IDENTITY_PROVIDER }}
+          service-account-email: ${{ secrets.SERVICE_ACCOUNT_EMAIL }}
+          project-id: ${{ secrets.PROJECT_ID }}
+          build-command: pnpm run build --mode dev
+          working-directory: ./website
+        env:
+          VITE_DISCOVER: ${{ secrets.DISCOVER_QUAD_WORD }}
+          VITE_WEB_API: ${{ secrets.WEB_API_KEY }}
+          VITE_FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
+
+  deploy-legacy-dev:
+    name: Deploy legacy to staging
+    runs-on: ubuntu-latest
     environment:
       name: dev
       url: https://deqspills.dev.utah.gov
+    if: github.event.release.prerelease == true
 
     steps:
       - name: 🚀 Deploy
@@ -24,15 +46,16 @@ jobs:
           identity-provider: ${{ secrets.IDENTITY_PROVIDER }}
           service-account-email: ${{ secrets.SERVICE_ACCOUNT_EMAIL }}
           project-id: ${{ secrets.PROJECT_ID }}
-          build-command: npm run build:stage
+          build-command: pnpm run build:stage
+          working-directory: ./legacy
 
-  deploy-prod:
-    name: Deploy to production
+  deploy-website-prod:
+    name: Deploy website to production
     runs-on: ubuntu-latest
-    if: github.event.release.prerelease == false
     environment:
       name: prod
-      url: https://deqspills.ugrc.utah.gov
+      url: https://spillsmap.deq.utah.gov
+    if: github.event.release.prerelease == false
 
     steps:
       - name: 🚀 Deploy
@@ -41,18 +64,49 @@ jobs:
           identity-provider: ${{ secrets.IDENTITY_PROVIDER }}
           service-account-email: ${{ secrets.SERVICE_ACCOUNT_EMAIL }}
           project-id: ${{ secrets.PROJECT_ID }}
-          build-command: npm run build:prod
+          build-command: pnpm run build --mode production
           service-now-instance: ${{ secrets.SN_INSTANCE }}
           service-now-table: ${{ secrets.SN_TABLE }}
           service-now-system-id: ${{ secrets.SN_SYS_ID }}
           service-now-username: ${{ secrets.SN_USERNAME }}
           service-now-password: ${{ secrets.SN_PASSWORD }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+          working-directory: ./website
+        env:
+          VITE_DISCOVER: ${{ secrets.DISCOVER_QUAD_WORD }}
+          VITE_WEB_API: ${{ secrets.WEB_API_KEY }}
+          VITE_FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
+
+  deploy-legacy-prod:
+    name: Deploy legacy to production
+    runs-on: ubuntu-latest
+    environment:
+      name: prod
+      url: https://deqspills.ugrc.utah.gov
+    if: github.event.release.prerelease == false
+
+    steps:
+      - name: 🚀 Deploy
+        uses: agrc/firebase-website-deploy-composite-action@v1
+        with:
+          identity-provider: ${{ secrets.IDENTITY_PROVIDER }}
+          service-account-email: ${{ secrets.SERVICE_ACCOUNT_EMAIL }}
+          project-id: ${{ secrets.PROJECT_ID }}
+          build-command: pnpm run build:prod
+          service-now-instance: ${{ secrets.SN_INSTANCE }}
+          service-now-table: ${{ secrets.SN_TABLE }}
+          service-now-system-id: ${{ secrets.SN_SYS_ID }}
+          service-now-username: ${{ secrets.SN_USERNAME }}
+          service-now-password: ${{ secrets.SN_PASSWORD }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          working-directory: ./legacy
 
   notify:
     name: Notifications
-    needs: deploy-prod
     runs-on: ubuntu-latest
+    needs: [deploy-website-prod, deploy-legacy-prod]
+    # run if either of the prod deployments were successful
+    if: always() && contains(join(needs.*.result, ','), 'success')
     permissions:
       contents: read
       pull-requests: write

@@ -1,0 +1,60 @@
+{
+  "hosting": [
+    {
+      "target": "default",
+      "public": "dist",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "headers": [
+        {
+          "source": "*.html",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "max-age=300"
+            }
+          ]
+        },
+        {
+          "source": "**/*.@(jpg|jpeg|gif|png)",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "max-age=86400"
+            }
+          ]
+        },
+        {
+          "source": "**",
+          "headers": [
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "1; mode=block"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer-when-downgrade"
+            },
+            {
+              "key": "Permissions-Policy",
+              "value": "accelerometer=(), ambient-light-sensor=(), autoplay=(), camera=(), encrypted-media=(), fullscreen=(self), geolocation=(self), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), speaker=(), screen-wake-lock=(), sync-xhr=(), usb=(), web-share=(), xr-spatial-tracking=()"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors https://utahdeqorg--eid.sandbox.lightning.force.com https://utahdeqorg.lightning.force.com https://utahdeqorg--eid.sandbox.my.salesforce.com https://utahdeqorg--derrdev.sandbox.lightning.force.com https://utahdeqorg--derrdev.sandbox.my.salesforce.com https://utahdeqorg--uatpartial.sandbox.my.salesforce.com https://utahdeqorg--utderrqa.sandbox.my.salesforce.com https://utahdeqorg--uatpartial.sandbox.lightning.force.com https://utahdeqorg--utderrqa.sandbox.lightning.force.com;"
+            }
+          ]
+        }
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    }
+  ]
+}

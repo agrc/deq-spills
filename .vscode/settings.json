@@ -1,9 +1,14 @@
 {
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "cSpell.words": [
     "AGRCGLOBAL",
     "autoplay",
     "BASEMERIDIAN",
     "citytown",
+    "dgts",
+    "FACNAME",
     "firebaserc",
     "fullscreen",
     "gcdb",
@@ -13,8 +18,20 @@
     "PECSFZVT",
     "plss",
     "SAMEORIGIN",
+    "sfdx",
     "SNUM",
     "Ssearch",
+    "startcase",
+    "usehooks",
+    "VITE",
     "ZIPCITY"
-  ]
+  ],
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "[xml]": {
+    "editor.defaultFormatter": "DotJoshJohnson.xml"
+  }
 }

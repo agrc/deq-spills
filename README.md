@@ -1,55 +1,81 @@
 # DEQ Spills Web Application & Salesforce Integration
 
-This projects consists of two parts:
+This project consists of three separate projects:
 
-- Firebase web mapping application
-- Salesforce Lightning Component
-
-## Firebase
-
-This web site is embedded via iframe in several DEQ web applications. See [src/index.html](src/index.html) for an example of how this is done.
+## Firebase Web App (`website`)
 
 Staging: <https://deqspills.dev.utah.gov/>
 
 Production: <https://deqspills.deq.utah.gov/>
 
-## Salesforce
+This is a normal web application hosted in firebase. It is used in two different contexts:
 
-This project also contains a Salesforce Lightning Component ([/salesforce](/salesforce/)) that embeds the Firebase web application via iframe in a similar way to other DEQ web applications.
+### Standalone
+
+When used as a standalone website, data is passed via Url parameters. This is used for linking from the public search results page as well as the lead agency report emails.
+
+### Embedded
+
+When used as an embedded application, data is passed (both ways) via the `window.postMessage` API. This is used in the DEQ Salesforce Lightning Component. A Url parameter (embedded=true) is used to indicate that the application is being used in an embedded context.
+
+### Url Parameters
+
+| Parameter  | Description                                                                                                               |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `embedded` | Set to true if the application is being used in an embedded context. This hides the header and footer among other things. |
+| `readonly` | Set to true to hide the location editing controls and disable location updates via map clicks.                            |
+
+Additionally, when in standalone mode, any of the properties of [`DataContextType['data']`](website/src/contexts/DataProvider.tsx) can be passed as Url parameters. These show up in a sidebar.
+
+### Development
+
+Pushes to `dev` and `main` branches will automatically deploy to staging and production Firebase instance respectively using the standard UGRC release and deploy actions.
+
+## Salesforce Lightning Web Component (`salesforce`)
+
+This project consists of a [Salesforce Lightning Web Component](https://developer.salesforce.com/docs/component-library/documentation/en/lwc) that embeds the Firebase web application via an iframe. It also includes a simple `environmentSwitch` component that allows us to switch between the production and development Urls in the iframe.
 
 Development Sandbox: <https://utahdeqorg--eid.sandbox.my.salesforce.com/>
 
 Production Salesforce Instance: <https://utahdeqorg.lightning.force.com/>
 
-## Development
+Development Model: Org
 
->[!NOTE]
->For DEQ web developers developing on `localhost`: You need to define the following global variable and pass a wide-open quad word: `AGRC_testQuadWord`.
+### Setup
 
-### Firebase
+1. Install Salesforce CLI (`pnpm install -g @salesforce/cli`)
+1. Install [Salesforce Extension Pack for VS Code](https://marketplace.visualstudio.com/items?itemName=salesforce.salesforcedx-vscode)
+1. Authorize Org Sandbox
+   1. `org:login:web --alias utahdeqorg --instance-url https://utahdeqorg--eid.sandbox.my.salesforce.com/ --set-default`
 
-Pushes to `dev` and `main` branches will automatically deploy to staging and production Firebase instance respectively using the standard UGRC release and deploy actions.
+### Pulling Changes from Org
 
-### Salesforce
+From `salesforce` directory:
 
-The Salesforce Lightning Component is developed in the `/salesforce` directory. The component is built using the [Salesforce Lightning Web Components](https://developer.salesforce.com/docs/component-library/documentation/en/lwc) framework.
+`sf project retrieve start --source-dir force-app`
 
-#### Setup
+### Pushing Changes to Org
 
-1. Install the [Salesforce CLI](https://developer.salesforce.com/tools/sfdxcli)
-1. Authenticate with the DEQ Salesforce org: `sfdx org login web --instance-url https://utahdeqorg--eid.sandbox.my.salesforce.com/ --alias spillsSandbox`
-1. Right-click on `manifest/package.xml` and select `SFDX: Retrieve Source in Manifest from Org`
+From `salesforce` directory:
 
-#### Deploy To Sandbox
+`sf project deploy start --source-dir force-app`
 
-1. Right-click on `lwc` folder and select `SFDX: Deploy Source to Org`
-1. Go to a case record in the sandbox (e.g. <https://utahdeqorg--eid.sandbox.lightning.force.com/lightning/r/Case/5003R000007Vao4QAC/view>)
-1. Click the gear icon in the upper right corner and select `Edit Page`
-1. Click on the "Save" button and then go back to the page (this is a hack to make sure that salesforce gets your changes).
+#### Testing Lead Agency Form
 
-#### Deploy To Production
+1. Log into sandbox.
+1. Contacts -> Nathan Hall
+1. "Log in to Experience as User" -> "DEQ EID Portal Authorized Users"
+1. "Spill Reports" -> Select a report
 
-1. Setup Cog button -> Setup
-1. Quick Find -> Outbound Change Sets
-1. Create a new set and add the component(s) that you want to deploy
-1. Upload the change set and then ask Barry to deploy your change set to production.
+### References
+
+- [Salesforce Extensions Documentation](https://developer.salesforce.com/tools/vscode/)
+- [Salesforce CLI Setup Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
+- [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm)
+- [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference.htm)
+
+## Legacy Firebase Web App (`legacy`)
+
+This is the legacy version of the web application that is still used by the Tanks system. They are currently working on migrating Tanks to Salesforce after which this application will be deprecated.
+
+This application has been removed from CI so any new deployments would need to be done manually.
