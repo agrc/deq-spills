@@ -1,5 +1,58 @@
 # Changelog
 
+## [3.0.0-8](https://github.com/agrc/deq-spills/compare/v2.11.6...v3.0.0-8) (2025-08-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* Begin total rewrite of application using React and newer Esri libraries.
+
+### Features
+
+* implement data context and hooks for managing state and iframe communication ([2b59e28](https://github.com/agrc/deq-spills/commit/2b59e28044d6fd9860277a0ca9529733c3fc4588)), closes [#148](https://github.com/agrc/deq-spills/issues/148)
+* implement updating coordinates via map click ([6321f17](https://github.com/agrc/deq-spills/commit/6321f171fd05486f77db707b07b69147581289e3)), closes [#131](https://github.com/agrc/deq-spills/issues/131)
+* **salesforce:** add `isReadOnly` prop to spills component ([162910a](https://github.com/agrc/deq-spills/commit/162910a9c83385818bdc3605c480f028eacd599f)), closes [#133](https://github.com/agrc/deq-spills/issues/133)
+* **website:** add a confirmation dialog to handle accidental map clicks ([0df95f4](https://github.com/agrc/deq-spills/commit/0df95f466602e2df7944719f33a6f05c97fb55ba)), closes [#142](https://github.com/agrc/deq-spills/issues/142)
+* **website:** add legend and labels for land ownership ([368b4da](https://github.com/agrc/deq-spills/commit/368b4da0d2584b511867bf3aac8650de33a2bccc)), closes [#128](https://github.com/agrc/deq-spills/issues/128)
+* **website:** add sidebar that displays data from URL parameters for standalone mode ([98bc459](https://github.com/agrc/deq-spills/commit/98bc459ad7de0b2f0828f1e8c985a8818bc80767))
+* **website:** add spill number and field aliases to standalone sidebar ([89d88c7](https://github.com/agrc/deq-spills/commit/89d88c70f5918fd1f75b4c30c75d2396e437dc13))
+* **website:** add water system layer and refine land ownership ([bac6b54](https://github.com/agrc/deq-spills/commit/bac6b5427644cf67a1f4cd9e686a272559d79534)), closes [#128](https://github.com/agrc/deq-spills/issues/128)
+* **website:** enable mouse wheel zooming when embedded ([a52f854](https://github.com/agrc/deq-spills/commit/a52f854561703f43788b976541538096222cbc6d)), closes [#130](https://github.com/agrc/deq-spills/issues/130)
+* **website:** implement define location by address or route/milepost ([e2390da](https://github.com/agrc/deq-spills/commit/e2390dacd8fef4a8e8edf4092ae845b71ef82cec)), closes [#136](https://github.com/agrc/deq-spills/issues/136)
+* **website:** implement define location by coordinates ([69fdd15](https://github.com/agrc/deq-spills/commit/69fdd15b943489b050fe6ac755d095e8e55515e3)), closes [#131](https://github.com/agrc/deq-spills/issues/131)
+* **website:** implement other location queries ([82f8279](https://github.com/agrc/deq-spills/commit/82f82798ed0dd887f6d6348f3a492659b6ac6bde)), closes [#137](https://github.com/agrc/deq-spills/issues/137)
+* **website:** implement readonly url parameter ([925730e](https://github.com/agrc/deq-spills/commit/925730ef8137b3b8b05b86e7bc2bb4e2f7b0c29f)), closes [#133](https://github.com/agrc/deq-spills/issues/133)
+
+
+### Bug Fixes
+
+* implement latest atlas template ([b24a1ca](https://github.com/agrc/deq-spills/commit/b24a1caeae7a6d48bbdf068dd4b1c516291bc568)), closes [#126](https://github.com/agrc/deq-spills/issues/126)
+* **legacy:** add pbf dependency ([28da98f](https://github.com/agrc/deq-spills/commit/28da98ff7c6af03b2e6b8de70d9db11ad3b7dbe7))
+* **legacy:** better headers for iframe security ([4735621](https://github.com/agrc/deq-spills/commit/4735621f8765a5a5b6e2d5471a3db1af20ef3cf6))
+* **legacy:** remove broken image min build step ([fecd264](https://github.com/agrc/deq-spills/commit/fecd264f38377471a65ce3baa31e2c37f2690c94))
+* **salesforce:** avoid storing "null" strings or a single comma in address field ([a64c136](https://github.com/agrc/deq-spills/commit/a64c136818bcdef751dc9b3162984a2b8e5fa8b4))
+* **salesforce:** set iframe to full width ([3eb51cb](https://github.com/agrc/deq-spills/commit/3eb51cb3b24c5e8a2985d20ab74221be7002d98b))
+* **website:** add QA and UatPartial DNS for tanks project to CSP ([ce79ed8](https://github.com/agrc/deq-spills/commit/ce79ed806aef2bba53ae75ad19bd4c84f05bfbe3))
+* **website:** better headers for iframe security ([2f16221](https://github.com/agrc/deq-spills/commit/2f1622103343a8065e29126e299bf5878ceccaae))
+* **website:** disable map click when not embedded ([495ffb5](https://github.com/agrc/deq-spills/commit/495ffb5777237fcf976d9733eb15706f29152319))
+* **website:** enable mouse wheel zooming even when no embedded ([d15410a](https://github.com/agrc/deq-spills/commit/d15410abe6fd0e319c7f4b1ae4d10866fda44ace))
+* **website:** hide legend when empty ([678fafe](https://github.com/agrc/deq-spills/commit/678fafe14e39d62a355927ce899ca5eb3752c2b0)), closes [#128](https://github.com/agrc/deq-spills/issues/128)
+* **website:** include city/zip in address sent to salesforce ([b1ec5e9](https://github.com/agrc/deq-spills/commit/b1ec5e99c8298533bd3a4844776dc0841e50c57d))
+* **website:** wire event listening sooner in react lifecycle ([8c1fb02](https://github.com/agrc/deq-spills/commit/8c1fb02a7f3c012af5f2bcc4f5e153ae8281268a))
+
+
+### Dependencies
+
+* **salesforce:** update to latest salesforce template project ([b51bea2](https://github.com/agrc/deq-spills/commit/b51bea26578b6641d2e1cb3e2cbcc4c75dda2740)), closes [#126](https://github.com/agrc/deq-spills/issues/126)
+* **website:** bump dependencies 🌲 ([3935299](https://github.com/agrc/deq-spills/commit/39352998811a05bc795ee17810e3ad7571c749c0))
+
+
+### Styles
+
+* **website:** override default colors with DEQ logo colors ([b138f39](https://github.com/agrc/deq-spills/commit/b138f39f6a50f025b42feec170c40a527801e045))
+* **website:** simplify layout and add optimizations for salesforce embed ([edb65e8](https://github.com/agrc/deq-spills/commit/edb65e865253cbb08cfa23afc683fb1c0e3f71bd))
+* **website:** update location point symbol to match the old style ([3a21d10](https://github.com/agrc/deq-spills/commit/3a21d107b95cfb6d8819e5abb1815fd5edc2e825))
+
 ## [3.0.0-7](https://github.com/agrc/deq-spills/compare/v3.0.0-6...v3.0.0-7) (2025-07-17)
 
 
