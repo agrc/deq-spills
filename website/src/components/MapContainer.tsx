@@ -35,6 +35,7 @@ export default function MapContainer({ isEmbedded, isReadOnly }: MapContainerPro
       map: mapComponent.current,
       extent: utahMercatorExtent,
     });
+    mapView.current.constraints.snapToZoom = false;
 
     mapView.current.when(() => {
       const legend = new Legend({
@@ -58,7 +59,7 @@ export default function MapContainer({ isEmbedded, isReadOnly }: MapContainerPro
       options: {
         view: mapView.current,
         quadWord: import.meta.env.VITE_DISCOVER,
-        baseLayers: ['Terrain', 'Hybrid', 'Lite'],
+        basemaps: ['Terrain', 'Hybrid', 'Lite'],
         referenceLayers: [
           {
             label: 'Public Water System Facilities',
