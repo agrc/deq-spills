@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.0.0-rc.9](https://github.com/agrc/deq-spills/compare/v3.0.0-8...v3.0.0-rc.9) (2025-08-21)
+
+
+### Bug Fixes
+
+* **website:** enable smooth map mouse wheel zooming and more modern base maps ([b505e29](https://github.com/agrc/deq-spills/commit/b505e291ed641adbc389f5c081ec3966bf78c9ae))
+
+
+### Dependencies
+
+* **website:** bump npm deps 🌲 ([f6d42df](https://github.com/agrc/deq-spills/commit/f6d42df3460db5bc506651c5b7a6b4afd113be91))
+
 ## [3.0.0-8](https://github.com/agrc/deq-spills/compare/v2.11.6...v3.0.0-8) (2025-08-01)
 
 
