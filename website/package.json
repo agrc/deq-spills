@@ -76,7 +76,10 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "@firebase/util",
-      "esbuild"
+      "@vaadin/vaadin-usage-statistics",
+      "esbuild",
+      "protobufjs",
+      "re2"
     ],
     "ignoredBuiltDependencies": [
       "unrs-resolver"
