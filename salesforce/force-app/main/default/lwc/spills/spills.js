@@ -6,6 +6,8 @@ import INDIAN from "@salesforce/schema/Case.Indian_Land__c";
 import OWNER_AGENCY from "@salesforce/schema/Case.Land_Ownership__c";
 import DD_LAT from "@salesforce/schema/Case.Latitude__c";
 import DD_LONG from "@salesforce/schema/Case.Longitude__c";
+// TODO: ask salesforce admin to add this field
+import FLOWPATH_LENGTH from "@salesforce/schema/Case.Flowpath_Length__c";
 import MILEMARKER from "@salesforce/schema/Case.Mile_Marker__c";
 import CITY from "@salesforce/schema/Case.Nearest_Town_City__c";
 import UTM_X from "@salesforce/schema/Case.Utm_E_X_6_dgts__c";
@@ -132,6 +134,7 @@ export default class Spills extends LightningElement {
       [COUNTY.fieldApiName]: data.COUNTY,
       [DD_LAT.fieldApiName]: data.DD_LAT.toString(),
       [DD_LONG.fieldApiName]: data.DD_LONG.toString(),
+      [FLOWPATH_LENGTH.fieldApiName]: data.FLOWPATH_LENGTH,
       [HIGHWAY.fieldApiName]: data.HIGHWAY, // comes from widget text input
       [INDIAN.fieldApiName]: data.INDIAN,
       [MILEMARKER.fieldApiName]: data.MILEMARKER, // comes from widget text input

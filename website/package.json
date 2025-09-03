@@ -7,12 +7,13 @@
     "build": "tsc -b && vite build",
     "check": "tsc -b",
     "copy:arcgis": "cpy \"./node_modules/@arcgis/core/assets/**\" ./public/assets",
-    "dev": "pnpm start",
+    "dev": "concurrently 'cd functions && pnpm run build:watch' 'wait-on ./functions/lib/src/index.js && pnpm dev:firebase' 'wait-on http://127.0.0.1:4000 && pnpm dev:vite'",
+    "dev:firebase": "firebase emulators:start --only functions",
+    "dev:vite": "vite",
     "format": "prettier . --write",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "start": "vite",
-    "start:ci": "vite --host",
+    "start": "pnpm run dev",
     "test": "vitest"
   },
   "browserslist": {
@@ -29,6 +30,7 @@
   },
   "dependencies": {
     "@arcgis/core": "^4.33.14",
+    "@tanstack/react-query": "^5.85.5",
     "@ugrc/eslint-config": "^1.2.3",
     "@ugrc/esri-theme-toggle": "^1.1.2",
     "@ugrc/layer-selector": "^6.4.0",
@@ -53,8 +55,10 @@
     "@ugrc/tsconfigs": "^1.0.3",
     "@vitejs/plugin-react": "^5.0.4",
     "autoprefixer": "^10.4.21",
+    "concurrently": "^9.2.1",
     "cpy-cli": "^6.0.0",
     "eslint": "^9.37.0",
+    "firebase-tools": "^14.14.0",
     "happy-dom": "^18.0.1",
     "postcss": "^8.5.6",
     "prettier": "^3.6.2",
@@ -66,12 +70,16 @@
     "typescript": "^5.9.3",
     "vite": "^7.1.11",
     "vite-plugin-package-version": "^1.1.0",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "wait-on": "^8.0.4"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
       "@firebase/util",
       "esbuild"
+    ],
+    "ignoredBuiltDependencies": [
+      "unrs-resolver"
     ]
   }
 }
