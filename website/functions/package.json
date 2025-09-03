@@ -8,9 +8,9 @@
     "build:watch": "tsc --watch",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
-    "serve": "npm run build && firebase emulators:start --only functions",
-    "shell": "npm run build && firebase functions:shell",
-    "start": "npm run shell"
+    "serve": "pnpm run build && firebase emulators:start --only functions",
+    "shell": "pnpm run build && firebase functions:shell",
+    "start": "pnpm run shell"
   },
   "dependencies": {
     "@arcgis/core": "^4.33.12",
