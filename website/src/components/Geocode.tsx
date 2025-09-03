@@ -37,7 +37,7 @@ export default function Geocode() {
       location = await defineLocation(point, null, firstInput, secondInput);
     }
 
-    setData(location);
+    setData((prevData) => ({ ...prevData, ...location }));
     setIsOpen(false);
   };
 

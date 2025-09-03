@@ -18,16 +18,22 @@ When used as a standalone website, data is passed via Url parameters. This is us
 
 When used as an embedded application, data is passed (both ways) via the `window.postMessage` API. This is used in the DEQ Salesforce Lightning Component. A Url parameter (embedded=true) is used to indicate that the application is being used in an embedded context.
 
+The following pages can be used to test the different embedded contexts:
+
+- `tests/duty-officer.html`
+- `tests/lead-agency-report.html`
+
 ### Url Parameters
 
 | Parameter  | Description                                                                                                               |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------- |
 | `embedded` | Set to true if the application is being used in an embedded context. This hides the header and footer among other things. |
 | `readonly` | Set to true to hide the location editing controls and disable location updates via map clicks.                            |
+| `flowpath` | Set to true to enable the flow path calculations and controls                                                             |
 
 Additionally, when in standalone mode, any of the properties of [`DataContextType['data']`](website/src/contexts/DataProvider.tsx) can be passed as Url parameters. These show up in a sidebar.
 
-### Development
+### Deployment
 
 Pushes to `dev` and `main` branches will automatically deploy to staging and production Firebase instance respectively using the standard UGRC release and deploy actions.
 

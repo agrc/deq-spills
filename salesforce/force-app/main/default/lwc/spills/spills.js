@@ -35,7 +35,7 @@ export default class Spills extends LightningElement {
       }
       this.dispatchEvent(
         new ShowToastEvent({
-          title: "Error loading contact",
+          title: "Error loading spill record data",
           message,
           variant: "error"
         })
@@ -57,9 +57,9 @@ export default class Spills extends LightningElement {
   get iframeSrc() {
     console.log("salesforce: isSandbox", this.isSandbox);
     if (this.isSandbox) {
-      return `https://spillsmap.dev.utah.gov?embedded=true&readonly=${JSON.stringify(this.isReadOnly)}`; // staging
+      return `https://spillsmap.dev.utah.gov?embedded=true&readonly=${JSON.stringify(this.isReadOnly)}&flowpath=true`; // staging
     } else if (this.isSandbox === false) {
-      return `https://spillsmap.deq.utah.gov?embedded=true&readonly=${JSON.stringify(this.isReadOnly)}`; // prod
+      return `https://spillsmap.deq.utah.gov?embedded=true&readonly=${JSON.stringify(this.isReadOnly)}&flowpath=true`; // prod
     } else {
       console.warn("salesforce: isSandbox is undefined");
     }
@@ -162,6 +162,7 @@ export default class Spills extends LightningElement {
     this.refs.iframe.contentWindow.postMessage(
       {
         data: {
+          ID: this.recordId,
           UTM_X: parseInt(this.utm_x, 10),
           UTM_Y: parseInt(this.utm_y, 10)
         },

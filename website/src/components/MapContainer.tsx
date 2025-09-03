@@ -9,6 +9,7 @@ import Graphic from '@arcgis/core/Graphic';
 import { useGraphicManager, utahMercatorExtent } from '@ugrc/utilities/hooks';
 import config from '../config';
 import useData from '../hooks/useDataProvider';
+import useMapView from '../hooks/useMapView';
 import { defineLocation } from '../utilities/defineLocation';
 
 type MapContainerProps = {
@@ -21,6 +22,7 @@ export default function MapContainer({ isEmbedded, isReadOnly }: MapContainerPro
   const mapComponent = useRef<EsriMap | null>(null);
   const mapView = useRef<MapView>(null);
   const [selectorOptions, setSelectorOptions] = useState<LayerSelectorProps | null>(null);
+  const { setMapView } = useMapView();
 
   // setup the Map
   useEffect(() => {
@@ -28,6 +30,7 @@ export default function MapContainer({ isEmbedded, isReadOnly }: MapContainerPro
       return;
     }
 
+    // TODO: add flow paths feature layer
     mapComponent.current = new EsriMap();
 
     mapView.current = new MapView({
@@ -54,6 +57,8 @@ export default function MapContainer({ isEmbedded, isReadOnly }: MapContainerPro
         }
       });
     });
+
+    setMapView(mapView.current);
 
     const selectorOptions: LayerSelectorProps = {
       options: {
@@ -102,13 +107,13 @@ export default function MapContainer({ isEmbedded, isReadOnly }: MapContainerPro
       mapView.current?.destroy();
       mapComponent.current?.destroy();
     };
-  }, [isEmbedded]);
+  }, [isEmbedded, setMapView]);
 
   const { data, setData } = useData();
 
   // add click event handlers
   useEffect(() => {
-    if (!isEmbedded || isReadOnly) {
+    if (!isEmbedded || isReadOnly || !mapView.current) {
       return;
     }
     const handle = mapView.current!.on('click', async (event) => {
@@ -164,6 +169,8 @@ export default function MapContainer({ isEmbedded, isReadOnly }: MapContainerPro
       });
     });
   }, [data, setGraphic]);
+
+  // TODO: update flow paths layer def query when the current incident changes
 
   return (
     <div ref={mapNode} className="flex-1">
