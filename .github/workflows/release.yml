@@ -30,6 +30,7 @@ jobs:
           VITE_DISCOVER: ${{ secrets.DISCOVER_QUAD_WORD }}
           VITE_WEB_API: ${{ secrets.WEB_API_KEY }}
           VITE_FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
+          VITE_FLOWPATHS_PUBLIC_SERVICE_URL: ${{ secrets.FLOWPATHS_PUBLIC_SERVICE_URL }}
 
   deploy-legacy-dev:
     name: Deploy legacy to staging
@@ -76,6 +77,7 @@ jobs:
           VITE_DISCOVER: ${{ secrets.DISCOVER_QUAD_WORD }}
           VITE_WEB_API: ${{ secrets.WEB_API_KEY }}
           VITE_FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
+          VITE_FLOWPATHS_PUBLIC_SERVICE_URL: ${{ secrets.FLOWPATHS_PUBLIC_SERVICE_URL }}
 
   deploy-legacy-prod:
     name: Deploy legacy to production

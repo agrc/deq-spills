@@ -328,7 +328,7 @@ export default function Coordinates() {
     event.preventDefault();
     const point = await getUtmPoint(coordinateType, values);
     const locationData = await defineLocation(point);
-    setData(locationData);
+    setData((prevData) => ({ ...prevData, ...locationData }));
     clearAndClose();
   };
 

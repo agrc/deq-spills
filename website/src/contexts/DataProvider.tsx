@@ -1,12 +1,17 @@
 import { createContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import type { FLOWPATH_LENGTHS } from '../../functions/common/shared';
 import { getData, getIsEmbedded } from '../utilities/urlParameters';
 
+export type UrlParamValue = number | string | boolean | null;
+export type StateKey = keyof typeof blankState;
 export const blankState = {
+  ID: null,
   ADDRESS: null,
   CITY: null,
   COUNTY: null,
   DD_LAT: null,
   DD_LONG: null,
+  FLOWPATH_LENGTH: 0.5,
   HIGHWAY: null,
   INDIAN: false,
   MILEMARKER: null,
@@ -18,15 +23,18 @@ export const blankState = {
 };
 
 type StringOrNull = string | null;
-type NumberOrNull = number | null;
+export type NumberOrNull = number | null;
 
 export type DataContextType = {
   data: {
+    ID: StringOrNull;
     ADDRESS: StringOrNull;
     CITY: StringOrNull;
     COUNTY: StringOrNull;
     DD_LAT: NumberOrNull;
     DD_LONG: NumberOrNull;
+    // TODO: is this still needed?
+    FLOWPATH_LENGTH: (typeof FLOWPATH_LENGTHS)[number]['value'] | null; // miles;
     HIGHWAY: StringOrNull;
     INDIAN: boolean;
     MILEMARKER: StringOrNull;
@@ -37,7 +45,7 @@ export type DataContextType = {
   };
   setData: React.Dispatch<React.SetStateAction<DataContextType['data']>>;
 };
-export const numericKeys = ['DD_LAT', 'DD_LONG', 'UTM_X', 'UTM_Y'];
+export const numericKeys = ['DD_LAT', 'DD_LONG', 'UTM_X', 'UTM_Y', 'FLOWPATH_LENGTH'];
 export const booleanKeys = ['INDIAN'];
 
 const isEmbedded = getIsEmbedded();
