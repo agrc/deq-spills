@@ -24,6 +24,7 @@ When used as an embedded application, data is passed (both ways) via the `window
 | ---------- | ------------------------------------------------------------------------------------------------------------------------- |
 | `embedded` | Set to true if the application is being used in an embedded context. This hides the header and footer among other things. |
 | `readonly` | Set to true to hide the location editing controls and disable location updates via map clicks.                            |
+| `flowpath` | Set to true to enable the flow path calculations and controls                                                             |
 
 Additionally, when in standalone mode, any of the properties of [`DataContextType['data']`](website/src/contexts/DataProvider.tsx) can be passed as Url parameters. These show up in a sidebar.
 

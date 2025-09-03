@@ -1,0 +1,28 @@
+{
+  "name": "functions",
+  "private": true,
+  "type": "module",
+  "main": "lib/src/index.js",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell"
+  },
+  "dependencies": {
+    "@arcgis/core": "^4.33.12",
+    "@esri/arcgis-rest-request": "^4.7.2",
+    "firebase-functions": "^6.0.1"
+  },
+  "devDependencies": {
+    "@total-typescript/tsconfig": "^1.0.4",
+    "firebase-functions-test": "^3.1.0",
+    "typescript": "^5.7.3"
+  },
+  "engines": {
+    "node": "22"
+  }
+}

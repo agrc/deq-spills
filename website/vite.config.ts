@@ -11,6 +11,6 @@ export default defineConfig({
   },
   test: {
     environment: 'happy-dom',
-    exclude: [...configDefaults.exclude, 'salesforce/**'],
+    exclude: [...configDefaults.exclude, 'functions/lib/**'],
   },
 });

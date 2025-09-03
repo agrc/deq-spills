@@ -14,7 +14,7 @@ export async function defineLocation(
   address: StringOrNull = null,
   highway: StringOrNull = null,
   milemarker: StringOrNull = null,
-): Promise<DataContextType['data']> {
+): Promise<Omit<DataContextType['data'], 'FLOWPATH_LENGTH'>> {
   if (!projectOperator.isLoaded()) {
     await projectOperator.load();
   }
@@ -36,7 +36,7 @@ export async function defineLocation(
 
   const queries = config.LOCATION_QUERIES;
   const agency = await queryApi(queries.agency.table, queries.agency.field, utmPoint);
-  const locationData: DataContextType['data'] = {
+  const locationData = {
     // make sure that the following properties stay in sync with the properties in salesforce/force-app/main/default/lwc/spills/spills.js
     ADDRESS: address,
     CITY: await queryApi(queries.city.table, queries.city.field, utmPoint),
