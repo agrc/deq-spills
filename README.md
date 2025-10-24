@@ -4,9 +4,9 @@ This project consists of three separate projects:
 
 ## Firebase Web App (`website`)
 
-Staging: <https://deqspills.dev.utah.gov/>
+Staging: <https://spillsmap.dev.utah.gov/>
 
-Production: <https://deqspills.deq.utah.gov/>
+Production: <https://spillsmap.deq.utah.gov/>
 
 This is a normal web application hosted in firebase. It is used in two different contexts:
 
