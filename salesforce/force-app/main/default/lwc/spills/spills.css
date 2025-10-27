@@ -1,4 +1,7 @@
-iframe {
+iframe.spills-map {
   height: 700px;
   width: 100%;
+  border-color: rgb(201, 201, 201);
+  border-width: 1px;
+  border-style: solid;
 }
