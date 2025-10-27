@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.0.0-rc.10](https://github.com/agrc/deq-spills/compare/v3.0.0-rc.9...v3.0.0-rc.10) (2025-10-27)
+
+
+### Bug Fixes
+
+* **legacy:** add new prod salesforce domain to CSP ([440cf01](https://github.com/agrc/deq-spills/commit/440cf01123665b16846fce02b0415aac8c94ca11))
+* **website:** use correct map click event ([02676cc](https://github.com/agrc/deq-spills/commit/02676cc31350c69764bf03739252aafbf9625a48))
+
 ## [3.0.0-rc.9](https://github.com/agrc/deq-spills/compare/v3.0.0-8...v3.0.0-rc.9) (2025-08-21)
 
 
