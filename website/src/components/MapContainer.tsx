@@ -111,7 +111,7 @@ export default function MapContainer({ isEmbedded, isReadOnly }: MapContainerPro
     if (!isEmbedded || isReadOnly) {
       return;
     }
-    const handle = mapView.current!.on('immediate-click', async (event) => {
+    const handle = mapView.current!.on('click', async (event) => {
       if (
         !window.confirm('Are you sure that you would like to update the event location to match the clicked location?')
       ) {
