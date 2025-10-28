@@ -2,10 +2,12 @@ import { Footer, Header, useFirebaseApp } from '@ugrc/utah-design-system';
 import { useEffect } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import Coordinates from './components/Coordinates';
+import FlowPath from './components/FlowPath';
 import Geocode from './components/Geocode';
 import MapContainer from './components/MapContainer';
 import Sidebar from './components/Sidebar';
-import { getIsEmbedded, getIsReadOnly } from './utilities/urlParameters';
+import { MapProvider } from './contexts/Map';
+import { getFlowPathEnabled, getIsEmbedded, getIsReadOnly } from './utilities/urlParameters';
 
 const version = import.meta.env.PACKAGE_VERSION;
 
@@ -31,6 +33,7 @@ const links = [
 
 const isEmbedded = getIsEmbedded();
 const isReadOnly = getIsReadOnly();
+const flowPathEnabled = getFlowPathEnabled();
 
 export default function App() {
   const app = useFirebaseApp();
@@ -62,13 +65,16 @@ export default function App() {
           <ErrorBoundary FallbackComponent={ErrorFallback}>
             <div className="flex size-full flex-1">
               <div className="flex size-full flex-col">
-                <MapContainer isEmbedded={isEmbedded} isReadOnly={isReadOnly} />
-                {!isEmbedded || isReadOnly ? null : (
-                  <div className="flex flex-wrap gap-2 border-t border-t-slate-300 p-3">
-                    <Coordinates />
-                    <Geocode />
-                  </div>
-                )}
+                <MapProvider>
+                  <MapContainer isEmbedded={isEmbedded} isReadOnly={isReadOnly} />
+                  {!isEmbedded || isReadOnly ? null : (
+                    <div className="flex flex-wrap gap-2 border-t border-t-slate-300 p-3">
+                      <Coordinates />
+                      <Geocode />
+                      {flowPathEnabled ? <FlowPath /> : null}
+                    </div>
+                  )}
+                </MapProvider>
               </div>
               {!isEmbedded && <Sidebar />}
             </div>
