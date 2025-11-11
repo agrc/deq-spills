@@ -12,5 +12,10 @@ export default defineConfig({
   test: {
     environment: 'happy-dom',
     exclude: [...configDefaults.exclude, 'salesforce/**'],
+    server: {
+      deps: {
+        inline: ['@esri/calcite-components', '@arcgis/core'],
+      },
+    },
   },
 });
