@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.0.1](https://github.com/agrc/deq-spills/compare/v3.0.0...v3.0.1) (2025-11-11)
+
+
+### Dependencies
+
+* bump the major-dependencies group across 3 directories with 13 updates ([6983adb](https://github.com/agrc/deq-spills/commit/6983adbe5f5f5c0d99532c9ccc9c6f5dc5b1cbca))
+* bump the safe-dependencies group across 2 directories with 20 updates ([79861e4](https://github.com/agrc/deq-spills/commit/79861e46d7cf5b6d84e25d131bf44151990bf4a7))
+
 ## [3.0.0](https://github.com/agrc/deq-spills/compare/v2.11.6...v3.0.0) (2025-10-27)
 
 
