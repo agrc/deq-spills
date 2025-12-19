@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.2](https://github.com/agrc/deq-spills/compare/v3.0.1...v3.0.2) (2025-12-19)
+
+
+### Bug Fixes
+
+* point to new source for environmental incidents ([947db5e](https://github.com/agrc/deq-spills/commit/947db5e945f55456ab760d35236a1e445d550529))
+
 ## [3.0.1](https://github.com/agrc/deq-spills/compare/v3.0.0...v3.0.1) (2025-11-11)
 
 
