@@ -33,10 +33,16 @@ class DEQSpillsPallet(Pallet):
                          'TIER2',
                          'TRI',
                          'FacilityPST',
-                         'VCP',
-                         'EnvironmentalIncidents'],
+                         'VCP'],
                         {'source_workspace': self.sgid,
                          'destination_workspace': self.environment})
+
+        self.add_crate((
+            'EnvironmentalIncidents/FeatureServer/0',
+            'https://services2.arcgis.com/NnxP4LZ3zX8wWmP9/arcgis/rest/services/',
+            self.environment,
+            'EnvironmentalIncidents',
+        ))
 
         self.add_crate(('Counties', self.sgid, self.boundaries))
         self.add_crate(('HealthDistricts', self.sgid, self.health))
