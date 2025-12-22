@@ -59,7 +59,9 @@ export default class Spills extends LightningElement {
     if (this.isSandbox) {
       return `https://spillsmap.dev.utah.gov?embedded=true&readonly=${JSON.stringify(this.isReadOnly)}`; // staging
     } else if (this.isSandbox === false) {
-      return `https://deqspills.ugrc.utah.gov?embedded=true&readonly=${JSON.stringify(this.isReadOnly)}`; // prod
+      return `https://spillsmap.deq.utah.gov?embedded=true&readonly=${JSON.stringify(this.isReadOnly)}`; // prod
+    } else {
+      console.warn("salesforce: isSandbox is undefined");
     }
 
     return null;

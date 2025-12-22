@@ -4,9 +4,9 @@ This project consists of three separate projects:
 
 ## Firebase Web App (`website`)
 
-Staging: <https://deqspills.dev.utah.gov/>
+Staging: <https://spillsmap.dev.utah.gov/>
 
-Production: <https://deqspills.deq.utah.gov/>
+Production: <https://spillsmap.deq.utah.gov/>
 
 This is a normal web application hosted in firebase. It is used in two different contexts:
 
@@ -79,3 +79,7 @@ From `salesforce` directory:
 This is the legacy version of the web application that is still used by the Tanks system. They are currently working on migrating Tanks to Salesforce after which this application will be deprecated.
 
 This application has been removed from CI so any new deployments would need to be done manually.
+
+Staging: <https://deqspills.dev.utah.gov/>
+
+Production: <https://deqspills.ugrc.utah.gov/>
