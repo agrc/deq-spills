@@ -8,7 +8,7 @@
     "check": "tsc -b",
     "copy:arcgis": "cpy \"./node_modules/@arcgis/core/assets/**\" ./public/assets",
     "dev": "concurrently 'cd functions && pnpm run build:watch' 'wait-on ./functions/lib/src/index.js && pnpm dev:firebase' 'wait-on http://127.0.0.1:4000 && pnpm dev:vite'",
-    "dev:firebase": "firebase emulators:start --only functions",
+    "dev:firebase": "./scripts/start-emulators.sh",
     "dev:vite": "vite",
     "format": "prettier . --write",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
