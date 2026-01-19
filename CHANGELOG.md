@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.3-rc.1](https://github.com/agrc/deq-spills/compare/v3.0.2...v3.0.3-rc.1) (2026-01-19)
+
+
+### Features
+
+* implement flow paths ([6cb4790](https://github.com/agrc/deq-spills/commit/6cb4790387afa14f77777f67801c2cbf4949678c)), closes [#129](https://github.com/agrc/deq-spills/issues/129)
+
 ## [3.0.2](https://github.com/agrc/deq-spills/compare/v3.0.1...v3.0.2) (2025-12-22)
 
 
