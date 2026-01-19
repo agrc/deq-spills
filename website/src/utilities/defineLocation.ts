@@ -14,7 +14,7 @@ export async function defineLocation(
   address: StringOrNull = null,
   highway: StringOrNull = null,
   milemarker: StringOrNull = null,
-): Promise<Omit<DataContextType['data'], 'FLOWPATH_LENGTH'>> {
+): Promise<Omit<DataContextType['data'], 'FLOWPATH_LENGTH' | 'ID' | 'SPILL_NUMBER'>> {
   if (!projectOperator.isLoaded()) {
     await projectOperator.load();
   }
