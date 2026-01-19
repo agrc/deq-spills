@@ -14,7 +14,8 @@ export default defineConfig({
     exclude: [...configDefaults.exclude, 'functions/lib/**'],
     server: {
       deps: {
-        // inline: ['@esri/calcite-components', '@arcgis/core'],
+        // Inline Calcite/ArcGIS so Vitest transforms their CSS imports instead of handing them to Node
+        inline: ['@esri/calcite-components', '@arcgis/core'],
       },
     },
   },
