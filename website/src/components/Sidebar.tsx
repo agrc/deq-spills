@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import { DataContext, type DataContextType } from '../contexts/DataProvider';
 
 const fieldAliases: Record<keyof DataContextType['data'], string> = {
+  ID: 'Record ID',
   SPILL_NUMBER: 'Spill Incident Number',
   ADDRESS: 'Address',
   CITY: 'City',
