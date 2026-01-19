@@ -3,13 +3,15 @@ import Polyline from '@arcgis/core/geometry/Polyline.js';
 import SpatialReference from '@arcgis/core/geometry/SpatialReference.js';
 import { type IPolyline } from '@esri/arcgis-rest-request';
 import { setGlobalOptions } from 'firebase-functions';
-import { defineSecret } from 'firebase-functions/params';
+import { defineSecret, defineString } from 'firebase-functions/params';
 import { logger } from 'firebase-functions/v2';
 import { onCall } from 'firebase-functions/v2/https';
 import { FIELDS, type FlowpathInput } from '../common/shared.js';
 import { clipPolylineToLength, getFeature, tracePath, writeToFeatureService } from './flowpath.js';
 
 const AGOL_API_KEY = defineSecret('AGOL_API_KEY');
+const FEATURE_SERVICE_URL = defineString('FEATURE_SERVICE_URL');
+
 setGlobalOptions({ maxInstances: 10 });
 
 const WEB_MERCATOR_WKID = 3857;
@@ -25,7 +27,7 @@ export const getFlowPath = onCall<FlowpathInput, Promise<IPolyline>>(
 
     const { length: desiredMiles, utmX, utmY, id } = request.data;
 
-    const existingFeature = await getFeature(id, AGOL_API_KEY.value());
+    const existingFeature = await getFeature(id, AGOL_API_KEY.value(), FEATURE_SERVICE_URL.value());
     if (
       existingFeature &&
       existingFeature.attributes[FIELDS.LENGTH] === desiredMiles &&
@@ -75,6 +77,7 @@ export const getFlowPath = onCall<FlowpathInput, Promise<IPolyline>>(
       utmX,
       utmY,
       AGOL_API_KEY.value(),
+      FEATURE_SERVICE_URL.value(),
       existingFeature?.attributes?.OBJECTID,
     );
 

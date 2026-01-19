@@ -141,10 +141,10 @@ export async function tracePath(utmX: number, utmY: number, apiKey: string): Pro
   return traceFeature;
 }
 
-export async function getFeature(id: string, apiKey: string): Promise<IFeature | null> {
+export async function getFeature(id: string, apiKey: string, url: string): Promise<IFeature | null> {
   const response = (await queryFeatures({
     authentication: getAuthentication(apiKey),
-    url: process.env.FEATURE_SERVICE_URL,
+    url,
     where: `${FIELDS.SALESFORCE_ID} = '${id}'`,
     outFields: ['*'],
     f: 'json',
@@ -164,11 +164,12 @@ export async function writeToFeatureService(
   utmX: number,
   utmY: number,
   apiKey: string,
+  url: string,
   existingOid?: number,
 ): Promise<void> {
   const params: IApplyEditsOptions = {
     authentication: getAuthentication(apiKey),
-    url: process.env.FEATURE_SERVICE_URL,
+    url,
   };
   const feature = {
     geometry: polyline.toJSON(),
