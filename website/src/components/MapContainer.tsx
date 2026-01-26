@@ -151,6 +151,8 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled }
       }));
     });
 
+    mapNode.current!.style.cursor = 'crosshair';
+
     return () => {
       handle?.remove();
     };
