@@ -25,7 +25,7 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled }
   const mapComponent = useRef<EsriMap | null>(null);
   const mapView = useRef<MapView>(null);
   const [selectorOptions, setSelectorOptions] = useState<LayerSelectorProps | null>(null);
-  const { setMapView, setFlowPathFeatureLayer } = useMapView();
+  const { setMapView, setFlowPathFeatureLayer, flowPathFeatureLayer } = useMapView();
   const { data, setData } = useData();
 
   // setup the Map
@@ -59,6 +59,26 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled }
           legend.visible = true;
         }
       });
+
+      if (flowPathEnabled) {
+        const flowPathFeatureLayer = new FeatureLayer({
+          url: import.meta.env.VITE_FLOWPATHS_PUBLIC_SERVICE_URL,
+          renderer: {
+            type: 'simple',
+            symbol: {
+              type: 'simple-line',
+              color: [0, 0, 255, 0.5],
+              width: 4,
+              style: 'solid',
+            },
+          },
+          definitionExpression: '1=0', // start with no features
+          legendEnabled: false,
+        });
+
+        mapView.current!.map!.add(flowPathFeatureLayer);
+        setFlowPathFeatureLayer(flowPathFeatureLayer);
+      }
     });
 
     setMapView(mapView.current);
@@ -110,13 +130,14 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled }
       mapView.current?.destroy();
       mapComponent.current?.destroy();
     };
-  }, [isEmbedded, setMapView]);
+  }, [flowPathEnabled, setFlowPathFeatureLayer, setMapView]);
 
   // add click event handlers
   useEffect(() => {
     if (!isEmbedded || isReadOnly || !mapView.current) {
       return;
     }
+
     const handle = mapView.current!.on('click', async (event) => {
       if (
         !window.confirm('Are you sure that you would like to update the event location to match the clicked location?')
@@ -133,9 +154,9 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled }
     return () => {
       handle?.remove();
     };
-  }, [isEmbedded, isReadOnly, mapView, setData]);
+  }, [isEmbedded, isReadOnly, setData]);
 
-  // add graphic
+  // add graphic and flow path feature layer
   const { setGraphic } = useGraphicManager(mapView.current);
   useEffect(() => {
     if (!data.UTM_X || !data.UTM_Y) {
@@ -163,44 +184,35 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled }
     });
     setGraphic(graphic);
 
-    if (flowPathEnabled) {
-      const flowPathFeatureLayer = new FeatureLayer({
-        url: import.meta.env.VITE_FLOWPATHS_PUBLIC_SERVICE_URL,
-        renderer: {
-          type: 'simple',
-          symbol: {
-            type: 'simple-line',
-            color: [0, 0, 255, 0.5],
-            width: 4,
-            style: 'solid',
-          },
-        },
-        definitionExpression: getDefinitionExpression(data.ID!),
-        legendEnabled: false,
-      });
-      flowPathFeatureLayer.when(() => {
-        flowPathFeatureLayer
-          .queryFeatures({
-            cacheHint: false,
-            returnGeometry: true,
-            outFields: [FIELDS.LENGTH],
-            where: flowPathFeatureLayer.definitionExpression,
-          })
-          .then((results) => {
-            if (results.features.length > 0) {
-              const flowPathGraphic = results.features[0];
-              mapView.current!.goTo(flowPathGraphic!.geometry!.extent!.expand(1.1));
-            } else {
-              mapView.current?.goTo({
-                target: graphic,
-                zoom: config.DEFAULT_ZOOM_LEVEL,
-              });
-            }
-          });
-      });
-
-      mapView.current!.map!.add(flowPathFeatureLayer);
-      setFlowPathFeatureLayer(flowPathFeatureLayer);
+    if (flowPathEnabled && flowPathFeatureLayer) {
+      flowPathFeatureLayer.definitionExpression = getDefinitionExpression(data.ID!);
+      flowPathFeatureLayer
+        .when(() => {
+          flowPathFeatureLayer
+            .queryFeatures({
+              cacheHint: false,
+              returnGeometry: true,
+              outFields: [FIELDS.LENGTH],
+              where: flowPathFeatureLayer!.definitionExpression,
+            })
+            .then((results) => {
+              if (results.features.length > 0) {
+                const flowPathGraphic = results.features[0];
+                mapView.current!.goTo(flowPathGraphic!.geometry!.extent!.expand(1.1));
+              } else {
+                mapView.current?.goTo({
+                  target: graphic,
+                  zoom: config.DEFAULT_ZOOM_LEVEL,
+                });
+              }
+            })
+            .catch((error) => {
+              console.error('Error querying flow path features:', error);
+            });
+        })
+        .catch((error) => {
+          console.error('Error loading flow path feature layer:', error);
+        });
     } else {
       mapView.current?.when(() => {
         mapView.current?.goTo({
@@ -209,7 +221,7 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled }
         });
       });
     }
-  }, [data, flowPathEnabled, setFlowPathFeatureLayer, setGraphic]);
+  }, [data.ID, data.UTM_X, data.UTM_Y, flowPathEnabled, flowPathFeatureLayer, setGraphic]);
 
   return (
     <div ref={mapNode} className="flex-1">
