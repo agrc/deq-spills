@@ -21,7 +21,8 @@ When used as an embedded application, data is passed (both ways) via the `window
 The following pages can be used to test the different embedded contexts:
 
 - `tests/duty-officer.html`
-- `tests/lead-agency-report.html`
+- `tests/lead-agency-report.html` (read-only)
+- `tests/tanks.html`
 
 ### Url Parameters
 

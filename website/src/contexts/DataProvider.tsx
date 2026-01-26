@@ -1,5 +1,4 @@
 import { createContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import type { FLOWPATH_LENGTHS } from '../../functions/common/shared';
 import { getData, getIsEmbedded } from '../utilities/urlParameters';
 
 export type UrlParamValue = number | string | boolean | null;
@@ -11,7 +10,6 @@ export const blankState = {
   COUNTY: null,
   DD_LAT: null,
   DD_LONG: null,
-  FLOWPATH_LENGTH: 0.5,
   HIGHWAY: null,
   INDIAN: false,
   MILEMARKER: null,
@@ -33,8 +31,6 @@ export type DataContextType = {
     COUNTY: StringOrNull;
     DD_LAT: NumberOrNull;
     DD_LONG: NumberOrNull;
-    // TODO: is this still needed?
-    FLOWPATH_LENGTH: (typeof FLOWPATH_LENGTHS)[number]['value'] | null; // miles;
     HIGHWAY: StringOrNull;
     INDIAN: boolean;
     MILEMARKER: StringOrNull;
@@ -45,7 +41,7 @@ export type DataContextType = {
   };
   setData: React.Dispatch<React.SetStateAction<DataContextType['data']>>;
 };
-export const numericKeys = ['DD_LAT', 'DD_LONG', 'UTM_X', 'UTM_Y', 'FLOWPATH_LENGTH'];
+export const numericKeys = ['DD_LAT', 'DD_LONG', 'UTM_X', 'UTM_Y'];
 export const booleanKeys = ['INDIAN'];
 
 const isEmbedded = getIsEmbedded();

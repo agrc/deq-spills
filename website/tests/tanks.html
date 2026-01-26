@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Duty Officer Embed Test</title>
+    <title>Tanks Embed Test</title>
     <link rel="stylesheet" href="../src/index.css" />
   </head>
 
@@ -12,7 +12,7 @@
       iframe.contentWindow.postMessage(
         {
           data: {
-            ID: 'a0123456789ABCDE', // test spill record Id
+            ID: 'a1B5g00000XXXXXX', // tanks does not send the ID currently, but will in the future
             UTM_X: 420304,
             UTM_Y: 4511432,
           },
@@ -36,7 +36,7 @@
       <div class="h-[700px]">
         <p class="h-40">A bunch of form content</p>
         <iframe
-          src="./?embedded=true&flowpath=true"
+          src="./?embedded=true"
           style="border-color: rgb(201, 201, 201); border-width: 1px; border-style: solid"
           width="100%"
           height="100%"

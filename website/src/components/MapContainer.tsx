@@ -7,22 +7,26 @@ import { useEffect, useRef, useState } from 'react';
 
 import Graphic from '@arcgis/core/Graphic';
 import { useGraphicManager, utahMercatorExtent } from '@ugrc/utilities/hooks';
+import { FIELDS } from '../../functions/common/shared';
 import config from '../config';
 import useData from '../hooks/useDataProvider';
 import useMapView from '../hooks/useMapView';
 import { defineLocation } from '../utilities/defineLocation';
+import { getDefinitionExpression } from './FlowPath';
 
 type MapContainerProps = {
   isEmbedded: boolean;
   isReadOnly: boolean;
+  flowPathEnabled: boolean;
 };
 
-export default function MapContainer({ isEmbedded, isReadOnly }: MapContainerProps) {
+export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled }: MapContainerProps) {
   const mapNode = useRef<HTMLDivElement | null>(null);
   const mapComponent = useRef<EsriMap | null>(null);
   const mapView = useRef<MapView>(null);
   const [selectorOptions, setSelectorOptions] = useState<LayerSelectorProps | null>(null);
-  const { setMapView } = useMapView();
+  const { setMapView, setFlowPathFeatureLayer } = useMapView();
+  const { data, setData } = useData();
 
   // setup the Map
   useEffect(() => {
@@ -30,7 +34,6 @@ export default function MapContainer({ isEmbedded, isReadOnly }: MapContainerPro
       return;
     }
 
-    // TODO: add flow paths feature layer
     mapComponent.current = new EsriMap();
 
     mapView.current = new MapView({
@@ -109,8 +112,6 @@ export default function MapContainer({ isEmbedded, isReadOnly }: MapContainerPro
     };
   }, [isEmbedded, setMapView]);
 
-  const { data, setData } = useData();
-
   // add click event handlers
   useEffect(() => {
     if (!isEmbedded || isReadOnly || !mapView.current) {
@@ -162,15 +163,52 @@ export default function MapContainer({ isEmbedded, isReadOnly }: MapContainerPro
     });
     setGraphic(graphic);
 
-    mapView.current?.when(() => {
-      mapView.current?.goTo({
-        target: graphic,
-        zoom: config.DEFAULT_ZOOM_LEVEL,
+    if (flowPathEnabled) {
+      const flowPathFeatureLayer = new FeatureLayer({
+        url: import.meta.env.VITE_FLOWPATHS_PUBLIC_SERVICE_URL,
+        renderer: {
+          type: 'simple',
+          symbol: {
+            type: 'simple-line',
+            color: [0, 0, 255, 0.5],
+            width: 4,
+            style: 'solid',
+          },
+        },
+        definitionExpression: getDefinitionExpression(data.ID!),
+        legendEnabled: false,
       });
-    });
-  }, [data, setGraphic]);
+      flowPathFeatureLayer.when(() => {
+        flowPathFeatureLayer
+          .queryFeatures({
+            returnGeometry: true,
+            outFields: [FIELDS.LENGTH],
+            where: flowPathFeatureLayer.definitionExpression,
+          })
+          .then((results) => {
+            if (results.features.length > 0) {
+              const flowPathGraphic = results.features[0];
+              mapView.current!.goTo(flowPathGraphic!.geometry!.extent!.expand(1.1));
+            } else {
+              mapView.current?.goTo({
+                target: graphic,
+                zoom: config.DEFAULT_ZOOM_LEVEL,
+              });
+            }
+          });
+      });
 
-  // TODO: update flow paths layer def query when the current incident changes
+      mapView.current!.map!.add(flowPathFeatureLayer);
+      setFlowPathFeatureLayer(flowPathFeatureLayer);
+    } else {
+      mapView.current?.when(() => {
+        mapView.current?.goTo({
+          target: graphic,
+          zoom: config.DEFAULT_ZOOM_LEVEL,
+        });
+      });
+    }
+  }, [data, flowPathEnabled, setFlowPathFeatureLayer, setGraphic]);
 
   return (
     <div ref={mapNode} className="flex-1">
