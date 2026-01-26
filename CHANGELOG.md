@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.3-rc.6](https://github.com/agrc/deq-spills/compare/v3.0.3-rc.5...v3.0.3-rc.6) (2026-01-26)
+
+
+### Bug Fixes
+
+* **website:** revert function rename ([b6bfcd5](https://github.com/agrc/deq-spills/commit/b6bfcd5289faab3f14abc16e34affd321c01c8f5))
+
 ## [3.0.3-rc.5](https://github.com/agrc/deq-spills/compare/v3.0.3-rc.4...v3.0.3-rc.5) (2026-01-26)
 
 
