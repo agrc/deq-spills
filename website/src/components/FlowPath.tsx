@@ -2,7 +2,7 @@ import Polyline from '@arcgis/core/geometry/Polyline';
 import { useMutation } from '@tanstack/react-query';
 import { Button, Dialog, Popover, Select, SelectItem, Spinner, useFirebaseFunctions } from '@ugrc/utah-design-system';
 import { httpsCallable } from 'firebase/functions';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { DialogTrigger, type Key } from 'react-aria-components';
 import { FIELDS, FLOWPATH_LENGTHS, type FlowpathInput, type IPolyline } from '../../functions/common/shared';
 import useData from '../hooks/useDataProvider';
@@ -14,11 +14,12 @@ export function getDefinitionExpression(id: string): string {
 
 export default function FlowPath() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { data, setData } = useData();
+  const { data } = useData();
   const { functions } = useFirebaseFunctions();
   const getFlowPath = httpsCallable<FlowpathInput, IPolyline>(functions, 'getFlowPath');
   const { mapView, flowPathFeatureLayer } = useMapView();
   const [dropdownValue, setDropdownValue] = useState<number>(FLOWPATH_LENGTHS[0]!.value);
+  const previousCoordinates = useRef<string | null>(null);
 
   const { mutate, isPending } = useMutation({
     mutationFn: async ({ length }: { length: number }) => {
@@ -76,7 +77,26 @@ export default function FlowPath() {
           }
         });
     });
-  }, [data.ID, data.UTM_X, data.UTM_Y, flowPathFeatureLayer, mapView, mutate, setData]);
+  }, [data.ID, flowPathFeatureLayer, mapView, mutate]);
+
+  // handle coordinate changes
+  useEffect(() => {
+    if (!data.ID || !data.UTM_X || !data.UTM_Y) {
+      return;
+    }
+
+    const coordinates = `${data.UTM_X},${data.UTM_Y}`;
+    if (!previousCoordinates.current) {
+      // we only want this to fire when the coordinates change, not on the initial load
+      previousCoordinates.current = coordinates;
+      return;
+    }
+
+    if (previousCoordinates.current !== coordinates) {
+      mutate({ length: dropdownValue });
+      previousCoordinates.current = coordinates;
+    }
+  }, [data.ID, data.UTM_X, data.UTM_Y, dropdownValue, mutate]);
 
   const onSelectionChange = (value: Key | null) => {
     setDropdownValue(value as number);
