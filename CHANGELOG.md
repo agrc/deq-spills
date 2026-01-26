@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.0.3-rc.7](https://github.com/agrc/deq-spills/compare/v3.0.3-rc.6...v3.0.3-rc.7) (2026-01-26)
+
+
+### Features
+
+* **website:** show crosshair cursor on map when not read only ([e38e117](https://github.com/agrc/deq-spills/commit/e38e11758bd7353596c64bdeba12a7e5ba2dd291))
+
+
+### Bug Fixes
+
+* **website:** prevent premature zooming to previous flow path when changing it ([c1de9e5](https://github.com/agrc/deq-spills/commit/c1de9e5e96c92825c38e8455e913cbd18b4a1976))
+
 ## [3.0.3-rc.6](https://github.com/agrc/deq-spills/compare/v3.0.3-rc.5...v3.0.3-rc.6) (2026-01-26)
 
 
