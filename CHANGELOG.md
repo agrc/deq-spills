@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.3-rc.2](https://github.com/agrc/deq-spills/compare/v3.0.3-rc.1...v3.0.3-rc.2) (2026-01-26)
+
+
+### Bug Fixes
+
+* **website:** handle more flow paths use cases and environments ([eb6b976](https://github.com/agrc/deq-spills/commit/eb6b976b449f908d1a4f23c284137569f08c04f9)), closes [#129](https://github.com/agrc/deq-spills/issues/129)
+
 ## [3.0.3-rc.1](https://github.com/agrc/deq-spills/compare/v3.0.2...v3.0.3-rc.1) (2026-01-19)
 
 
