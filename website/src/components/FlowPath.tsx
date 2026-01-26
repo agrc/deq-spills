@@ -7,14 +7,7 @@ import { DialogTrigger, type Key } from 'react-aria-components';
 import { FIELDS, FLOWPATH_LENGTHS, type FlowpathInput, type IPolyline } from '../../functions/common/shared';
 import useData from '../hooks/useDataProvider';
 import useMapView from '../hooks/useMapView';
-
-export function getDefinitionExpression(id: string): string {
-  // break the AGOL cache by always sending a unique expression
-  const now = Date.now();
-  const expression = `${FIELDS.SALESFORCE_ID} = '${id}' AND ${now} = ${now}`;
-
-  return expression;
-}
+import { getDefinitionExpression } from '../utilities/getDefinitionExpression';
 
 export default function FlowPath() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -36,6 +29,7 @@ export default function FlowPath() {
       }
 
       console.log('Fetching flow path with length:', length);
+      flowPathFeatureLayer.definitionExpression = '2=1'; // hide layer while loading
 
       const result = await getFlowPath({
         id: data.ID!,
