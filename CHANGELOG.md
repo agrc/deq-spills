@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.0.3-rc.5](https://github.com/agrc/deq-spills/compare/v3.0.3-rc.4...v3.0.3-rc.5) (2026-01-26)
+
+
+### Bug Fixes
+
+* **website:** better cache-busting def queries ([74f3835](https://github.com/agrc/deq-spills/commit/74f3835003cf787d7fb07951f5364edf2bd32a9b))
+* **website:** fix flow paths layer initialization in stand-alone mode ([ce02f19](https://github.com/agrc/deq-spills/commit/ce02f19cdaa0fbb5af263e880aafad2a29396dd1))
+
 ## [3.0.3-rc.4](https://github.com/agrc/deq-spills/compare/v3.0.3-rc.3...v3.0.3-rc.4) (2026-01-26)
 
 
