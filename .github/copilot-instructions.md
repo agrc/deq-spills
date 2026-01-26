@@ -72,7 +72,7 @@ Any property from `DataContextType['data']` can be passed as a URL param in stan
 
 ### Firebase Functions for Heavy Computation
 
-Flow path tracing uses ArcGIS REST API via Firebase function [calculateFlowPath](../website/functions/src/index.ts) to:
+Flow path tracing uses ArcGIS REST API via Firebase function [getFlowPath](../website/functions/src/index.ts) to:
 
 1. Trace downstream path from UTM coordinates
 2. Clip to desired length (miles → meters conversion)

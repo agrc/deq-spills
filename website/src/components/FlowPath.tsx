@@ -20,7 +20,7 @@ export default function FlowPath() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { data } = useData();
   const { functions } = useFirebaseFunctions();
-  const calculateFlowPath = httpsCallable<FlowpathInput, IPolyline>(functions, 'calculateFlowPath');
+  const getFlowPath = httpsCallable<FlowpathInput, IPolyline>(functions, 'getFlowPath');
   const { mapView, flowPathFeatureLayer } = useMapView();
   const [dropdownValue, setDropdownValue] = useState<number>(FLOWPATH_LENGTHS[0]!.value);
   const previousCoordinates = useRef<string | null>(null);
@@ -37,7 +37,7 @@ export default function FlowPath() {
 
       console.log('Fetching flow path with length:', length);
 
-      const result = await calculateFlowPath({
+      const result = await getFlowPath({
         id: data.ID!,
         length,
         utmX: data.UTM_X!,
