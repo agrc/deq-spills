@@ -9,7 +9,6 @@ const fieldAliases: Record<keyof DataContextType['data'], string> = {
   COUNTY: 'County',
   DD_LAT: 'Latitude',
   DD_LONG: 'Longitude',
-  FLOWPATH_LENGTH: 'Flow Path Length (miles)',
   HIGHWAY: 'Highway',
   INDIAN: 'Tribal Land',
   MILEMARKER: 'Mile Marker',

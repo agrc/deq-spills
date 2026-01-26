@@ -66,7 +66,7 @@ export default function App() {
             <div className="flex size-full flex-1">
               <div className="flex size-full flex-col">
                 <MapProvider>
-                  <MapContainer isEmbedded={isEmbedded} isReadOnly={isReadOnly} />
+                  <MapContainer isEmbedded={isEmbedded} isReadOnly={isReadOnly} flowPathEnabled={flowPathEnabled} />
                   {!isEmbedded || isReadOnly ? null : (
                     <div className="flex flex-wrap gap-2 border-t border-t-slate-300 p-3">
                       <Coordinates />
