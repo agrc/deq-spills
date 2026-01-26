@@ -18,12 +18,12 @@ const WEB_MERCATOR_WKID = 3857;
 const UTM_WKID = 26912;
 const MILES_TO_METERS = 1609.34;
 
-export const getFlowPath = onCall<FlowpathInput, Promise<IPolyline>>(
+export const calculateFlowPath = onCall<FlowpathInput, Promise<IPolyline>>(
   {
     secrets: [AGOL_API_KEY],
   },
   async (request): Promise<IPolyline> => {
-    logger.info('getFlowPath', { data: request.data });
+    logger.info('calculateFlowPath', { data: request.data });
 
     const { length: desiredMiles, utmX, utmY, id } = request.data;
 
