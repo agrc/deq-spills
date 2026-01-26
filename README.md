@@ -14,15 +14,20 @@ This is a normal web application hosted in firebase. It is used in two different
 
 When used as a standalone website, data is passed via Url parameters. This is used for linking from the public search results page as well as the lead agency report emails.
 
+Example test Urls:
+
+<http://localhost:5173/?ID=a0123456789ABCDE&UTM_X=420304&UTM_Y=4511432>  
+<http://localhost:5173/?ID=a0123456789ABCDE&UTM_X=420304&UTM_Y=4511432&flowpath=true>
+
 ### Embedded
 
 When used as an embedded application, data is passed (both ways) via the `window.postMessage` API. This is used in the DEQ Salesforce Lightning Component. A Url parameter (embedded=true) is used to indicate that the application is being used in an embedded context.
 
 The following pages can be used to test the different embedded contexts:
 
-- `tests/duty-officer.html`
-- `tests/lead-agency-report.html` (read-only)
-- `tests/tanks.html`
+<http://localhost:5173/tests/duty-officer.html>  
+<http://localhost:5173/tests/lead-agency-report.html> (read-only)  
+<http://localhost:5173/tests/tanks.html>
 
 ### Url Parameters
 
