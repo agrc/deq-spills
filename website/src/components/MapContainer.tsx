@@ -12,7 +12,7 @@ import config from '../config';
 import useData from '../hooks/useDataProvider';
 import useMapView from '../hooks/useMapView';
 import { defineLocation } from '../utilities/defineLocation';
-import { getDefinitionExpression } from './FlowPath';
+import { getDefinitionExpression } from '../utilities/getDefinitionExpression';
 
 type MapContainerProps = {
   isEmbedded: boolean;
@@ -158,10 +158,11 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled }
     };
   }, [isEmbedded, isReadOnly, setData]);
 
-  // add graphic and flow path feature layer
+  // update graphic and update flow paths layer
   const { setGraphic } = useGraphicManager(mapView.current);
+  const coordinatesChanged = useRef(false);
   useEffect(() => {
-    if (!data.UTM_X || !data.UTM_Y) {
+    if (!data.UTM_X || !data.UTM_Y || (flowPathEnabled && !flowPathFeatureLayer)) {
       return;
     }
 
@@ -186,7 +187,8 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled }
     });
     setGraphic(graphic);
 
-    if (flowPathEnabled && flowPathFeatureLayer) {
+    // this should only happen once when the coordinates change from null to a value, if they change after that, FlowPaths.tsx takes care of zooming
+    if (flowPathEnabled && flowPathFeatureLayer && coordinatesChanged.current === false) {
       flowPathFeatureLayer.definitionExpression = getDefinitionExpression(data.ID!);
       flowPathFeatureLayer
         .when(() => {
@@ -223,6 +225,7 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled }
         });
       });
     }
+    coordinatesChanged.current = true;
   }, [data.ID, data.UTM_X, data.UTM_Y, flowPathEnabled, flowPathFeatureLayer, setGraphic]);
 
   return (
