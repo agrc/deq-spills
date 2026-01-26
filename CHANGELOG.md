@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.3-rc.3](https://github.com/agrc/deq-spills/compare/v3.0.3-rc.2...v3.0.3-rc.3) (2026-01-26)
+
+
+### Bug Fixes
+
+* **website:** disable caching on flow paths queries ([d4125eb](https://github.com/agrc/deq-spills/commit/d4125ebb4ce6ebf59f952ccf03c3eeeee862af62)), closes [#129](https://github.com/agrc/deq-spills/issues/129)
+
 ## [3.0.3-rc.2](https://github.com/agrc/deq-spills/compare/v3.0.3-rc.1...v3.0.3-rc.2) (2026-01-26)
 
 
