@@ -9,7 +9,11 @@ import useData from '../hooks/useDataProvider';
 import useMapView from '../hooks/useMapView';
 
 export function getDefinitionExpression(id: string): string {
-  return `${FIELDS.SALESFORCE_ID} = '${id}'`;
+  // break the AGOL cache by always sending a unique expression
+  const now = Date.now();
+  const expression = `${FIELDS.SALESFORCE_ID} = '${id}' AND ${now} = ${now}`;
+
+  return expression;
 }
 
 export default function FlowPath() {
@@ -44,8 +48,8 @@ export default function FlowPath() {
 
       mapView!.goTo(geometry.extent!.expand(1.1));
 
-      // append "AND 1=1" to existing definition expression to break any caching
-      flowPathFeatureLayer.definitionExpression = `${flowPathFeatureLayer.definitionExpression} AND 1=1`;
+      // calling refresh didn't work reliably
+      flowPathFeatureLayer.definitionExpression = getDefinitionExpression(data.ID!);
 
       setIsOpen(false);
     },
