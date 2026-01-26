@@ -4,9 +4,12 @@ import initializeTheme from '@ugrc/esri-theme-toggle';
 import { FirebaseAnalyticsProvider, FirebaseAppProvider, FirebaseFunctionsProvider } from '@ugrc/utah-design-system';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import packageJson from '../package.json';
 import App from './App';
 import { DataProvider } from './contexts/DataProvider';
 import './index.css';
+
+console.log(`firebase map website version: ${packageJson.version}`);
 
 esriConfig.assetsPath = '/assets';
 initializeTheme();
