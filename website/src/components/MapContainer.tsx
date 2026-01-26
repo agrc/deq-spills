@@ -181,6 +181,7 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled }
       flowPathFeatureLayer.when(() => {
         flowPathFeatureLayer
           .queryFeatures({
+            cacheHint: false,
             returnGeometry: true,
             outFields: [FIELDS.LENGTH],
             where: flowPathFeatureLayer.definitionExpression,

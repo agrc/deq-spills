@@ -59,6 +59,7 @@ export default function FlowPath() {
     flowPathFeatureLayer.when(() => {
       flowPathFeatureLayer
         .queryFeatures({
+          cacheHint: false,
           where: getDefinitionExpression(data.ID!),
           returnGeometry: true,
           outFields: [FIELDS.LENGTH],
