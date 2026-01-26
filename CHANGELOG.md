@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.3-rc.4](https://github.com/agrc/deq-spills/compare/v3.0.3-rc.3...v3.0.3-rc.4) (2026-01-26)
+
+
+### Bug Fixes
+
+* **website:** calculate new flow paths on coordinate change ([c9c4a5b](https://github.com/agrc/deq-spills/commit/c9c4a5bccd2709e020abaa431b581907bcab5bcc)), closes [#129](https://github.com/agrc/deq-spills/issues/129)
+
 ## [3.0.3-rc.3](https://github.com/agrc/deq-spills/compare/v3.0.3-rc.2...v3.0.3-rc.3) (2026-01-26)
 
 
