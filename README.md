@@ -83,3 +83,7 @@ This application has been removed from CI so any new deployments would need to b
 Staging: <https://deqspills.dev.utah.gov/>
 
 Production: <https://deqspills.ugrc.utah.gov/>
+
+## Attribution
+
+This project was developed with the assistance of [GitHub Copilot](https://github.com/features/copilot).
