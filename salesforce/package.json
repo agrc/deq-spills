@@ -24,21 +24,21 @@
     ]
   },
   "devDependencies": {
-    "@lwc/eslint-plugin-lwc": "^3.2.0",
+    "@lwc/eslint-plugin-lwc": "^3.3.0",
     "@prettier/plugin-xml": "^3.4.2",
-    "@salesforce/eslint-config-lwc": "^4.0.0",
+    "@salesforce/eslint-config-lwc": "^4.1.2",
     "@salesforce/eslint-plugin-aura": "^3.0.0",
     "@salesforce/eslint-plugin-lightning": "^2.0.0",
-    "@salesforce/sfdx-lwc-jest": "^7.1.1",
-    "eslint": "^9.35.0",
+    "@salesforce/sfdx-lwc-jest": "^7.1.2",
+    "eslint": "^9.39.2",
     "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-jest": "^29.0.1",
+    "eslint-plugin-jest": "^29.12.1",
     "husky": "^9.1.5",
-    "lint-staged": "^16.1.6",
-    "prettier": "^3.6.2",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.8.1",
     "prettier-plugin-apex": "^2.2.6",
     "prettier-plugin-organize-imports": "^4.3.0",
-    "prettier-plugin-packagejson": "^2.5.19",
+    "prettier-plugin-packagejson": "^2.5.22",
     "typescript": "^5.9.3"
   }
 }
