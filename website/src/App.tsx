@@ -1,6 +1,6 @@
 import { Footer, Header, useFirebaseApp } from '@ugrc/utah-design-system';
 import { useEffect } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorBoundary, getErrorMessage, type FallbackProps } from 'react-error-boundary';
 import Coordinates from './components/Coordinates';
 import Geocode from './components/Geocode';
 import MapContainer from './components/MapContainer';
@@ -9,11 +9,11 @@ import { getIsEmbedded, getIsReadOnly } from './utilities/urlParameters';
 
 const version = import.meta.env.PACKAGE_VERSION;
 
-const ErrorFallback = ({ error }: { error: Error }) => {
+const ErrorFallback = ({ error }: FallbackProps) => {
   return (
     <div role="alert">
       <p>Something went wrong:</p>
-      <pre style={{ color: 'red' }}>{error.message}</pre>
+      <pre style={{ color: 'red' }}>{getErrorMessage(error)}</pre>
     </div>
   );
 };
