@@ -47,18 +47,18 @@ export default function App() {
 
   return (
     <>
-      <main className="flex h-screen flex-col">
+      <div className="flex h-screen flex-col">
         {!isEmbedded ? (
           <Header links={links}>
             <div className="flex h-full grow items-center gap-3">
               <img src="deq_logo.png" alt="DEQ Logo" className="h-12 w-12" />
-              <h2 className="font-heading text-3xl font-black text-zinc-600 sm:text-5xl dark:text-zinc-100">
+              <h1 className="font-heading text-3xl font-black text-zinc-600 sm:text-5xl dark:text-zinc-100">
                 DEQ Spills
-              </h2>
+              </h1>
             </div>
           </Header>
         ) : null}
-        <section className="relative flex min-h-0 flex-1 overflow-x-hidden">
+        <main id="main-content" tabIndex={-1} className="relative flex min-h-0 flex-1 overflow-x-hidden">
           <ErrorBoundary FallbackComponent={ErrorFallback}>
             <div className="flex size-full flex-1">
               <div className="flex size-full flex-col">
@@ -73,8 +73,8 @@ export default function App() {
               {!isEmbedded && <Sidebar />}
             </div>
           </ErrorBoundary>
-        </section>
-      </main>
+        </main>
+      </div>
       {!isEmbedded ? <Footer /> : null}
     </>
   );
