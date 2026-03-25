@@ -30,6 +30,7 @@ export const FLOWPATH_LENGTHS = [
 export type FlowpathInput = {
   id: string;
   length: (typeof FLOWPATH_LENGTHS)[number]['value']; // miles
+  token: string;
   utmX: number;
   utmY: number;
 };

@@ -150,6 +150,9 @@ importers:
       firebase-functions:
         specifier: ^6.0.1
         version: 6.6.0(firebase-admin@13.7.0)
+      jose:
+        specifier: ^6.2.2
+        version: 6.2.2
     devDependencies:
       '@total-typescript/tsconfig':
         specifier: ^1.0.4
