@@ -8,5 +8,5 @@
   "name": "spills-map",
   "namespace": "",
   "sfdcLoginUrl": "https://utahdeqorg--eid.sandbox.my.salesforce.com/",
-  "sourceApiVersion": "62.0"
+  "sourceApiVersion": "66.0"
 }
