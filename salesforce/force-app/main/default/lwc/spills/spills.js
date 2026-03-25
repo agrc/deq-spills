@@ -13,6 +13,9 @@ import UTM_Y from "@salesforce/schema/Case.Utm_N_Y_7_dgts__c";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { getRecord, updateRecord } from "lightning/uiRecordApi";
 import { api, LightningElement, wire } from "lwc";
+//import getJWTToken from '@salesforce/apex/FirebaseAuthProvider.getJWTToken';
+//End point: https://utahdeqorg--eid.sandbox.my.salesforce.com/id/keys
+//Organization ID: 00D5g000001XoYyEAK
 
 export default class Spills extends LightningElement {
   utm_x;
@@ -23,6 +26,7 @@ export default class Spills extends LightningElement {
   @api isReadOnly;
   iframeId;
   sampleId = 1234;
+  //firebaseAppUrl = 'https://your-project-id.web.app';
 
   @wire(getRecord, { recordId: "$recordId", fields: [ID_FIELD, UTM_X, UTM_Y] })
   wiredRecord({ error, data }) {
@@ -156,20 +160,33 @@ export default class Spills extends LightningElement {
       });
   };
 
+  //async
+
   sendCoordinatesToIFrame() {
     console.log(`salesforce: sending coordinates to iframe ${this.iframeId}`);
 
-    this.refs.iframe.contentWindow.postMessage(
-      {
-        data: {
-          ID: this.recordId,
-          UTM_X: parseInt(this.utm_x, 10),
-          UTM_Y: parseInt(this.utm_y, 10)
+    try {
+        //const authToken = await getJWTToken({ caseId: this.recordId });
+
+    try {
+        //const authToken = await getJWTToken({ caseId: this.recordId });
+
+        this.refs.iframe.contentWindow.postMessage(
+        {
+          data: {
+            ID: this.recordId,
+            UTM_X: parseInt(this.utm_x, 10),
+            UTM_Y: parseInt(this.utm_y, 10),
+            //token: authToken
+          },
+          iframeId: this.iframeId
         },
-        iframeId: this.iframeId
-      },
-      this.iframeOrigin
-    );
+          this.iframeOrigin
+        );
+
+    } catch (error) {
+      console.error("salesforce: error sending message to iframe", error);
+    }
   }
 
   renderedCallback() {
