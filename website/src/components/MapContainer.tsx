@@ -87,7 +87,7 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled }
       options: {
         view: mapView.current,
         quadWord: import.meta.env.VITE_DISCOVER,
-        basemaps: ['Terrain', 'Hybrid', 'Lite'],
+        basemaps: ['Terrain', 'Hybrid', 'Lite', 'High Contrast'],
         referenceLayers: [
           {
             label: 'Public Water System Facilities',
