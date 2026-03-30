@@ -102,6 +102,7 @@ Functions require `AGOL_API_KEY` secret in Firebase.
 - **Website**: Vitest with happy-dom, tests adjacent to components (`.test.ts`)
 - **Salesforce**: Jest for LWC (`pnpm test:unit`), uses `@salesforce/sfdx-lwc-jest`
 - **Manual**: Use [tests/duty-officer.html](../website/tests/duty-officer.html) to simulate postMessage communication locally
+- **Agent test execution**: Prefer non-watch test commands unless the user explicitly asks for watch mode. Use `pnpm test -- --run` or equivalent for Vitest, and disable Jest watch mode explicitly when needed (for example `CI=1 pnpm test:unit` or `pnpm test:unit -- --watchAll=false`).
 
 ## Common Gotchas
 
