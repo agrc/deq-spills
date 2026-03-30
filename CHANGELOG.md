@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.0](https://github.com/agrc/deq-spills/compare/v3.0.4...v3.1.0) (2026-03-30)
+
+
+### Features
+
+* **a11y:** add high contrast base map ([9e46d23](https://github.com/agrc/deq-spills/commit/9e46d234dde7bdb7651a6288f5b1e9a8ddddcc5e))
+
 ## [3.0.4](https://github.com/agrc/deq-spills/compare/v3.0.3...v3.0.4) (2026-03-23)
 
 
