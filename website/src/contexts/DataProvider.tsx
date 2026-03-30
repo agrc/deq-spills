@@ -71,7 +71,7 @@ type EmbeddedMessage = {
 type PendingTokenRequest = {
   reject: (error: Error) => void;
   resolve: (token: string) => void;
-  timeoutId: ReturnType<typeof window.setTimeout>;
+  timeoutId: ReturnType<typeof setTimeout>;
 };
 
 function createRequestId() {
@@ -119,9 +119,11 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     const requestId = createRequestId();
+    const targetOrigin = salesforceOrigin.current;
+    const currentIframeId = iframeId.current;
 
     return new Promise<string>((resolve, reject) => {
-      const timeoutId = window.setTimeout(() => {
+      const timeoutId = setTimeout(() => {
         pendingTokenRequests.current.delete(requestId);
         reject(new Error('Timed out waiting for a flow path token.'));
       }, FLOWPATH_TOKEN_REQUEST_TIMEOUT_MS);
@@ -134,11 +136,11 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
 
       window.parent.postMessage(
         {
-          iframeId: iframeId.current,
+          iframeId: currentIframeId,
           requestId,
           type: EMBEDDED_MESSAGE_TYPES.FLOWPATH_TOKEN_REQUEST,
         },
-        salesforceOrigin.current,
+        targetOrigin,
       );
     });
   }, []);
@@ -202,10 +204,16 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
 
       const newData = { ...message.data };
       for (const key in newData) {
-        if (numericKeys.includes(key) && newData[key] !== null) {
-          newData[key] = parseFloat(newData[key]);
-        } else if (booleanKeys.includes(key) && typeof newData[key] === 'string') {
-          newData[key] = newData[key] === 'true';
+        const value = newData[key];
+
+        if (numericKeys.includes(key) && value !== null && value !== undefined) {
+          if (typeof value === 'number') {
+            newData[key] = value;
+          } else if (typeof value === 'string') {
+            newData[key] = parseFloat(value);
+          }
+        } else if (booleanKeys.includes(key) && typeof value === 'string') {
+          newData[key] = value === 'true';
         }
       }
 
