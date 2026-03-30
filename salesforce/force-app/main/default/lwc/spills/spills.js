@@ -13,9 +13,14 @@ import UTM_Y from "@salesforce/schema/Case.Utm_N_Y_7_dgts__c";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { getRecord, updateRecord } from "lightning/uiRecordApi";
 import { api, LightningElement, wire } from "lwc";
-//import getJWTToken from '@salesforce/apex/FirebaseAuthProvider.getJWTToken';
-//End point: https://utahdeqorg--eid.sandbox.my.salesforce.com/id/keys
-//Organization ID: 00D5g000001XoYyEAK
+import getJWTToken from "@salesforce/apex/FirebaseAuthProvider.getJWTToken";
+
+const MESSAGE_TYPES = {
+  DATA_SYNC: "data-sync",
+  FLOWPATH_TOKEN_ERROR: "flowpath-token-error",
+  FLOWPATH_TOKEN_REQUEST: "flowpath-token-request",
+  FLOWPATH_TOKEN_RESPONSE: "flowpath-token-response"
+};
 
 export default class Spills extends LightningElement {
   utm_x;
@@ -25,8 +30,8 @@ export default class Spills extends LightningElement {
   @api instanceId;
   @api isReadOnly;
   iframeId;
+  hasIframeLoadListener = false;
   sampleId = 1234;
-  //firebaseAppUrl = 'https://your-project-id.web.app';
 
   @wire(getRecord, { recordId: "$recordId", fields: [ID_FIELD, UTM_X, UTM_Y] })
   wiredRecord({ error, data }) {
@@ -89,10 +94,7 @@ export default class Spills extends LightningElement {
   }
 
   receiveMessage = (event) => {
-    if (
-      event.origin === window.location.origin ||
-      event.origin !== this.iframeOrigin
-    ) {
+    if (event.origin !== this.iframeOrigin) {
       return;
     }
 
@@ -101,10 +103,19 @@ export default class Spills extends LightningElement {
       JSON.stringify(event.data, null, 2)
     );
 
-    const { iframeId, data } = event.data;
+    const { iframeId, data, requestId, type } = event.data || {};
 
     if (iframeId !== this.iframeId) {
       console.log("salesforce: iframeId mismatch", iframeId, this.iframeId);
+      return;
+    }
+
+    if (type === MESSAGE_TYPES.FLOWPATH_TOKEN_REQUEST) {
+      void this.handleFlowpathTokenRequest(requestId);
+      return;
+    }
+
+    if (type && type !== MESSAGE_TYPES.DATA_SYNC) {
       return;
     }
 
@@ -160,30 +171,60 @@ export default class Spills extends LightningElement {
       });
   };
 
-  //async
+  async handleFlowpathTokenRequest(requestId) {
+    if (!requestId) {
+      return;
+    }
+
+    try {
+      const token = await getJWTToken({ caseId: this.recordId });
+
+      this.postMessageToIFrame({
+        requestId,
+        token,
+        type: MESSAGE_TYPES.FLOWPATH_TOKEN_RESPONSE
+      });
+    } catch (error) {
+      console.error("salesforce: error getting flowpath token", error);
+
+      this.postMessageToIFrame({
+        error:
+          error?.body?.message ||
+          error?.message ||
+          "Unable to retrieve a flow path token.",
+        requestId,
+        type: MESSAGE_TYPES.FLOWPATH_TOKEN_ERROR
+      });
+    }
+  }
+
+  postMessageToIFrame(message) {
+    if (!this.refs?.iframe?.contentWindow) {
+      console.warn("salesforce: iframe is not ready for postMessage");
+      return;
+    }
+
+    this.refs.iframe.contentWindow.postMessage(
+      {
+        iframeId: this.iframeId,
+        ...message
+      },
+      this.iframeOrigin
+    );
+  }
 
   sendCoordinatesToIFrame() {
     console.log(`salesforce: sending coordinates to iframe ${this.iframeId}`);
 
     try {
-        //const authToken = await getJWTToken({ caseId: this.recordId });
-
-    try {
-        //const authToken = await getJWTToken({ caseId: this.recordId });
-
-        this.refs.iframe.contentWindow.postMessage(
-        {
-          data: {
-            ID: this.recordId,
-            UTM_X: parseInt(this.utm_x, 10),
-            UTM_Y: parseInt(this.utm_y, 10),
-            //token: authToken
-          },
-          iframeId: this.iframeId
+      this.postMessageToIFrame({
+        data: {
+          ID: this.recordId,
+          UTM_X: parseInt(this.utm_x, 10),
+          UTM_Y: parseInt(this.utm_y, 10)
         },
-          this.iframeOrigin
-        );
-
+        type: MESSAGE_TYPES.DATA_SYNC
+      });
     } catch (error) {
       console.error("salesforce: error sending message to iframe", error);
     }
@@ -194,6 +235,12 @@ export default class Spills extends LightningElement {
     console.log("instance " + this.instanceId);
     console.log("iframe " + this.iframeId);
 
+    if (this.hasIframeLoadListener || !this.refs.iframe) {
+      return;
+    }
+
+    this.hasIframeLoadListener = true;
+
     this.refs.iframe.addEventListener("load", () => {
       console.log("salesforce: iframe loaded", this.utm_x, this.utm_y);
 
@@ -201,3 +248,28 @@ export default class Spills extends LightningElement {
     });
   }
 }
+
+
+/*
+Apex class:
+public with sharing class FirebaseAuthProvider {
+    
+    @AuraEnabled(cacheable=false)
+    public static String getJWTToken(Id caseId) {
+        Auth.JWT jwt = new Auth.JWT();
+        jwt.setSub(UserInfo.getUserId()); 
+        jwt.setAud('https://spillsmap.dev.utah.gov');
+        jwt.setIss(UserInfo.getOrganizationId());
+
+        Map<String, Object> claims = new Map<String, Object>();
+        claims.put('authorizedCaseId', caseId);
+        jwt.setAdditionalClaims(claims);
+
+        jwt.setValidityLength(120); 
+
+        Auth.JWS jws = new Auth.JWS(jwt, 'FirebaseMapCert');
+        
+        return jws.getCompactSerialization();
+    }
+}
+*/
