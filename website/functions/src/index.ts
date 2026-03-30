@@ -12,18 +12,11 @@ import { type FlowpathJwtConfig, verifyFlowpathJwt } from './verifyFlowpathJwt.j
 
 const AGOL_API_KEY = defineSecret('AGOL_API_KEY');
 const FEATURE_SERVICE_URL = defineString('FEATURE_SERVICE_URL');
-const FLOWPATH_JWT_AUDIENCE = defineString('FLOWPATH_JWT_AUDIENCE', {
-  default: 'https://spillsmap.dev.utah.gov',
-});
-const FLOWPATH_JWT_EXPECTED_KID = defineString('FLOWPATH_JWT_EXPECTED_KID', {
-  default: 'FirebaseMapCert',
-});
-const FLOWPATH_JWT_ISSUER = defineString('FLOWPATH_JWT_ISSUER', {
-  default: '00D5g000001XoYyEAK',
-});
-const FLOWPATH_JWT_JWKS_URL = defineString('FLOWPATH_JWT_JWKS_URL', {
-  default: 'https://utahdeqorg--eid.sandbox.my.salesforce.com/id/keys',
-});
+const FLOWPATH_JWT_AUDIENCE = defineString('FLOWPATH_JWT_AUDIENCE');
+const FLOWPATH_JWT_DEV_BYPASS_TOKEN = defineString('FLOWPATH_JWT_DEV_BYPASS_TOKEN');
+const FLOWPATH_JWT_EXPECTED_KID = defineString('FLOWPATH_JWT_EXPECTED_KID');
+const FLOWPATH_JWT_ISSUER = defineString('FLOWPATH_JWT_ISSUER');
+const FLOWPATH_JWT_JWKS_URL = defineString('FLOWPATH_JWT_JWKS_URL');
 
 setGlobalOptions({ maxInstances: 10 });
 
@@ -39,6 +32,12 @@ const flowPathDependencies = {
 };
 
 export type FlowPathDependencies = typeof flowPathDependencies;
+
+function shouldBypassFlowpathJwtVerification(token: string) {
+  const bypassToken = FLOWPATH_JWT_DEV_BYPASS_TOKEN.value();
+
+  return process.env.FUNCTIONS_EMULATOR === 'true' && Boolean(bypassToken) && token === bypassToken;
+}
 
 export function getFlowpathJwtConfig(): FlowpathJwtConfig {
   return {
@@ -69,14 +68,18 @@ export async function handleGetFlowPath(
     throw new HttpsError('unauthenticated', 'A Salesforce JWT token is required.');
   }
 
-  try {
-    await dependencies.verifyFlowpathJwt(token, id, jwtConfig);
-  } catch (error) {
-    const message = error instanceof Error ? error.message : 'JWT verification failed.';
+  if (shouldBypassFlowpathJwtVerification(token)) {
+    logger.warn('Bypassing flowpath JWT verification in the local functions emulator.', { id });
+  } else {
+    try {
+      await dependencies.verifyFlowpathJwt(token, id, jwtConfig);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'JWT verification failed.';
 
-    logger.warn('Flowpath token verification failed', { id, message });
+      logger.warn('Flowpath token verification failed', { id, message });
 
-    throw new HttpsError('permission-denied', message);
+      throw new HttpsError('permission-denied', message);
+    }
   }
 
   const existingFeature = await dependencies.getFeature(id, AGOL_API_KEY.value(), FEATURE_SERVICE_URL.value());
@@ -138,7 +141,7 @@ export async function handleGetFlowPath(
 
 export const getFlowPath = onCall<FlowpathInput, Promise<IPolyline>>(
   {
-    secrets: [AGOL_API_KEY],
+    secrets: [AGOL_API_KEY, FLOWPATH_JWT_DEV_BYPASS_TOKEN],
   },
   async (request): Promise<IPolyline> => handleGetFlowPath(request.data),
 );

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { FlowpathInput } from '../common/shared.js';
 import type { FlowpathJwtConfig } from './verifyFlowpathJwt.js';
 
@@ -31,11 +31,11 @@ vi.mock('firebase-functions', () => ({
 }));
 
 vi.mock('firebase-functions/params', () => ({
-  defineSecret: vi.fn(() => ({
-    value: () => 'test-api-key',
+  defineSecret: vi.fn((name: string) => ({
+    value: () => process.env[name] ?? (name === 'AGOL_API_KEY' ? 'test-api-key' : ''),
   })),
   defineString: vi.fn((name: string, options?: { default?: string }) => ({
-    value: () => options?.default ?? name,
+    value: () => process.env[name] ?? options?.default ?? name,
   })),
 }));
 
@@ -66,6 +66,7 @@ vi.mock('firebase-functions/v2/https', () => {
 });
 
 describe('handleGetFlowPath', () => {
+  const originalFunctionsEmulator = process.env.FUNCTIONS_EMULATOR;
   const config: FlowpathJwtConfig = {
     audience: 'https://spillsmap.dev.utah.gov',
     expectedKid: 'FirebaseMapCert',
@@ -83,6 +84,12 @@ describe('handleGetFlowPath', () => {
   beforeEach(() => {
     vi.resetModules();
     vi.clearAllMocks();
+    delete process.env.FLOWPATH_JWT_DEV_BYPASS_TOKEN;
+    process.env.FUNCTIONS_EMULATOR = originalFunctionsEmulator;
+  });
+
+  afterAll(() => {
+    process.env.FUNCTIONS_EMULATOR = originalFunctionsEmulator;
   });
 
   it('should reject a missing token before calling downstream helpers', async () => {
@@ -123,5 +130,38 @@ describe('handleGetFlowPath', () => {
     expect(dependencies.getFeature).not.toHaveBeenCalled();
     expect(dependencies.tracePath).not.toHaveBeenCalled();
     expect(dependencies.writeToFeatureService).not.toHaveBeenCalled();
+  });
+
+  it('should allow the configured dev bypass token in the functions emulator', async () => {
+    process.env.FUNCTIONS_EMULATOR = 'true';
+    process.env.FLOWPATH_JWT_DEV_BYPASS_TOKEN = 'local-test-token';
+
+    const { handleGetFlowPath } = await import('./index.js');
+    const existingFeature = {
+      attributes: {
+        LENGTH: requestData.length,
+        OBJECTID: 1,
+        UTM_X: requestData.utmX,
+        UTM_Y: requestData.utmY,
+      },
+      geometry: {
+        paths: [],
+      },
+    };
+    const dependencies = {
+      getFeature: vi.fn().mockResolvedValue(existingFeature),
+      tracePath: vi.fn(),
+      verifyFlowpathJwt: vi.fn(),
+      writeToFeatureService: vi.fn(),
+    };
+
+    const result = await handleGetFlowPath({ ...requestData, token: 'local-test-token' }, dependencies as any, config);
+
+    expect(dependencies.verifyFlowpathJwt).not.toHaveBeenCalled();
+    expect(dependencies.getFeature).toHaveBeenCalled();
+    expect(result).toEqual({
+      paths: [],
+      spatialReference: { wkid: 3857 },
+    });
   });
 });

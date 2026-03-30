@@ -5,6 +5,12 @@
   </head>
 
   <script>
+    const MESSAGE_TYPES = {
+      DATA_SYNC: 'data-sync',
+      FLOWPATH_TOKEN_REQUEST: 'flowpath-token-request',
+      FLOWPATH_TOKEN_RESPONSE: 'flowpath-token-response',
+    };
+
     window.addEventListener('iframe-is-listening', () => {
       console.log('window loaded');
       const iframe = document.querySelector('iframe');
@@ -17,6 +23,7 @@
             UTM_Y: 4511432,
           },
           iframeId: '1234',
+          type: MESSAGE_TYPES.DATA_SYNC,
         },
         'http://localhost:5173',
       );
@@ -25,6 +32,18 @@
     window.addEventListener('message', (event) => {
       if (!event.data.iframeId) {
         return;
+      }
+
+      if (event.data.type === MESSAGE_TYPES.FLOWPATH_TOKEN_REQUEST) {
+        document.querySelector('iframe').contentWindow.postMessage(
+          {
+            iframeId: event.data.iframeId,
+            requestId: event.data.requestId,
+            token: 'local-test-token', // corresponds with value in website/functions/.env
+            type: MESSAGE_TYPES.FLOWPATH_TOKEN_RESPONSE,
+          },
+          'http://localhost:5173',
+        );
       }
 
       console.log('salesforce: event from iframe', JSON.stringify(event.data, null, 2));

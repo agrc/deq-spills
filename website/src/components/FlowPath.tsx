@@ -11,7 +11,8 @@ import { getDefinitionExpression } from '../utilities/getDefinitionExpression';
 
 export default function FlowPath() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { data } = useData();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { data, requestFlowpathToken } = useData();
   const { functions } = useFirebaseFunctions();
   const getFlowPath = httpsCallable<FlowpathInput, IPolyline>(functions, 'getFlowPath');
   const { mapView, flowPathFeatureLayer } = useMapView();
@@ -28,24 +29,39 @@ export default function FlowPath() {
         throw new Error('Flow Path length is not set');
       }
 
+      setErrorMessage(null);
+
+      const token = await requestFlowpathToken();
+      const definitionExpression = flowPathFeatureLayer.definitionExpression || getDefinitionExpression(data.ID!);
+
       console.log('Fetching flow path with length:', length);
       flowPathFeatureLayer.definitionExpression = '2=1'; // hide layer while loading
 
-      const result = await getFlowPath({
-        id: data.ID!,
-        length,
-        utmX: data.UTM_X!,
-        utmY: data.UTM_Y!,
-      });
+      try {
+        const result = await getFlowPath({
+          id: data.ID!,
+          length,
+          token,
+          utmX: data.UTM_X!,
+          utmY: data.UTM_Y!,
+        });
 
-      const geometry = Polyline.fromJSON(result.data);
+        const geometry = Polyline.fromJSON(result.data);
 
-      mapView!.goTo(geometry.extent!.expand(1.1));
+        mapView!.goTo(geometry.extent!.expand(1.1));
 
-      // calling refresh didn't work reliably
-      flowPathFeatureLayer.definitionExpression = getDefinitionExpression(data.ID!);
+        // calling refresh didn't work reliably
+        flowPathFeatureLayer.definitionExpression = getDefinitionExpression(data.ID!);
 
-      setIsOpen(false);
+        setIsOpen(false);
+      } catch (error) {
+        flowPathFeatureLayer.definitionExpression = definitionExpression;
+
+        throw error;
+      }
+    },
+    onError: (error: unknown) => {
+      setErrorMessage(error instanceof Error ? error.message : 'Unable to fetch the flow path.');
     },
   });
 
@@ -113,11 +129,12 @@ export default function FlowPath() {
       </Button>
       <Popover showArrow>
         <Dialog>
-          {length === null ? (
-            <div className="flex justify-center p-5">
-              <Spinner />
-            </div>
-          ) : (
+          <div className="flex min-w-56 flex-col gap-4">
+            {errorMessage ? (
+              <p role="alert" className="text-sm text-red-700">
+                {errorMessage}
+              </p>
+            ) : null}
             <Select
               label="Length"
               items={FLOWPATH_LENGTHS}
@@ -126,7 +143,7 @@ export default function FlowPath() {
             >
               {(item) => <SelectItem id={item.value}>{item.name}</SelectItem>}
             </Select>
-          )}
+          </div>
         </Dialog>
       </Popover>
     </DialogTrigger>
