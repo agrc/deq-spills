@@ -1,5 +1,27 @@
 # Changelog
 
+## [3.1.1-rc.1](https://github.com/agrc/deq-spills/compare/v3.0.4...v3.1.1-rc.1) (2026-03-30)
+
+
+### Features
+
+* **functions:** implement JWT verification for flowpath requests ([91aeb55](https://github.com/agrc/deq-spills/commit/91aeb556bb80ec37e573ae5fc035e373c80ed679))
+* implement flow paths ([9623b07](https://github.com/agrc/deq-spills/commit/9623b07275cea9b32eb3001c143079a6e1d98950)), closes [#129](https://github.com/agrc/deq-spills/issues/129)
+* **salesforce:** implement jwt token request and response ([5c5a734](https://github.com/agrc/deq-spills/commit/5c5a73469b679a8cf6c625668545bbda3267cf51)), closes [#129](https://github.com/agrc/deq-spills/issues/129)
+* **website:** request jwt from salesforce and pass along to flow paths function ([82e89d7](https://github.com/agrc/deq-spills/commit/82e89d79a68131b5483575d254392e1c6d82bf2b)), closes [#129](https://github.com/agrc/deq-spills/issues/129)
+* **website:** show crosshair cursor on map when not read only ([17c4f87](https://github.com/agrc/deq-spills/commit/17c4f87d87d8144f34b68b766adae86a900ca342))
+
+
+### Bug Fixes
+
+* **website:** better cache-busting def queries ([4d84a87](https://github.com/agrc/deq-spills/commit/4d84a879579e1b5eb10b2cb5dd3c0d3a952dc1ea))
+* **website:** calculate new flow paths on coordinate change ([a1e1746](https://github.com/agrc/deq-spills/commit/a1e174657c9b91c9654496de30342c22eb0ed8ca)), closes [#129](https://github.com/agrc/deq-spills/issues/129)
+* **website:** disable caching on flow paths queries ([c8dd450](https://github.com/agrc/deq-spills/commit/c8dd450f82d25c394e54a05f71191ce87b8db246)), closes [#129](https://github.com/agrc/deq-spills/issues/129)
+* **website:** fix flow paths layer initialization in stand-alone mode ([838d48e](https://github.com/agrc/deq-spills/commit/838d48e6640aed17c151df194b5e7bdb010edaf8))
+* **website:** handle more flow paths use cases and environments ([067db7c](https://github.com/agrc/deq-spills/commit/067db7c295dcfcd0aea95a7e71d4957082a816cb)), closes [#129](https://github.com/agrc/deq-spills/issues/129)
+* **website:** prevent premature zooming to previous flow path when changing it ([a4ce274](https://github.com/agrc/deq-spills/commit/a4ce274ddca84d571d08efa1d7d1faebe78f4f08))
+* **website:** revert function rename ([85b4c53](https://github.com/agrc/deq-spills/commit/85b4c53debe1bb8cb9561946cb1741c6ff424e78))
+
 ## [3.0.3-rc.7](https://github.com/agrc/deq-spills/compare/v3.0.3-rc.6...v3.0.3-rc.7) (2026-01-26)
 
 
