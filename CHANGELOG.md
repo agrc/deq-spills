@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.1-rc.2](https://github.com/agrc/deq-spills/compare/v3.1.1-rc.1...v3.1.1-rc.2) (2026-03-30)
+
+
+### Bug Fixes
+
+* remove extra secret token ([ea1f9d3](https://github.com/agrc/deq-spills/commit/ea1f9d32ece65180b115d4e8328e913767218831))
+
 ## [3.1.1-rc.1](https://github.com/agrc/deq-spills/compare/v3.0.4...v3.1.1-rc.1) (2026-03-30)
 
 
