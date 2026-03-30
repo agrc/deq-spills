@@ -141,7 +141,7 @@ export async function handleGetFlowPath(
 
 export const getFlowPath = onCall<FlowpathInput, Promise<IPolyline>>(
   {
-    secrets: [AGOL_API_KEY, FLOWPATH_JWT_DEV_BYPASS_TOKEN],
+    secrets: [AGOL_API_KEY],
   },
   async (request): Promise<IPolyline> => handleGetFlowPath(request.data),
 );
