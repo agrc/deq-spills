@@ -2,9 +2,8 @@ import * as projectOperator from '@arcgis/core/geometry/operators/projectOperato
 import Polyline from '@arcgis/core/geometry/Polyline.js';
 import SpatialReference from '@arcgis/core/geometry/SpatialReference.js';
 import { type IPolyline } from '@esri/arcgis-rest-request';
-import { setGlobalOptions } from 'firebase-functions';
 import { defineSecret, defineString } from 'firebase-functions/params';
-import { logger } from 'firebase-functions/v2';
+import { logger, setGlobalOptions } from 'firebase-functions/v2';
 import { HttpsError, onCall } from 'firebase-functions/v2/https';
 import { FIELDS, type FlowpathInput } from '../common/shared.js';
 import { clipPolylineToLength, getFeature, tracePath, writeToFeatureService } from './flowpath.js';
@@ -17,6 +16,7 @@ const FLOWPATH_JWT_DEV_BYPASS_TOKEN = defineString('FLOWPATH_JWT_DEV_BYPASS_TOKE
 const FLOWPATH_JWT_EXPECTED_KID = defineString('FLOWPATH_JWT_EXPECTED_KID');
 const FLOWPATH_JWT_ISSUER = defineString('FLOWPATH_JWT_ISSUER');
 const FLOWPATH_JWT_JWKS_URL = defineString('FLOWPATH_JWT_JWKS_URL');
+const CORS_ORIGINS = ['https://spillsmap.dev.utah.gov', 'https://spillsmap.deq.utah.gov'];
 
 setGlobalOptions({ maxInstances: 10 });
 
@@ -141,6 +141,7 @@ export async function handleGetFlowPath(
 
 export const getFlowPath = onCall<FlowpathInput, Promise<IPolyline>>(
   {
+    cors: CORS_ORIGINS,
     secrets: [AGOL_API_KEY],
   },
   async (request): Promise<IPolyline> => handleGetFlowPath(request.data),
