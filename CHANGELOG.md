@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.1-rc.3](https://github.com/agrc/deq-spills/compare/v3.1.1-rc.2...v3.1.1-rc.3) (2026-04-14)
+
+
+### Bug Fixes
+
+* **website/functions:** add CORS policy ([c7ee78f](https://github.com/agrc/deq-spills/commit/c7ee78fed1ecefc1c00323d3cb4b5f04e2367488))
+
 ## [3.1.1-rc.2](https://github.com/agrc/deq-spills/compare/v3.1.1-rc.1...v3.1.1-rc.2) (2026-03-30)
 
 
