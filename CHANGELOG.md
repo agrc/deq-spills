@@ -1,5 +1,16 @@
 # Changelog
 
+## [4.0.0](https://github.com/agrc/deq-spills/compare/v3.1.0...v4.0.0) (2026-04-23)
+
+
+### ⚠ BREAKING CHANGES
+
+* Begin total rewrite of application using React and newer Esri libraries.
+
+### Bug Fixes
+
+* implement latest atlas template ([3b860b5](https://github.com/agrc/deq-spills/commit/3b860b544738e69b824dc5187a3b7b0d1dee3ce8)), closes [#126](https://github.com/agrc/deq-spills/issues/126)
+
 ## [3.1.0](https://github.com/agrc/deq-spills/compare/v3.0.4...v3.1.0) (2026-03-30)
 
 
