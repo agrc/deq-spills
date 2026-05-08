@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.1.2](https://github.com/agrc/deq-spills/compare/v3.1.1...v3.1.2) (2026-05-08)
+
+
+### Bug Fixes
+
+* **deploy:** correct user type reference in Firebase preview condition ([24e2e6c](https://github.com/agrc/deq-spills/commit/24e2e6c7aef169df8a8e7eba8261dbc863e7c16f))
+
+
+### Dependencies
+
+* bump the safe-dependencies group across 1 directory with 3 updates ([40e1f0e](https://github.com/agrc/deq-spills/commit/40e1f0e9131b8a0049ebbdf095a78664e979a5e9))
+
 ## [3.1.1](https://github.com/agrc/deq-spills/compare/v3.1.1-rc.3...v3.1.1) (2026-05-08)
 
 
