@@ -13,7 +13,7 @@
     "start": "pnpm run shell"
   },
   "dependencies": {
-    "@arcgis/core": "^4.33.12",
+    "@arcgis/core": "^5.0.10",
     "@esri/arcgis-rest-feature-service": "^4.10.2",
     "@esri/arcgis-rest-request": "^4.10.2",
     "firebase-functions": "^7.2.5",
