@@ -50,11 +50,11 @@ export async function verifyFlowpathJwt(token: string, caseId: string, config: F
     payload = result.payload;
   } catch (error) {
     if (error instanceof errors.JWTExpired) {
-      throw new Error('JWT has expired.');
+      throw new Error('JWT has expired.', { cause: error });
     }
 
     if (error instanceof errors.JOSEError) {
-      throw new Error(`JWT verification failed: ${error.message}`);
+      throw new Error(`JWT verification failed: ${error.message}`, { cause: error });
     }
 
     throw error;
