@@ -1,5 +1,27 @@
 # Changelog
 
+## [3.1.1](https://github.com/agrc/deq-spills/compare/v3.1.1-rc.3...v3.1.1) (2026-05-08)
+
+
+### ⚠ BREAKING CHANGES
+
+* Begin total rewrite of application using React and newer Esri libraries.
+
+### Features
+
+* **a11y:** add high contrast base map ([2d84db5](https://github.com/agrc/deq-spills/commit/2d84db5e31b72d6bdad939f92a0977d2931143b7))
+
+
+### Bug Fixes
+
+* implement latest atlas template ([2734d92](https://github.com/agrc/deq-spills/commit/2734d92c17c82fe7b84cd7fd75123a67d46abd25)), closes [#126](https://github.com/agrc/deq-spills/issues/126)
+
+
+### Dependencies
+
+* bump npm dependencies 🌲 ([4026afb](https://github.com/agrc/deq-spills/commit/4026afb80e5db5e8401a3f937dc6dd234e391196))
+* **website:** migrate to pnpm v11 ([c40ccf7](https://github.com/agrc/deq-spills/commit/c40ccf755324a18ba5f0af294710e22559c7443f))
+
 ## [3.1.0](https://github.com/agrc/deq-spills/compare/v3.0.4...v3.1.0) (2026-03-30)
 
 ### Features
