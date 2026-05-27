@@ -114,6 +114,7 @@ describe('handleGetFlowPath', () => {
 
   it('should reject an invalid token before calling downstream helpers', async () => {
     const { handleGetFlowPath } = await import('./index.js');
+    const { logger } = await import('firebase-functions/v2');
     const dependencies = {
       getFeature: vi.fn(),
       tracePath: vi.fn(),
@@ -127,6 +128,14 @@ describe('handleGetFlowPath', () => {
     });
 
     expect(dependencies.verifyFlowpathJwt).toHaveBeenCalledWith(requestData.token, requestData.id, config);
+    expect(logger.warn).toHaveBeenCalledWith(
+      'Flowpath token verification failed: JWT verification failed: unexpected "iss" claim value',
+      {
+        errorMessage: 'JWT verification failed: unexpected "iss" claim value',
+        errorName: 'Error',
+        id: requestData.id,
+      },
+    );
     expect(dependencies.getFeature).not.toHaveBeenCalled();
     expect(dependencies.tracePath).not.toHaveBeenCalled();
     expect(dependencies.writeToFeatureService).not.toHaveBeenCalled();

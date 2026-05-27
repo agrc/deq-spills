@@ -32,11 +32,13 @@ export async function verifyFlowpathJwt(token: string, caseId: string, config: F
   }
 
   if (protectedHeader.alg !== 'RS256') {
-    throw new Error('JWT must use RS256.');
+    throw new Error(`JWT algorithm mismatch: expected RS256, received ${protectedHeader.alg ?? '<missing>'}.`);
   }
 
   if (protectedHeader.kid !== config.expectedKid) {
-    throw new Error(`JWT kid must be ${config.expectedKid}.`);
+    throw new Error(
+      `JWT kid mismatch: expected ${config.expectedKid}, received ${protectedHeader.kid ?? '<missing>'}.`,
+    );
   }
 
   let payload: JWTPayload;

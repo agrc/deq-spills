@@ -74,11 +74,12 @@ export async function handleGetFlowPath(
     try {
       await dependencies.verifyFlowpathJwt(token, id, jwtConfig);
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'JWT verification failed.';
+      const errorMessage = error instanceof Error ? error.message : 'JWT verification failed.';
+      const errorName = error instanceof Error ? error.name : undefined;
 
-      logger.warn('Flowpath token verification failed', { id, message });
+      logger.warn(`Flowpath token verification failed: ${errorMessage}`, { id, errorMessage, errorName });
 
-      throw new HttpsError('permission-denied', message);
+      throw new HttpsError('permission-denied', errorMessage);
     }
   }
 

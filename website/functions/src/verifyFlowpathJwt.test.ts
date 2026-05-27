@@ -56,7 +56,7 @@ describe('verifyFlowpathJwt', () => {
     (decodeProtectedHeader as any).mockReturnValue({ alg: 'RS256', kid: 'OtherCert' });
 
     await expect(verifyFlowpathJwt('invalid-token', caseId, config)).rejects.toThrow(
-      'JWT kid must be FirebaseMapCert.',
+      'JWT kid mismatch: expected FirebaseMapCert, received OtherCert.',
     );
     expect(jwtVerify).not.toHaveBeenCalled();
   });
