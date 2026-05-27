@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.4](https://github.com/agrc/deq-spills/compare/v3.1.3...v3.1.4) (2026-05-27)
+
+
+### Bug Fixes
+
+* **website:** better logging for failed token verification errors ([2d598a6](https://github.com/agrc/deq-spills/commit/2d598a69f6801ac1943ccfee9d103ffc2a1e4c5f))
+
 ## [3.1.3](https://github.com/agrc/deq-spills/compare/v3.1.2...v3.1.3) (2026-05-27)
 
 
