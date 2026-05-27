@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.5](https://github.com/agrc/deq-spills/compare/v3.1.4...v3.1.5) (2026-05-27)
+
+
+### Bug Fixes
+
+* **website:** use correct env vars ([03ec661](https://github.com/agrc/deq-spills/commit/03ec661651e78b1c7a36a81d90401d1a8e3d8b33))
+
 ## [3.1.4](https://github.com/agrc/deq-spills/compare/v3.1.3...v3.1.4) (2026-05-27)
 
 
