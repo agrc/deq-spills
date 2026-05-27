@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.1.3](https://github.com/agrc/deq-spills/compare/v3.1.2...v3.1.3) (2026-05-27)
+
+
+### Bug Fixes
+
+* **forklift:** repoint to dataset in DNR AGOL ([857a2a6](https://github.com/agrc/deq-spills/commit/857a2a60121734f037f33c1eda0125a01664fb8d))
+* **website:** fix prod issuer value ([5347538](https://github.com/agrc/deq-spills/commit/534753832a4aaf7d81a3fb852deb1c8edaaf37c4))
+
 ## [3.1.2](https://github.com/agrc/deq-spills/compare/v3.1.1...v3.1.2) (2026-05-08)
 
 
