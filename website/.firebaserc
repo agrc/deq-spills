@@ -1,8 +1,8 @@
 {
   "projects": {
     "default": "ut-dts-agrc-spills-dev",
-    "staging": "ut-dts-agrc-spills-sf-dev",
-    "prod": "ut-dts-agrc-spills-sf-prod"
+    "staging": "ut-dts-agrc-spills-dev",
+    "prod": "ut-dts-agrc-spills-prod"
   },
   "targets": {
     "ut-dts-agrc-spills-dev": {
