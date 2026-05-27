@@ -32,7 +32,6 @@ class DEQSpillsPallet(Pallet):
                          'MMRP',
                          'TIER2',
                          'TRI',
-                         'FacilityPST',
                          'VCP'],
                         {'source_workspace': self.sgid,
                          'destination_workspace': self.environment})
@@ -42,6 +41,13 @@ class DEQSpillsPallet(Pallet):
             'https://services2.arcgis.com/NnxP4LZ3zX8wWmP9/arcgis/rest/services/',
             self.environment,
             'EnvironmentalIncidents',
+        ))
+
+        self.add_crate((
+            'pst_facilities/FeatureServer/0',
+            'https://services2.arcgis.com/NnxP4LZ3zX8wWmP9/ArcGIS/rest/services/',
+            self.environment,
+            'FacilityPST',
         ))
 
         self.add_crate(('Counties', self.sgid, self.boundaries))
