@@ -13,7 +13,7 @@
     "start": "pnpm run shell"
   },
   "dependencies": {
-    "@arcgis/core": "^4.33.12",
+    "@arcgis/core": "^5.0.19",
     "@esri/arcgis-rest-feature-service": "^4.10.2",
     "@esri/arcgis-rest-request": "^4.10.2",
     "firebase-functions": "^7.2.5",
@@ -22,7 +22,7 @@
   "devDependencies": {
     "@total-typescript/tsconfig": "^1.0.4",
     "firebase-functions-test": "^3.4.1",
-    "typescript": "^5.7.3"
+    "typescript": "^6.0.3"
   },
   "engines": {
     "node": "22"
