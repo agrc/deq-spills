@@ -8,6 +8,37 @@ Staging: <https://spillsmap.dev.utah.gov/>
 
 Production: <https://spillsmap.deq.utah.gov/>
 
+### Local Development
+
+Prerequisites: Node.js 22 and pnpm.
+
+From the `website` directory, install dependencies and copy the ArcGIS assets:
+
+```sh
+pnpm install
+pnpm copy:arcgis
+```
+
+Create `website/.env.local` from the tracked `.env` template, then add the values for the blank variables. Ask a project maintainer for the Firebase configuration and ArcGIS API keys.
+
+```sh
+cp .env .env.local
+```
+
+Create `website/functions/.secret.local` with the ArcGIS Online API key used by the Functions emulator:
+
+```dotenv
+AGOL_API_KEY=your-arcgis-online-api-key
+```
+
+The tracked `website/functions/.env` file provides the non-secret local Functions parameters. Start the Vite development server and Firebase Functions emulator:
+
+```sh
+pnpm start
+```
+
+The application is then available at <http://localhost:5173/>. The standard map works without Salesforce authentication. To exercise flow-path functionality locally, use the configured development bypass token with the embedded test page or an equivalent request.
+
 This is a normal web application hosted in firebase. It is used in two different contexts:
 
 ### Standalone
