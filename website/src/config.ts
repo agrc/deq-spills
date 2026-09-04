@@ -8,6 +8,10 @@ const config = {
     landownership: 'https://gis.trustlands.utah.gov/mapping/rest/services/Land_Ownership/FeatureServer/0',
     waterSystems:
       'https://services2.arcgis.com/NnxP4LZ3zX8wWmP9/ArcGIS/rest/services/Utah_DDW_Public_Water_System_Sources/FeatureServer/0',
+    majorStreams:
+      'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/UtahMajor_Streams/FeatureServer/0',
+    majorRivers:
+      'https://services1.arcgis.com/99lidPhWCzftIe9K/ArcGIS/rest/services/UtahMajorRiversPoly/FeatureServer/0',
   },
   LOCATION_QUERIES: {
     city: {
