@@ -1,3 +1,4 @@
+import getJWTToken from "@salesforce/apex/FirebaseAuthProvider.getJWTToken";
 import ADDRESS from "@salesforce/schema/Case.Address_Location__c";
 import COUNTY from "@salesforce/schema/Case.County__c";
 import HIGHWAY from "@salesforce/schema/Case.Highway__c";
@@ -8,12 +9,14 @@ import DD_LAT from "@salesforce/schema/Case.Latitude__c";
 import DD_LONG from "@salesforce/schema/Case.Longitude__c";
 import MILEMARKER from "@salesforce/schema/Case.Mile_Marker__c";
 import CITY from "@salesforce/schema/Case.Nearest_Town_City__c";
+import NEAREST_WATERBODY_DISTANCE from "@salesforce/schema/Case.NearestWaterbodyDistance__c";
+import NEAREST_WATERBODY_ID from "@salesforce/schema/Case.NearestWaterbodyID__c";
+import NEAREST_WATERBODY_NAME from "@salesforce/schema/Case.NearestWaterbodyName__c";
 import UTM_X from "@salesforce/schema/Case.Utm_E_X_6_dgts__c";
 import UTM_Y from "@salesforce/schema/Case.Utm_N_Y_7_dgts__c";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { getRecord, updateRecord } from "lightning/uiRecordApi";
 import { api, LightningElement, wire } from "lwc";
-import getJWTToken from "@salesforce/apex/FirebaseAuthProvider.getJWTToken";
 
 const MESSAGE_TYPES = {
   DATA_SYNC: "data-sync",
@@ -66,9 +69,9 @@ export default class Spills extends LightningElement {
   get iframeSrc() {
     console.log("salesforce: isSandbox", this.isSandbox);
     if (this.isSandbox) {
-      return `https://spillsmap.dev.utah.gov?embedded=true&readonly=${JSON.stringify(this.isReadOnly)}&flowpath=true`; // staging
+      return `https://spillsmap.dev.utah.gov?embedded=true&readonly=${JSON.stringify(this.isReadOnly)}&flowpath=true&waterbody=true`; // staging
     } else if (this.isSandbox === false) {
-      return `https://spillsmap.deq.utah.gov?embedded=true&readonly=${JSON.stringify(this.isReadOnly)}&flowpath=true`; // prod
+      return `https://spillsmap.deq.utah.gov?embedded=true&readonly=${JSON.stringify(this.isReadOnly)}&flowpath=true&waterbody=true`; // prod
     } else {
       console.warn("salesforce: isSandbox is undefined");
     }
@@ -152,7 +155,10 @@ export default class Spills extends LightningElement {
       [MILEMARKER.fieldApiName]: data.MILEMARKER, // comes from widget text input
       [OWNER_AGENCY.fieldApiName]: data.OWNER_AGENCY,
       [UTM_X.fieldApiName]: utm_x,
-      [UTM_Y.fieldApiName]: utm_y
+      [UTM_Y.fieldApiName]: utm_y,
+      [NEAREST_WATERBODY_DISTANCE.fieldApiName]: data.NEAREST_WATERBODY_DISTANCE,
+      [NEAREST_WATERBODY_ID.fieldApiName]: data.NEAREST_WATERBODY_ID,
+      [NEAREST_WATERBODY_NAME.fieldApiName]: data.NEAREST_WATERBODY_NAME
     };
 
     updateRecord({ fields })

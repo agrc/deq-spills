@@ -18,9 +18,10 @@ type MapContainerProps = {
   isEmbedded: boolean;
   isReadOnly: boolean;
   flowPathEnabled: boolean;
+  waterbodyEnabled: boolean;
 };
 
-export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled }: MapContainerProps) {
+export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, waterbodyEnabled }: MapContainerProps) {
   const mapNode = useRef<HTMLDivElement | null>(null);
   const mapComponent = useRef<EsriMap | null>(null);
   const mapView = useRef<MapView>(null);
@@ -144,7 +145,7 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled }
       ) {
         return;
       }
-      const newData = await defineLocation(event.mapPoint);
+      const newData = await defineLocation(event.mapPoint, null, null, null, waterbodyEnabled);
       setData((prevData) => ({
         ...prevData,
         ...newData,
@@ -156,7 +157,7 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled }
     return () => {
       handle?.remove();
     };
-  }, [isEmbedded, isReadOnly, setData]);
+  }, [isEmbedded, isReadOnly, setData, waterbodyEnabled]);
 
   // update graphic and update flow paths layer
   const { setGraphic } = useGraphicManager(mapView.current);

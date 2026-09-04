@@ -18,6 +18,9 @@ export const blankState = {
   UTM_X: null,
   UTM_Y: null,
   ZIP: null,
+  NEAREST_WATERBODY_DISTANCE: null,
+  NEAREST_WATERBODY_ID: null,
+  NEAREST_WATERBODY_NAME: null,
 };
 
 type StringOrNull = string | null;
@@ -47,11 +50,14 @@ export type DataContextType = {
     SPILL_NUMBER?: StringOrNull; // this is only used in standalone mode
     UTM_X: NumberOrNull;
     UTM_Y: NumberOrNull;
+    NEAREST_WATERBODY_DISTANCE: NumberOrNull;
+    NEAREST_WATERBODY_ID: StringOrNull;
+    NEAREST_WATERBODY_NAME: StringOrNull;
   };
   requestFlowpathToken: () => Promise<string>;
   setData: React.Dispatch<React.SetStateAction<DataContextType['data']>>;
 };
-export const numericKeys = ['DD_LAT', 'DD_LONG', 'UTM_X', 'UTM_Y'];
+export const numericKeys = ['DD_LAT', 'DD_LONG', 'UTM_X', 'UTM_Y', 'NEAREST_WATERBODY_DISTANCE'];
 export const booleanKeys = ['INDIAN'];
 
 const isEmbedded = getIsEmbedded();

@@ -14,8 +14,11 @@ import { useState } from 'react';
 import { DialogTrigger } from 'react-aria-components';
 import useData from '../hooks/useDataProvider';
 import { defineLocation } from '../utilities/defineLocation';
+import { getWaterbodyEnabled } from '../utilities/urlParameters';
 
 type SearchType = 'single-address' | 'route-milepost';
+
+const waterbodyEnabled = getWaterbodyEnabled();
 
 export default function Geocode() {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,9 +35,9 @@ export default function Geocode() {
 
     let location;
     if (searchType === 'single-address') {
-      location = await defineLocation(point, `${firstInput}, ${secondInput}`);
+      location = await defineLocation(point, `${firstInput}, ${secondInput}`, null, null, waterbodyEnabled);
     } else {
-      location = await defineLocation(point, null, firstInput, secondInput);
+      location = await defineLocation(point, null, firstInput, secondInput, waterbodyEnabled);
     }
 
     setData((prevData) => ({ ...prevData, ...location }));

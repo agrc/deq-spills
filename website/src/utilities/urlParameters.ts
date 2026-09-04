@@ -34,6 +34,10 @@ export function getFlowPathEnabled(): boolean {
   return getUrlParam('flowpath') === 'true';
 }
 
+export function getWaterbodyEnabled(): boolean {
+  return getUrlParam('waterbody') === 'true';
+}
+
 export function getData(): DataContextType['data'] {
   const data: { [key: string]: UrlParamValue } = {};
 
