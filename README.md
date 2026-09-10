@@ -62,11 +62,12 @@ The following pages can be used to test the different embedded contexts:
 
 ### Url Parameters
 
-| Parameter  | Description                                                                                                               |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `embedded` | Set to true if the application is being used in an embedded context. This hides the header and footer among other things. |
-| `readonly` | Set to true to hide the location editing controls and disable location updates via map clicks.                            |
-| `flowpath` | Set to true to enable the flow path calculations and controls                                                             |
+| Parameter          | Description                                                                                                               |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------- |
+| `embedded`         | Set to true if the application is being used in an embedded context. This hides the header and footer among other things. |
+| `readonly`         | Set to true to hide the location editing controls and disable location updates via map clicks.                            |
+| `flowpath`         | Set to true to enable the flow path calculations and controls                                                             |
+| `nearestWaterbody` | Set to true to enable the nearest waterbody calculation                                                                   |
 
 Additionally, when in standalone mode, any of the properties of [`DataContextType['data']`](website/src/contexts/DataProvider.tsx) can be passed as Url parameters. These show up in a sidebar.
 
@@ -89,7 +90,7 @@ Development Model: Org
 1. Install Salesforce CLI (`pnpm install -g @salesforce/cli`)
 1. Install [Salesforce Extension Pack for VS Code](https://marketplace.visualstudio.com/items?itemName=salesforce.salesforcedx-vscode)
 1. Authorize Org Sandbox
-   1. `org:login:web --alias utahdeqorg --instance-url https://utahdeqorg--eid.sandbox.my.salesforce.com/ --set-default`
+   1. `sf org:login:web --alias utahdeqorg --instance-url https://utahdeqorg--eid.sandbox.my.salesforce.com/ --set-default`
 
 ### Pulling Changes from Org
 
