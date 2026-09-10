@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.1.6-rc.1](https://github.com/agrc/deq-spills/compare/v3.1.5...v3.1.6-rc.1) (2026-09-10)
+
+
+### Features
+
+* basic neare ([f012c56](https://github.com/agrc/deq-spills/commit/f012c56d7606764fca754f0354da4f2092d24632))
+* basic waterbody query logic ([58dbf7c](https://github.com/agrc/deq-spills/commit/58dbf7c1c6a1332a829ee611734599f69fb47937))
+
+
+### Documentation
+
+* update readme and cspell ([2c604c8](https://github.com/agrc/deq-spills/commit/2c604c8e7fd512812f3755175ad537762acd726e))
+* update README with better local running instructions ([02065c6](https://github.com/agrc/deq-spills/commit/02065c628936df8fd132e3d6ce73031938691497))
+
 ## [3.1.5](https://github.com/agrc/deq-spills/compare/v3.1.4...v3.1.5) (2026-05-27)
 
 
