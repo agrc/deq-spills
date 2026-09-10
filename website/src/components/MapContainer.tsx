@@ -121,6 +121,38 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
                 ],
               }),
           },
+          {
+            label: 'Streams',
+            function: () =>
+              new FeatureLayer({
+                url: config.URL.majorStreams,
+                outFields: ['ComID', 'GNIS_Name'],
+                labelingInfo: [
+                  {
+                    labelExpressionInfo: {
+                      expression: '$feature.GNIS_Name',
+                    },
+                    minScale: 200000,
+                  },
+                ],
+              }),
+          },
+          {
+            label: 'Rivers',
+            function: () =>
+              new FeatureLayer({
+                url: config.URL.majorRivers,
+                outFields: ['COM_ID', 'NAME'],
+                labelingInfo: [
+                  {
+                    labelExpressionInfo: {
+                      expression: '$feature.NAME',
+                    },
+                    minScale: 200000,
+                  },
+                ],
+              }),
+          },
         ],
       },
     };
