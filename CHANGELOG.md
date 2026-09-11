@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.6-rc.2](https://github.com/agrc/deq-spills/compare/v3.1.6-rc.1...v3.1.6-rc.2) (2026-09-11)
+
+
+### Features
+
+* adding geometry as feature layer ([7e6b446](https://github.com/agrc/deq-spills/commit/7e6b446f5e88c0660c1c4625eda1915d055a6d0f))
+
 ## [3.1.6-rc.1](https://github.com/agrc/deq-spills/compare/v3.1.5...v3.1.6-rc.1) (2026-09-10)
 
 
