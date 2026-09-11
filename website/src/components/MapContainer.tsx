@@ -25,6 +25,8 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
   const mapNode = useRef<HTMLDivElement | null>(null);
   const mapComponent = useRef<EsriMap | null>(null);
   const mapView = useRef<MapView>(null);
+  const streamsFeatureLayer = useRef<FeatureLayer | null>(null);
+  const riversFeatureLayer = useRef<FeatureLayer | null>(null);
   const [selectorOptions, setSelectorOptions] = useState<LayerSelectorProps | null>(null);
   const { setMapView, setFlowPathFeatureLayer, flowPathFeatureLayer } = useMapView();
   const { data, setData } = useData();
@@ -79,6 +81,44 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
 
         mapView.current!.map!.add(flowPathFeatureLayer);
         setFlowPathFeatureLayer(flowPathFeatureLayer);
+      }
+
+      if (waterbodyEnabled) {
+        streamsFeatureLayer.current = new FeatureLayer({
+          url: config.URL.majorStreams,
+          outFields: ['ComID'],
+          renderer: {
+            type: 'simple',
+            symbol: {
+              type: 'simple-line',
+              color: [0, 255, 255, 0.75],
+              width: 4,
+              style: 'solid',
+            },
+          },
+          definitionExpression: '1=0', // start with no features
+          legendEnabled: false,
+        });
+
+        riversFeatureLayer.current = new FeatureLayer({
+          url: config.URL.majorRivers,
+          outFields: ['COM_ID'],
+          renderer: {
+            type: 'simple',
+            symbol: {
+              type: 'simple-fill',
+              color: [0, 255, 255, 0.35],
+              outline: {
+                color: [0, 255, 255, 0.75],
+                width: 2,
+              },
+            },
+          },
+          definitionExpression: '1=0', // start with no features
+          legendEnabled: false,
+        });
+
+        mapView.current!.map!.addMany([streamsFeatureLayer.current, riversFeatureLayer.current]);
       }
     });
 
@@ -163,7 +203,7 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
       mapView.current?.destroy();
       mapComponent.current?.destroy();
     };
-  }, [flowPathEnabled, setFlowPathFeatureLayer, setMapView]);
+  }, [flowPathEnabled, setFlowPathFeatureLayer, setMapView, waterbodyEnabled]);
 
   // add click event handlers
   useEffect(() => {
@@ -190,6 +230,18 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
       handle?.remove();
     };
   }, [isEmbedded, isReadOnly, setData, waterbodyEnabled]);
+
+  // highlight the nearest water body, since its id tells us whether it came from the streams or rivers layer
+  useEffect(() => {
+    if (!waterbodyEnabled || !streamsFeatureLayer.current || !riversFeatureLayer.current) {
+      return;
+    }
+
+    const [type, id] = data.NEAREST_WATERBODY_ID?.split(':') ?? [];
+
+    streamsFeatureLayer.current.definitionExpression = type === 'stream' ? `ComID = ${id}` : '1=0';
+    riversFeatureLayer.current.definitionExpression = type === 'river' ? `COM_ID = ${id}` : '1=0';
+  }, [data.NEAREST_WATERBODY_ID, waterbodyEnabled]);
 
   // update graphic and update flow paths layer
   const { setGraphic } = useGraphicManager(mapView.current);
