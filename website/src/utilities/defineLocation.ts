@@ -56,7 +56,8 @@ export async function defineLocation(
     MILEMARKER: milemarker,
     NEAREST_WATERBODY_DISTANCE: nearestWaterBody?.distanceInFeet ?? null,
     NEAREST_WATERBODY_ID: nearestWaterBody?.id ?? null,
-    NEAREST_WATERBODY_NAME: nearestWaterBody?.name ?? null,
+    NEAREST_WATERBODY_NAME:
+      waterbodyEnabled && nearestWaterBody === null ? 'No water bodies found' : (nearestWaterBody?.name ?? null),
     OWNER_AGENCY: agency,
     UTM_X: Math.round(utmPoint.x),
     UTM_Y: Math.round(utmPoint.y),
