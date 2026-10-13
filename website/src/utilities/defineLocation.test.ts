@@ -40,9 +40,11 @@ describe('defineLocation', () => {
       spatialReference,
       toJSON: () => ({ x: input.x, y: input.y }),
     }));
-    mocks.search.mockImplementation(async (_apiKey: string, _table: string, [field]: string[]) => [
-      { attributes: { [field]: 'Agency' } },
-    ]);
+    mocks.search.mockImplementation(async (_apiKey: string, _table: string, fields: string[]) => {
+      const field = fields[0]!;
+
+      return [{ attributes: { [field]: 'Agency' } }];
+    });
     mocks.queryNearestWaterBody.mockResolvedValue(null);
   });
 
@@ -59,5 +61,18 @@ describe('defineLocation', () => {
 
     expect(result.NEAREST_WATERBODY_NAME).toBeNull();
     expect(mocks.queryNearestWaterBody).not.toHaveBeenCalled();
+  });
+
+  it('returns null for lookup fields when a search request rejects', async () => {
+    mocks.search.mockRejectedValue(new TypeError("Cannot read properties of undefined (reading 'status')"));
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    const result = await defineLocation(point);
+
+    expect(result.OWNER_AGENCY).toBeNull();
+    expect(result.CITY).toBeNull();
+    expect(result.COUNTY).toBeNull();
+    expect(consoleError).toHaveBeenCalled();
+    consoleError.mockRestore();
   });
 });

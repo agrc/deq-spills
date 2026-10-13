@@ -68,9 +68,17 @@ export async function defineLocation(
 
 async function queryApi(table: string, field: string, point: __esri.Point): Promise<string | null> {
   const apiKey = import.meta.env.VITE_WEB_API;
-  const result = await search(apiKey, table, [field], {
-    geometry: `point:${JSON.stringify(point.toJSON())}`,
-  });
+  let result: Awaited<ReturnType<typeof search>>;
+
+  try {
+    result = await search(apiKey, table, [field], {
+      geometry: `point:${JSON.stringify(point.toJSON())}`,
+    });
+  } catch (error) {
+    console.error(`error querying api for ${table}`, error);
+
+    return null;
+  }
 
   if ((result as ApiErrorResponse).status) {
     console.error('error querying api', result);
