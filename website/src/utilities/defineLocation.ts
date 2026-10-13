@@ -43,7 +43,6 @@ export async function defineLocation(
   const queries = config.LOCATION_QUERIES;
   const agency = await queryApi(queries.agency.table, queries.agency.field, utmPoint);
   const nearestWaterBody = waterbodyEnabled ? await queryNearestWaterBody(webMercatorPoint) : null;
-  console.log('nearest waterbody', nearestWaterBody);
   const locationData = {
     // make sure that the following properties stay in sync with the properties in salesforce/force-app/main/default/lwc/spills/spills.js
     ADDRESS: address,
@@ -62,6 +61,13 @@ export async function defineLocation(
     UTM_X: Math.round(utmPoint.x),
     UTM_Y: Math.round(utmPoint.y),
   };
+
+  console.log('nearest waterbody', {
+    enabled: waterbodyEnabled,
+    name: locationData.NEAREST_WATERBODY_NAME,
+    id: locationData.NEAREST_WATERBODY_ID,
+    distanceInFeet: locationData.NEAREST_WATERBODY_DISTANCE,
+  });
 
   return locationData;
 }

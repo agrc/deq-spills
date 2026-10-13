@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mocks = vi.hoisted(() => ({
   execute: vi.fn(),
@@ -33,6 +33,7 @@ describe('defineLocation', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.spyOn(console, 'log').mockImplementation(() => {});
     mocks.isLoaded.mockReturnValue(true);
     mocks.execute.mockImplementation((input: { x: number; y: number }, spatialReference: { wkid: number }) => ({
       x: input.x,
@@ -48,12 +49,22 @@ describe('defineLocation', () => {
     mocks.queryNearestWaterBody.mockResolvedValue(null);
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('sets the waterbody name when no waterbody is found, while leaving ID and distance null', async () => {
     const result = await defineLocation(point, null, null, null, true);
 
     expect(result.NEAREST_WATERBODY_NAME).toBe('No water bodies found');
     expect(result.NEAREST_WATERBODY_ID).toBeNull();
     expect(result.NEAREST_WATERBODY_DISTANCE).toBeNull();
+    expect(console.log).toHaveBeenCalledWith('nearest waterbody', {
+      enabled: true,
+      name: 'No water bodies found',
+      id: null,
+      distanceInFeet: null,
+    });
   });
 
   it('leaves the waterbody name null when waterbody searching is disabled', async () => {
@@ -61,6 +72,29 @@ describe('defineLocation', () => {
 
     expect(result.NEAREST_WATERBODY_NAME).toBeNull();
     expect(mocks.queryNearestWaterBody).not.toHaveBeenCalled();
+    expect(console.log).toHaveBeenCalledWith('nearest waterbody', {
+      enabled: false,
+      name: null,
+      id: null,
+      distanceInFeet: null,
+    });
+  });
+
+  it('logs the final waterbody fields when a waterbody is found', async () => {
+    mocks.queryNearestWaterBody.mockResolvedValue({
+      name: 'Jordan River',
+      id: 'river:123',
+      distanceInFeet: 42,
+    });
+
+    const result = await defineLocation(point, null, null, null, true);
+
+    expect(console.log).toHaveBeenCalledWith('nearest waterbody', {
+      enabled: true,
+      name: result.NEAREST_WATERBODY_NAME,
+      id: result.NEAREST_WATERBODY_ID,
+      distanceInFeet: result.NEAREST_WATERBODY_DISTANCE,
+    });
   });
 
   it('returns null for lookup fields when a search request rejects', async () => {
