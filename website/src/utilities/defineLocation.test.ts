@@ -59,7 +59,7 @@ describe('defineLocation', () => {
     expect(result.NEAREST_WATERBODY_NAME).toBe('No water bodies found');
     expect(result.NEAREST_WATERBODY_ID).toBeNull();
     expect(result.NEAREST_WATERBODY_DISTANCE).toBeNull();
-    expect(console.log).toHaveBeenCalledWith('nearest waterbody', {
+    expect(console.log).toHaveBeenCalledWith('nearest waterbody: sending info to Salesforce', {
       enabled: true,
       name: 'No water bodies found',
       id: null,
@@ -72,7 +72,7 @@ describe('defineLocation', () => {
 
     expect(result.NEAREST_WATERBODY_NAME).toBeNull();
     expect(mocks.queryNearestWaterBody).not.toHaveBeenCalled();
-    expect(console.log).toHaveBeenCalledWith('nearest waterbody', {
+    expect(console.log).toHaveBeenCalledWith('nearest waterbody: sending info to Salesforce', {
       enabled: false,
       name: null,
       id: null,
@@ -89,7 +89,7 @@ describe('defineLocation', () => {
 
     const result = await defineLocation(point, null, null, null, true);
 
-    expect(console.log).toHaveBeenCalledWith('nearest waterbody', {
+    expect(console.log).toHaveBeenCalledWith('nearest waterbody: sending info to Salesforce', {
       enabled: true,
       name: result.NEAREST_WATERBODY_NAME,
       id: result.NEAREST_WATERBODY_ID,
