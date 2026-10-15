@@ -97,16 +97,32 @@ describe('defineLocation', () => {
     });
   });
 
-  it('returns null for lookup fields when a search request rejects', async () => {
-    mocks.search.mockRejectedValue(new TypeError("Cannot read properties of undefined (reading 'status')"));
+  it('rejects when a search request fails', async () => {
+    const lookupError = new TypeError("Cannot read properties of undefined (reading 'status')");
+    mocks.search.mockRejectedValue(lookupError);
     const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    await expect(defineLocation(point)).rejects.toBe(lookupError);
+
+    expect(consoleError).toHaveBeenCalled();
+    consoleError.mockRestore();
+  });
+
+  it('returns null when a successful search finds no result', async () => {
+    mocks.search.mockResolvedValue([]);
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     const result = await defineLocation(point);
 
     expect(result.OWNER_AGENCY).toBeNull();
     expect(result.CITY).toBeNull();
     expect(result.COUNTY).toBeNull();
-    expect(consoleError).toHaveBeenCalled();
-    consoleError.mockRestore();
+  });
+
+  it('rejects when the search API returns an error response', async () => {
+    mocks.search.mockResolvedValue({ status: 500 });
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    await expect(defineLocation(point)).rejects.toThrow('error querying api');
   });
 });
