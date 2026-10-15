@@ -108,10 +108,11 @@ describe('defineLocation', () => {
     expect(result.COUNTY).toBeNull();
   });
 
-  it('rejects when the search API returns an error response', async () => {
+it('returns null when the search API returns an error response', async () => {
     mocks.search.mockResolvedValue({ status: 500 });
     vi.spyOn(console, 'error').mockImplementation(() => {});
 
-    await expect(defineLocation(point)).rejects.toThrow('error querying api');
+    const result = await defineLocation(point);
+    expect(result.OWNER_AGENCY).toBeNull();
   });
 });
