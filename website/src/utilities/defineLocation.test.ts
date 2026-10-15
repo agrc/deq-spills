@@ -108,11 +108,25 @@ describe('defineLocation', () => {
     expect(result.COUNTY).toBeNull();
   });
 
-it('returns null when the search API returns an error response', async () => {
+  it('returns null when the search API returns an error response', async () => {
     mocks.search.mockResolvedValue({ status: 500 });
     vi.spyOn(console, 'error').mockImplementation(() => {});
 
     const result = await defineLocation(point);
     expect(result.OWNER_AGENCY).toBeNull();
+  });
+
+  it('returns Unnamed Water Body when a waterbody has no name', async () => {
+    mocks.queryNearestWaterBody.mockResolvedValue({
+      name: null,
+      id: 'river:123',
+      distanceInFeet: 42,
+    });
+
+    const result = await defineLocation(point, null, null, null, true);
+
+    expect(result.NEAREST_WATERBODY_NAME).toBe('Unnamed water body');
+    expect(result.NEAREST_WATERBODY_ID).toBe('river:123');
+    expect(result.NEAREST_WATERBODY_DISTANCE).toBe(42);
   });
 });
