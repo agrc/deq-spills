@@ -84,7 +84,7 @@ async function queryApi(table: string, field: string, point: __esri.Point): Prom
   if ((result as ApiErrorResponse).status) {
     console.error('error querying api', result);
 
-    throw new Error(`error querying api for ${table}`);
+    return null;
   }
 
   if ((result as SearchResponse['result']).length === 0) {
