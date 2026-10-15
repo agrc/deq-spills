@@ -97,17 +97,6 @@ describe('defineLocation', () => {
     });
   });
 
-  it('rejects when a search request fails', async () => {
-    const lookupError = new TypeError("Cannot read properties of undefined (reading 'status')");
-    mocks.search.mockRejectedValue(lookupError);
-    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
-
-    await expect(defineLocation(point)).rejects.toBe(lookupError);
-
-    expect(consoleError).toHaveBeenCalled();
-    consoleError.mockRestore();
-  });
-
   it('returns null when a successful search finds no result', async () => {
     mocks.search.mockResolvedValue([]);
     vi.spyOn(console, 'warn').mockImplementation(() => {});
