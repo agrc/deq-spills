@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.6-rc.3](https://github.com/agrc/deq-spills/compare/v3.1.6-rc.2...v3.1.6-rc.3) (2026-10-15)
+
+
+### Bug Fixes
+
+* no nearest waterbody handling ([bd38751](https://github.com/agrc/deq-spills/commit/bd38751e24bd38b35690132427ed1533ccd926ef))
+
 ## [3.1.6-rc.2](https://github.com/agrc/deq-spills/compare/v3.1.6-rc.1...v3.1.6-rc.2) (2026-09-11)
 
 
