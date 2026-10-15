@@ -62,7 +62,7 @@ export async function defineLocation(
     UTM_Y: Math.round(utmPoint.y),
   };
 
-  console.log('nearest waterbody', {
+  console.log('nearest waterbody: sending info to Salesforce', {
     enabled: waterbodyEnabled,
     name: locationData.NEAREST_WATERBODY_NAME,
     id: locationData.NEAREST_WATERBODY_ID,
