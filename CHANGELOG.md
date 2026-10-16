@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.6-rc.4](https://github.com/agrc/deq-spills/compare/v3.1.6-rc.3...v3.1.6-rc.4) (2026-10-16)
+
+
+### Features
+
+* 127-3 change polyline color ([#264](https://github.com/agrc/deq-spills/issues/264)) ([42adee1](https://github.com/agrc/deq-spills/commit/42adee1246bd4b32e37cb8b6556c330b96521861))
+
 ## [3.1.6-rc.3](https://github.com/agrc/deq-spills/compare/v3.1.6-rc.2...v3.1.6-rc.3) (2026-10-15)
 
 
