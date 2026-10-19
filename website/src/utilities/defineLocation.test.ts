@@ -3,7 +3,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 const mocks = vi.hoisted(() => ({
   execute: vi.fn(),
   isLoaded: vi.fn(),
-  queryNearestWaterBody: vi.fn(),
   search: vi.fn(),
 }));
 
@@ -20,7 +19,6 @@ vi.mock('@arcgis/core/geometry/SpatialReference', () => ({
 }));
 
 vi.mock('@ugrc/utilities', () => ({ search: mocks.search }));
-vi.mock('./queryNearestWaterBody', () => ({ queryNearestWaterBody: mocks.queryNearestWaterBody }));
 
 import { defineLocation } from './defineLocation';
 
@@ -46,55 +44,10 @@ describe('defineLocation', () => {
 
       return [{ attributes: { [field]: 'Agency' } }];
     });
-    mocks.queryNearestWaterBody.mockResolvedValue(null);
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
-  });
-
-  it('sets the waterbody name when no waterbody is found, while leaving ID and distance null', async () => {
-    const result = await defineLocation(point, null, null, null, true);
-
-    expect(result.NEAREST_WATERBODY_NAME).toBe('No water bodies found');
-    expect(result.NEAREST_WATERBODY_ID).toBeNull();
-    expect(result.NEAREST_WATERBODY_DISTANCE).toBeNull();
-    expect(console.log).toHaveBeenCalledWith('nearest waterbody: sending info to Salesforce', {
-      enabled: true,
-      name: 'No water bodies found',
-      id: null,
-      distanceInFeet: null,
-    });
-  });
-
-  it('leaves the waterbody name null when waterbody searching is disabled', async () => {
-    const result = await defineLocation(point);
-
-    expect(result.NEAREST_WATERBODY_NAME).toBeNull();
-    expect(mocks.queryNearestWaterBody).not.toHaveBeenCalled();
-    expect(console.log).toHaveBeenCalledWith('nearest waterbody: sending info to Salesforce', {
-      enabled: false,
-      name: null,
-      id: null,
-      distanceInFeet: null,
-    });
-  });
-
-  it('logs the final waterbody fields when a waterbody is found', async () => {
-    mocks.queryNearestWaterBody.mockResolvedValue({
-      name: 'Jordan River',
-      id: 'river:123',
-      distanceInFeet: 42,
-    });
-
-    const result = await defineLocation(point, null, null, null, true);
-
-    expect(console.log).toHaveBeenCalledWith('nearest waterbody: sending info to Salesforce', {
-      enabled: true,
-      name: result.NEAREST_WATERBODY_NAME,
-      id: result.NEAREST_WATERBODY_ID,
-      distanceInFeet: result.NEAREST_WATERBODY_DISTANCE,
-    });
   });
 
   it('returns null when a successful search finds no result', async () => {
@@ -106,6 +59,9 @@ describe('defineLocation', () => {
     expect(result.OWNER_AGENCY).toBeNull();
     expect(result.CITY).toBeNull();
     expect(result.COUNTY).toBeNull();
+    expect(result.NEAREST_WATERBODY_NAME).toBeNull();
+    expect(result.NEAREST_WATERBODY_ID).toBeNull();
+    expect(result.NEAREST_WATERBODY_DISTANCE).toBeNull();
   });
 
   it('returns null when the search API returns an error response', async () => {
@@ -114,19 +70,5 @@ describe('defineLocation', () => {
 
     const result = await defineLocation(point);
     expect(result.OWNER_AGENCY).toBeNull();
-  });
-
-  it('returns Unnamed Water Body when a waterbody has no name', async () => {
-    mocks.queryNearestWaterBody.mockResolvedValue({
-      name: null,
-      id: 'river:123',
-      distanceInFeet: 42,
-    });
-
-    const result = await defineLocation(point, null, null, null, true);
-
-    expect(result.NEAREST_WATERBODY_NAME).toBe('Unnamed water body');
-    expect(result.NEAREST_WATERBODY_ID).toBe('river:123');
-    expect(result.NEAREST_WATERBODY_DISTANCE).toBe(42);
   });
 });

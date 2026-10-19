@@ -7,6 +7,7 @@ import Geocode from './components/Geocode';
 import MapContainer from './components/MapContainer';
 import Sidebar from './components/Sidebar';
 import { MapProvider } from './contexts/Map';
+import useWaterbody from './hooks/useWaterbody';
 import { getFlowPathEnabled, getIsEmbedded, getIsReadOnly, getWaterbodyEnabled } from './utilities/urlParameters';
 
 const version = import.meta.env.PACKAGE_VERSION;
@@ -38,6 +39,7 @@ const waterbodyEnabled = getWaterbodyEnabled();
 
 export default function App() {
   const app = useFirebaseApp();
+  useWaterbody(waterbodyEnabled);
 
   // initialize firebase performance metrics
   useEffect(() => {
