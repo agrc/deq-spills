@@ -59,9 +59,9 @@ describe('defineLocation', () => {
     expect(result.OWNER_AGENCY).toBeNull();
     expect(result.CITY).toBeNull();
     expect(result.COUNTY).toBeNull();
-    expect(result.NEAREST_WATERBODY_NAME).toBeNull();
-    expect(result.NEAREST_WATERBODY_ID).toBeNull();
-    expect(result.NEAREST_WATERBODY_DISTANCE).toBeNull();
+    expect(result).not.toHaveProperty('NEAREST_WATERBODY_NAME');
+    expect(result).not.toHaveProperty('NEAREST_WATERBODY_ID');
+    expect(result).not.toHaveProperty('NEAREST_WATERBODY_DISTANCE');
   });
 
   it('returns null when the search API returns an error response', async () => {
