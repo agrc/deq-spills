@@ -3,7 +3,7 @@ import EsriMap from '@arcgis/core/Map';
 import MapView from '@arcgis/core/views/MapView';
 import Legend from '@arcgis/core/widgets/Legend';
 import { LayerSelector, type LayerSelectorProps } from '@ugrc/utah-design-system';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import Graphic from '@arcgis/core/Graphic';
 import { useGraphicManager, utahMercatorExtent } from '@ugrc/utilities/hooks';
@@ -27,9 +27,22 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
   const mapView = useRef<MapView>(null);
   const streamsFeatureLayer = useRef<FeatureLayer | null>(null);
   const riversFeatureLayer = useRef<FeatureLayer | null>(null);
+  const initialNavigationComplete = useRef(false);
   const [selectorOptions, setSelectorOptions] = useState<LayerSelectorProps | null>(null);
   const { setMapView, setFlowPathFeatureLayer, flowPathFeatureLayer } = useMapView();
   const { data, setData } = useData();
+
+  const showWaterbodyLayers = useCallback(() => {
+    initialNavigationComplete.current = true;
+
+    if (streamsFeatureLayer.current) {
+      streamsFeatureLayer.current.visible = true;
+    }
+
+    if (riversFeatureLayer.current) {
+      riversFeatureLayer.current.visible = true;
+    }
+  }, []);
 
   // setup the Map
   useEffect(() => {
@@ -97,6 +110,7 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
             },
           },
           definitionExpression: '1=0', // start with no features
+          visible: initialNavigationComplete.current,
           legendEnabled: false,
         });
 
@@ -115,6 +129,7 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
             },
           },
           definitionExpression: '1=0', // start with no features
+          visible: initialNavigationComplete.current,
           legendEnabled: false,
         });
 
@@ -287,12 +302,24 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
             .then((results) => {
               if (results.features.length > 0) {
                 const flowPathGraphic = results.features[0];
-                mapView.current!.goTo(flowPathGraphic!.geometry!.extent!.expand(1.1));
+                void mapView
+                  .current!.goTo(flowPathGraphic!.geometry!.extent!.expand(1.1))
+                  .then(showWaterbodyLayers)
+                  .catch((error) => {
+                    console.error('Error navigating to initial flow path:', error);
+                    showWaterbodyLayers();
+                  });
               } else {
-                mapView.current?.goTo({
-                  target: graphic,
-                  zoom: config.DEFAULT_ZOOM_LEVEL,
-                });
+                void mapView.current
+                  ?.goTo({
+                    target: graphic,
+                    zoom: config.DEFAULT_ZOOM_LEVEL,
+                  })
+                  ?.then(showWaterbodyLayers)
+                  .catch((error) => {
+                    console.error('Error navigating to initial location:', error);
+                    showWaterbodyLayers();
+                  });
               }
             })
             .catch((error) => {
@@ -304,14 +331,20 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
         });
     } else {
       mapView.current?.when(() => {
-        mapView.current?.goTo({
-          target: graphic,
-          zoom: config.DEFAULT_ZOOM_LEVEL,
-        });
+        void mapView.current
+          ?.goTo({
+            target: graphic,
+            zoom: config.DEFAULT_ZOOM_LEVEL,
+          })
+          ?.then(showWaterbodyLayers)
+          .catch((error) => {
+            console.error('Error navigating to initial location:', error);
+            showWaterbodyLayers();
+          });
       });
     }
     coordinatesChanged.current = true;
-  }, [data.ID, data.UTM_X, data.UTM_Y, flowPathEnabled, flowPathFeatureLayer, setGraphic]);
+  }, [data.ID, data.UTM_X, data.UTM_Y, flowPathEnabled, flowPathFeatureLayer, setGraphic, showWaterbodyLayers]);
 
   return (
     <div ref={mapNode} className="flex-1">
