@@ -324,10 +324,12 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
             })
             .catch((error) => {
               console.error('Error querying flow path features:', error);
+              showWaterbodyLayers();
             });
         })
         .catch((error) => {
           console.error('Error loading flow path feature layer:', error);
+          showWaterbodyLayers();
         });
     } else {
       mapView.current?.when(() => {
