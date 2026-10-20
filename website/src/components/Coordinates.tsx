@@ -6,7 +6,6 @@ import { useState } from 'react';
 import { DialogTrigger } from 'react-aria-components';
 import useData from '../hooks/useDataProvider';
 import { defineLocation } from '../utilities/defineLocation';
-import { getWaterbodyEnabled } from '../utilities/urlParameters';
 
 const utm = new SpatialReference({ wkid: 26912 });
 export const blankValues = {
@@ -160,8 +159,6 @@ type CoordinateValues = {
     y: string;
   };
 };
-
-const waterbodyEnabled = getWaterbodyEnabled();
 
 export default function Coordinates() {
   const [coordinateType, setCoordinateType] = useState<CoordinateType>('dd');
@@ -330,7 +327,7 @@ export default function Coordinates() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const point = await getUtmPoint(coordinateType, values);
-    const locationData = await defineLocation(point, null, null, null, waterbodyEnabled);
+    const locationData = await defineLocation(point, null, null, null);
     setData((prevData) => ({ ...prevData, ...locationData }));
     clearAndClose();
   };
