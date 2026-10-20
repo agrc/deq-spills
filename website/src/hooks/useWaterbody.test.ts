@@ -1,7 +1,7 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { createElement, type PropsWithChildren } from 'react';
-import { afterEach, describe, expect, it, vi } from 'vitest';
-import { blankState, DataContext } from '../contexts/DataProvider';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { blankState, DataContext, type DataContextType } from '../contexts/DataProvider';
 import useWaterbody from './useWaterbody';
 
 const mocks = vi.hoisted(() => ({
@@ -20,7 +20,7 @@ vi.mock('@arcgis/core/geometry/operators/projectOperator', () => ({
 
 const coordinates = { UTM_X: 437156, UTM_Y: 4454301 };
 
-function renderWaterbodyHook() {
+function renderWaterbodyHook(setData: DataContextType['setData'] = () => undefined) {
   const wrapper = ({ children }: PropsWithChildren) =>
     createElement(
       DataContext.Provider,
@@ -28,7 +28,7 @@ function renderWaterbodyHook() {
         value: {
           data: { ...blankState, ...coordinates },
           requestFlowpathToken: async () => '',
-          setData: () => undefined,
+          setData,
         },
       },
       children,
@@ -38,6 +38,10 @@ function renderWaterbodyHook() {
 }
 
 describe('useWaterbody', () => {
+  beforeEach(() => {
+    window.history.pushState({}, '', '?waterbody=true');
+  });
+
   afterEach(() => {
     window.history.pushState({}, '', '/');
     vi.restoreAllMocks();
@@ -47,7 +51,6 @@ describe('useWaterbody', () => {
   it('logs when the waterbody lookup is enabled with UTM coordinates', async () => {
     mocks.queryNearestWaterBody.mockResolvedValue(null);
     const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined);
-    window.history.pushState({}, '', '?waterbody=true');
     renderWaterbodyHook();
 
     expect(logSpy).toHaveBeenCalledWith('Waterbody: change detected in UTM');
@@ -70,7 +73,6 @@ describe('useWaterbody', () => {
       name: 'Provo River',
     });
     const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined);
-    window.history.pushState({}, '', '?waterbody=true');
 
     renderWaterbodyHook();
 
@@ -84,9 +86,27 @@ describe('useWaterbody', () => {
     );
   });
 
+  it('sets the waterbody name to "No water bodies found" when none are nearby, but leaves ID and distance null', async () => {
+    mocks.queryNearestWaterBody.mockResolvedValue(null);
+
+    const setData = vi.fn<DataContextType['setData']>();
+    renderWaterbodyHook(setData);
+
+    await waitFor(() => expect(setData).toHaveBeenCalledOnce());
+
+    const updateData = setData.mock.calls[0]?.[0];
+    expect(typeof updateData).toBe('function');
+    if (typeof updateData === 'function') {
+      const updatedData = updateData({ ...blankState, ...coordinates });
+
+      expect(updatedData.NEAREST_WATERBODY_NAME).toBe('No water bodies found');
+      expect(updatedData.NEAREST_WATERBODY_ID).toBeNull();
+      expect(updatedData.NEAREST_WATERBODY_DISTANCE).toBeNull();
+    }
+  });
+
   /*
     Next tests (delete me):
-    - it sets the waterbody name to 'No waterbody found' when no waterbody is found, but leaves ID and distance null.
     - it should exit immediately if no waterbody is found, not even logging
     - it should return 'Unnamed water body' when a waterbody has no name
   */
