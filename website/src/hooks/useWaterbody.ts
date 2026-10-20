@@ -38,20 +38,20 @@ export default function useWaterbody() {
 
       const webMercatorPoint = computeWebMercatorPoint();
       const nearestWaterBody = await queryNearestWaterBody(webMercatorPoint);
-      const toReturn = {
+      const waterbodyInfo = {
         NEAREST_WATERBODY_DISTANCE: nearestWaterBody?.distanceInFeet ?? null,
         NEAREST_WATERBODY_ID: nearestWaterBody?.id ?? null,
         NEAREST_WATERBODY_NAME: !isWaterbodyEnabled
           ? null
           : nearestWaterBody === null
             ? 'No water bodies found'
-            : (nearestWaterBody?.name || 'Unnamed water body'),
+            : nearestWaterBody?.name || 'Unnamed water body',
       };
       console.log('nearest waterbody: sending info to Salesforce', {
         enabled: isWaterbodyEnabled,
-        name: toReturn.NEAREST_WATERBODY_NAME,
-        id: toReturn.NEAREST_WATERBODY_ID,
-        distanceInFeet: toReturn.NEAREST_WATERBODY_DISTANCE,
+        name: waterbodyInfo.NEAREST_WATERBODY_NAME,
+        id: waterbodyInfo.NEAREST_WATERBODY_ID,
+        distanceInFeet: waterbodyInfo.NEAREST_WATERBODY_DISTANCE,
       });
 
       setData((prevData) => {
@@ -60,7 +60,7 @@ export default function useWaterbody() {
         }
         return {
           ...prevData,
-          ...toReturn,
+          ...waterbodyInfo,
         };
       });
     }
