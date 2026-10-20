@@ -219,7 +219,7 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
       ) {
         return;
       }
-      const newData = await defineLocation(event.mapPoint, null, null, null); //, waterbodyEnabled);
+      const newData = await defineLocation(event.mapPoint, null, null, null);
       setData((prevData) => ({
         ...prevData,
         ...newData,
