@@ -29,6 +29,10 @@ export default function useWaterbody() {
     }
     console.log('Waterbody: change detected in UTM');
     async function fetchNearestWaterBody() {
+      if (!projectOperator.isLoaded()) {
+        await projectOperator.load();
+      }
+
       const webMercatorPoint = computeWebMercatorPoint();
       const nearestWaterBody = await queryNearestWaterBody(webMercatorPoint);
       const toReturn = {
