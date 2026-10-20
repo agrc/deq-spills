@@ -14,6 +14,9 @@ export default function useWaterbody() {
   const { data, setData } = useData();
 
   useEffect(() => {
+    if (data.UTM_X === null || data.UTM_Y === null) {
+      return;
+    }
     function computeWebMercatorPoint() {
       const utmPoint = new Point({
         x: Number(data.UTM_X),
