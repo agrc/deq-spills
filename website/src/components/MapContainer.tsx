@@ -11,6 +11,7 @@ import { FIELDS } from '../../functions/common/shared';
 import config from '../config';
 import useData from '../hooks/useDataProvider';
 import useMapView from '../hooks/useMapView';
+import useWaterbody from '../hooks/useWaterbody';
 import { defineLocation } from '../utilities/defineLocation';
 import { getDefinitionExpression } from '../utilities/getDefinitionExpression';
 
@@ -30,6 +31,7 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
   const [selectorOptions, setSelectorOptions] = useState<LayerSelectorProps | null>(null);
   const { setMapView, setFlowPathFeatureLayer, flowPathFeatureLayer } = useMapView();
   const { data, setData } = useData();
+  useWaterbody();
 
   // setup the Map
   useEffect(() => {
