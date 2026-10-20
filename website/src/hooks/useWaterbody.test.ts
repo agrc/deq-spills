@@ -37,7 +37,7 @@ function renderWaterbodyHook() {
   return renderHook(() => useWaterbody(), { wrapper });
 }
 
-describe('useWaterbody: Basic functionality', () => {
+describe('useWaterbody', () => {
   afterEach(() => {
     window.history.pushState({}, '', '/');
     vi.restoreAllMocks();
