@@ -3,12 +3,12 @@ import SpatialReference from '@arcgis/core/geometry/SpatialReference';
 import { search, type ApiErrorResponse, type SearchResponse } from '@ugrc/utilities';
 import config from '../config';
 import type { DataContextType } from '../contexts/DataProvider';
-import { queryNearestWaterBody } from './queryNearestWaterBody';
+// import { queryNearestWaterBody } from './queryNearestWaterBody';
 
 type StringOrNull = string | null;
 
 const webMercatorWkid = 3857;
-const webMercator = new SpatialReference({ wkid: webMercatorWkid });
+// const webMercator = new SpatialReference({ wkid: webMercatorWkid });
 const utm = new SpatialReference({ wkid: 26912 });
 const wgs = new SpatialReference({ wkid: 4326 });
 export async function defineLocation(
@@ -16,7 +16,7 @@ export async function defineLocation(
   address: StringOrNull = null,
   highway: StringOrNull = null,
   milemarker: StringOrNull = null,
-  waterbodyEnabled = false,
+  // waterbodyEnabled = false,
 ): Promise<Omit<DataContextType['data'], 'FLOWPATH_LENGTH' | 'ID' | 'SPILL_NUMBER'>> {
   if (!projectOperator.isLoaded()) {
     await projectOperator.load();
@@ -24,17 +24,17 @@ export async function defineLocation(
 
   let wgsPoint;
   let utmPoint;
-  let webMercatorPoint;
+  // let webMercatorPoint;
 
   if (point.spatialReference.wkid === webMercatorWkid) {
     // point from map click or geocode
-    webMercatorPoint = point;
+    // webMercatorPoint = point;
     utmPoint = projectOperator.execute(point, utm) as __esri.Point;
     wgsPoint = projectOperator.execute(point, wgs) as __esri.Point;
   } else if (point.spatialReference.wkid === utm.wkid) {
     // point from coordinates component
     utmPoint = point;
-    webMercatorPoint = projectOperator.execute(point, webMercator) as __esri.Point;
+    //webMercatorPoint = projectOperator.execute(point, webMercator) as __esri.Point;
     wgsPoint = projectOperator.execute(point, wgs) as __esri.Point;
   } else {
     throw new Error(`Unsupported spatial reference: ${point.spatialReference.wkid}`);
@@ -42,7 +42,7 @@ export async function defineLocation(
 
   const queries = config.LOCATION_QUERIES;
   const agency = await queryApi(queries.agency.table, queries.agency.field, utmPoint);
-  const nearestWaterBody = waterbodyEnabled ? await queryNearestWaterBody(webMercatorPoint) : null;
+  // const nearestWaterBody = waterbodyEnabled ? await queryNearestWaterBody(webMercatorPoint) : null;
   const locationData = {
     // make sure that the following properties stay in sync with the properties in salesforce/force-app/main/default/lwc/spills/spills.js
     ADDRESS: address,
@@ -53,24 +53,27 @@ export async function defineLocation(
     HIGHWAY: highway,
     INDIAN: agency === 'Tribal',
     MILEMARKER: milemarker,
-    NEAREST_WATERBODY_DISTANCE: nearestWaterBody?.distanceInFeet ?? null,
-    NEAREST_WATERBODY_ID: nearestWaterBody?.id ?? null,
-    NEAREST_WATERBODY_NAME: !waterbodyEnabled
-      ? null
-      : nearestWaterBody === null
-        ? 'No water bodies found'
-        : (nearestWaterBody?.name ?? 'Unnamed water body'),
+    // NEAREST_WATERBODY_DISTANCE: nearestWaterBody?.distanceInFeet ?? null,
+    // NEAREST_WATERBODY_ID: nearestWaterBody?.id ?? null,
+    // NEAREST_WATERBODY_NAME: !waterbodyEnabled
+    //   ? null
+    //   : nearestWaterBody === null
+    //     ? 'No water bodies found'
+    //     : (nearestWaterBody?.name ?? 'Unnamed water body'),
+    NEAREST_WATERBODY_DISTANCE: null,
+    NEAREST_WATERBODY_ID: null,
+    NEAREST_WATERBODY_NAME: null,
     OWNER_AGENCY: agency,
     UTM_X: Math.round(utmPoint.x),
     UTM_Y: Math.round(utmPoint.y),
   };
 
-  console.log('nearest waterbody: sending info to Salesforce', {
-    enabled: waterbodyEnabled,
-    name: locationData.NEAREST_WATERBODY_NAME,
-    id: locationData.NEAREST_WATERBODY_ID,
-    distanceInFeet: locationData.NEAREST_WATERBODY_DISTANCE,
-  });
+  // console.log('nearest waterbody: sending info to Salesforce', {
+  //   enabled: waterbodyEnabled,
+  //   name: locationData.NEAREST_WATERBODY_NAME,
+  //   id: locationData.NEAREST_WATERBODY_ID,
+  //   distanceInFeet: locationData.NEAREST_WATERBODY_DISTANCE,
+  // });
 
   return locationData;
 }
