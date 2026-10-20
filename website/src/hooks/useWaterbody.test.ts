@@ -105,9 +105,54 @@ describe('useWaterbody', () => {
     }
   });
 
+  it('returns "Unnamed water body" when a waterbody\'s name is null', async () => {
+    mocks.queryNearestWaterBody.mockResolvedValue({
+      distanceInFeet: 200,
+      id: 'lake:456',
+      name: null,
+    });
+
+    const setData = vi.fn<DataContextType['setData']>();
+    renderWaterbodyHook(setData);
+
+    await waitFor(() => expect(setData).toHaveBeenCalledOnce());
+
+    const updateData = setData.mock.calls[0]?.[0];
+    expect(typeof updateData).toBe('function');
+    if (typeof updateData === 'function') {
+      const updatedData = updateData({ ...blankState, ...coordinates });
+
+      expect(updatedData.NEAREST_WATERBODY_NAME).toBe('Unnamed water body');
+      expect(updatedData.NEAREST_WATERBODY_ID).toBe('lake:456');
+      expect(updatedData.NEAREST_WATERBODY_DISTANCE).toBe(200);
+    }
+  });
+
+  it('returns "Unnamed water body" when a waterbody\'s name is empty', async () => {
+    mocks.queryNearestWaterBody.mockResolvedValue({
+      distanceInFeet: 200,
+      id: 'lake:456',
+      name: '',
+    });
+
+    const setData = vi.fn<DataContextType['setData']>();
+    renderWaterbodyHook(setData);
+
+    await waitFor(() => expect(setData).toHaveBeenCalledOnce());
+
+    const updateData = setData.mock.calls[0]?.[0];
+    expect(typeof updateData).toBe('function');
+    if (typeof updateData === 'function') {
+      const updatedData = updateData({ ...blankState, ...coordinates });
+
+      expect(updatedData.NEAREST_WATERBODY_NAME).toBe('Unnamed water body');
+      expect(updatedData.NEAREST_WATERBODY_ID).toBe('lake:456');
+      expect(updatedData.NEAREST_WATERBODY_DISTANCE).toBe(200);
+    }
+  });
+
   /*
     Next tests (delete me):
     - it should exit immediately if no waterbody is found, not even logging
-    - it should return 'Unnamed water body' when a waterbody has no name
   */
 });

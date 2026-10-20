@@ -42,7 +42,7 @@ export default function useWaterbody() {
           ? null
           : nearestWaterBody === null
             ? 'No water bodies found'
-            : (nearestWaterBody?.name ?? 'Unnamed water body'),
+            : (nearestWaterBody?.name || 'Unnamed water body'),
       };
       console.log('nearest waterbody: sending info to Salesforce', {
         enabled: isWaterbodyEnabled,
