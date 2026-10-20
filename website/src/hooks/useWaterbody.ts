@@ -8,6 +8,7 @@ import { getWaterbodyEnabled } from '../utilities/urlParameters';
 
 const utmWkid = 26912;
 const webMercatorWkid = 3857;
+const webMercator = new SpatialReference({ wkid: webMercatorWkid });
 
 export default function useWaterbody() {
   const { data, setData } = useData();
@@ -19,7 +20,6 @@ export default function useWaterbody() {
         y: Number(data.UTM_Y),
         spatialReference: { wkid: utmWkid },
       });
-      const webMercator = new SpatialReference({ wkid: webMercatorWkid });
       const webMercatorPoint = projectOperator.execute(utmPoint, webMercator) as __esri.Point;
       return webMercatorPoint;
     }
