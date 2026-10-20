@@ -14,7 +14,17 @@ export async function defineLocation(
   address: StringOrNull = null,
   highway: StringOrNull = null,
   milemarker: StringOrNull = null,
-): Promise<Omit<DataContextType['data'], 'FLOWPATH_LENGTH' | 'ID' | 'SPILL_NUMBER'>> {
+): Promise<
+  Omit<
+    DataContextType['data'],
+    | 'FLOWPATH_LENGTH'
+    | 'ID'
+    | 'SPILL_NUMBER'
+    | 'NEAREST_WATERBODY_DISTANCE'
+    | 'NEAREST_WATERBODY_ID'
+    | 'NEAREST_WATERBODY_NAME'
+  >
+> {
   if (!projectOperator.isLoaded()) {
     await projectOperator.load();
   }
@@ -46,9 +56,6 @@ export async function defineLocation(
     HIGHWAY: highway,
     INDIAN: agency === 'Tribal',
     MILEMARKER: milemarker,
-    NEAREST_WATERBODY_DISTANCE: null,
-    NEAREST_WATERBODY_ID: null,
-    NEAREST_WATERBODY_NAME: null,
     OWNER_AGENCY: agency,
     UTM_X: Math.round(utmPoint.x),
     UTM_Y: Math.round(utmPoint.y),
