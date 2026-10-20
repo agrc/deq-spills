@@ -48,6 +48,18 @@ describe('useWaterbody', () => {
     mocks.queryNearestWaterBody.mockReset();
   });
 
+  it('does not execute if waterbody lookup is disabled', async () => {
+    window.history.pushState({}, '', '?waterbody=false');
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined);
+    const setData = vi.fn<DataContextType['setData']>();
+    renderWaterbodyHook(setData);
+
+    await waitFor(() => {
+      expect(logSpy).not.toHaveBeenCalledWith('Waterbody: change detected in UTM');
+      expect(mocks.queryNearestWaterBody).not.toHaveBeenCalled();
+    });
+  });
+
   it('logs when the waterbody lookup is enabled with UTM coordinates', async () => {
     mocks.queryNearestWaterBody.mockResolvedValue(null);
     const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined);
@@ -150,9 +162,4 @@ describe('useWaterbody', () => {
       expect(updatedData.NEAREST_WATERBODY_DISTANCE).toBe(200);
     }
   });
-
-  /*
-    Next tests (delete me):
-    - it should exit immediately if no waterbody is found, not even logging
-  */
 });
