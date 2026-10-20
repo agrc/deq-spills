@@ -51,10 +51,15 @@ export default function useWaterbody() {
         distanceInFeet: toReturn.NEAREST_WATERBODY_DISTANCE,
       });
 
-      setData((prevData) => ({
-        ...prevData,
-        ...toReturn,
-      }));
+      setData((prevData) => {
+        if (prevData.UTM_X !== data.UTM_X || prevData.UTM_Y !== data.UTM_Y) {
+          return prevData;
+        }
+        return {
+          ...prevData,
+          ...toReturn,
+        };
+      });
     }
     fetchNearestWaterBody();
   }, [data.UTM_X, data.UTM_Y, setData]);
