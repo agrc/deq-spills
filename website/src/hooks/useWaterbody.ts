@@ -64,6 +64,8 @@ export default function useWaterbody() {
         };
       });
     }
-    fetchNearestWaterBody();
+    void fetchNearestWaterBody().catch((error) => {
+      console.error('Error querying nearest waterbody:', error);
+    });
   }, [data.UTM_X, data.UTM_Y, setData]);
 }
