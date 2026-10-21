@@ -31,7 +31,7 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
   const [selectorOptions, setSelectorOptions] = useState<LayerSelectorProps | null>(null);
   const { setMapView, setFlowPathFeatureLayer, flowPathFeatureLayer } = useMapView();
   const { data, setData } = useData();
-  useWaterbody();
+  useWaterbody(mapView.current, streamsFeatureLayer.current, riversFeatureLayer.current);
 
   // setup the Map
   useEffect(() => {
@@ -88,7 +88,7 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
       if (waterbodyEnabled) {
         streamsFeatureLayer.current = new FeatureLayer({
           url: config.URL.majorStreams,
-          outFields: ['ComID'],
+          outFields: ['ComID', 'GNIS_Name'],
           renderer: {
             type: 'simple',
             symbol: {
@@ -104,7 +104,7 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
 
         riversFeatureLayer.current = new FeatureLayer({
           url: config.URL.majorRivers,
-          outFields: ['COM_ID'],
+          outFields: ['COM_ID', 'NAME'],
           renderer: {
             type: 'simple',
             symbol: {
