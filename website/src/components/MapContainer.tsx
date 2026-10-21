@@ -22,6 +22,8 @@ type MapContainerProps = {
   waterbodyEnabled: boolean;
 };
 
+const WATERBODY_COLOR = [64, 224, 208, 0.5];
+
 export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, waterbodyEnabled }: MapContainerProps) {
   const mapNode = useRef<HTMLDivElement | null>(null);
   const mapComponent = useRef<EsriMap | null>(null);
@@ -93,7 +95,7 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
             type: 'simple',
             symbol: {
               type: 'simple-line',
-              color: [64, 224, 208, 0.5],
+              color: WATERBODY_COLOR,
               width: 4,
               style: 'solid',
             },
@@ -109,10 +111,10 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
             type: 'simple',
             symbol: {
               type: 'simple-fill',
-              color: [64, 224, 208, 0.5],
+              color: WATERBODY_COLOR,
               outline: {
-                color: [64, 224, 208, 0.5],
-                width: 2,
+                color: WATERBODY_COLOR,
+                width: 4,
               },
             },
           },
