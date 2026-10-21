@@ -1,26 +1,20 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import config from '../config';
 import { queryNearestWaterBody } from './queryNearestWaterBody';
 
 const mocks = vi.hoisted(() => ({
   execute: vi.fn(),
   isLoaded: vi.fn(),
   load: vi.fn(),
-  queryFeatures: vi.fn(),
+  queryRivers: vi.fn(),
+  queryStreams: vi.fn(),
 }));
 
 vi.mock('@arcgis/core/geometry/operators/geodeticDistanceOperator', () => mocks);
 
-vi.mock('@arcgis/core/layers/FeatureLayer', () => ({
-  default: vi.fn().mockImplementation(function MockFeatureLayer(options: { url: string }) {
-    return {
-      queryFeatures: (query: __esri.QueryProperties) => mocks.queryFeatures(options.url, query),
-    };
-  }),
-}));
-
 describe('queryNearestWaterBody', () => {
   const point = { spatialReference: { wkid: 3857 }, type: 'point' } as unknown as __esri.Point;
+  const riversFeatureLayer = { queryFeatures: mocks.queryRivers } as unknown as __esri.FeatureLayer;
+  const streamsFeatureLayer = { queryFeatures: mocks.queryStreams } as unknown as __esri.FeatureLayer;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -31,38 +25,32 @@ describe('queryNearestWaterBody', () => {
     const streamGeometry = { type: 'polyline' } as unknown as __esri.Polyline;
     const riverGeometry = { type: 'polygon' } as unknown as __esri.Polygon;
 
-    mocks.queryFeatures.mockImplementation((url: string) => {
-      if (url === config.URL.majorStreams) {
-        return Promise.resolve({
-          features: [
-            {
-              attributes: { ComID: 123, GNIS_Name: 'Dry Creek' },
-              geometry: streamGeometry,
-            },
-          ],
-        });
-      }
-
-      return Promise.resolve({
-        features: [
-          {
-            attributes: { COM_ID: 456, NAME: 'Jordan River' },
-            geometry: riverGeometry,
-          },
-        ],
-      });
+    mocks.queryStreams.mockResolvedValue({
+      features: [
+        {
+          attributes: { ComID: 123, GNIS_Name: 'Dry Creek' },
+          geometry: streamGeometry,
+        },
+      ],
+    });
+    mocks.queryRivers.mockResolvedValue({
+      features: [
+        {
+          attributes: { COM_ID: 456, NAME: 'Jordan River' },
+          geometry: riverGeometry,
+        },
+      ],
     });
     mocks.execute.mockImplementation((_, geometry: __esri.Geometry) => (geometry === streamGeometry ? 42 : 12));
 
-    const result = await queryNearestWaterBody(point);
+    const result = await queryNearestWaterBody(point, streamsFeatureLayer, riversFeatureLayer);
 
     expect(result).toEqual({
       distanceInFeet: 12,
       id: 'river:456',
       name: 'Jordan River',
     });
-    expect(mocks.queryFeatures).toHaveBeenCalledWith(
-      config.URL.majorStreams,
+    expect(mocks.queryStreams).toHaveBeenCalledWith(
       expect.objectContaining({
         distance: 5280,
         geometry: point,
@@ -73,8 +61,7 @@ describe('queryNearestWaterBody', () => {
         where: '1=1',
       }),
     );
-    expect(mocks.queryFeatures).toHaveBeenCalledWith(
-      config.URL.majorRivers,
+    expect(mocks.queryRivers).toHaveBeenCalledWith(
       expect.objectContaining({
         outFields: ['COM_ID', 'NAME'],
       }),
@@ -82,8 +69,9 @@ describe('queryNearestWaterBody', () => {
   });
 
   it('returns null when no candidates are found', async () => {
-    mocks.queryFeatures.mockResolvedValue({ features: [] });
+    mocks.queryStreams.mockResolvedValue({ features: [] });
+    mocks.queryRivers.mockResolvedValue({ features: [] });
 
-    await expect(queryNearestWaterBody(point)).resolves.toBeNull();
+    await expect(queryNearestWaterBody(point, streamsFeatureLayer, riversFeatureLayer)).resolves.toBeNull();
   });
 });
