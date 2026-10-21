@@ -19,6 +19,9 @@ vi.mock('@arcgis/core/geometry/operators/projectOperator', () => ({
 }));
 
 const coordinates = { UTM_X: 437156, UTM_Y: 4454301 };
+const mapView = {} as __esri.MapView;
+const streamsFeatureLayer = { queryFeatures: vi.fn() } as unknown as __esri.FeatureLayer;
+const riversFeatureLayer = { queryFeatures: vi.fn() } as unknown as __esri.FeatureLayer;
 
 function renderWaterbodyHook(setData: DataContextType['setData'] = () => undefined) {
   const wrapper = ({ children }: PropsWithChildren) =>
@@ -34,7 +37,7 @@ function renderWaterbodyHook(setData: DataContextType['setData'] = () => undefin
       children,
     );
 
-  return renderHook(() => useWaterbody(), { wrapper });
+  return renderHook(() => useWaterbody(mapView, streamsFeatureLayer, riversFeatureLayer), { wrapper });
 }
 
 describe('useWaterbody', () => {
@@ -74,6 +77,8 @@ describe('useWaterbody', () => {
           y: coordinates.UTM_Y,
           spatialReference: expect.objectContaining({ wkid: 26912 }),
         }),
+        streamsFeatureLayer,
+        riversFeatureLayer,
       );
     });
   });
