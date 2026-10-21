@@ -1,6 +1,4 @@
 import * as geodeticDistanceOperator from '@arcgis/core/geometry/operators/geodeticDistanceOperator';
-import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
-import config from '../config';
 
 export type NearestWaterBody = {
   distanceInFeet: number;
@@ -10,18 +8,11 @@ export type NearestWaterBody = {
 
 const searchDistanceInFeet = 5280;
 
-const streamsLayer = new FeatureLayer({
-  url: config.URL.majorStreams,
-  outFields: ['ComID', 'GNIS_Name'],
-});
-
-const riversLayer = new FeatureLayer({
-  url: config.URL.majorRivers,
-  outFields: ['COM_ID', 'NAME'],
-});
-
-async function queryStreams(point: __esri.Point): Promise<NearestWaterBody[]> {
-  const result = await streamsLayer.queryFeatures({
+async function queryStreams(
+  point: __esri.Point,
+  streamsFeatureLayer: __esri.FeatureLayer,
+): Promise<NearestWaterBody[]> {
+  const result = await streamsFeatureLayer.queryFeatures({
     geometry: point,
     spatialRelationship: 'intersects',
     distance: searchDistanceInFeet,
@@ -42,8 +33,8 @@ async function queryStreams(point: __esri.Point): Promise<NearestWaterBody[]> {
   }));
 }
 
-async function queryRivers(point: __esri.Point): Promise<NearestWaterBody[]> {
-  const result = await riversLayer.queryFeatures({
+async function queryRivers(point: __esri.Point, riversFeatureLayer: __esri.FeatureLayer): Promise<NearestWaterBody[]> {
+  const result = await riversFeatureLayer.queryFeatures({
     geometry: point,
     spatialRelationship: 'intersects',
     distance: searchDistanceInFeet,
@@ -64,12 +55,19 @@ async function queryRivers(point: __esri.Point): Promise<NearestWaterBody[]> {
   }));
 }
 
-export async function queryNearestWaterBody(point: __esri.Point): Promise<NearestWaterBody | null> {
+export async function queryNearestWaterBody(
+  point: __esri.Point,
+  streamsFeatureLayer: __esri.FeatureLayer,
+  riversFeatureLayer: __esri.FeatureLayer,
+): Promise<NearestWaterBody | null> {
   if (!geodeticDistanceOperator.isLoaded()) {
     await geodeticDistanceOperator.load();
   }
 
-  const [streamCandidates, riverCandidates] = await Promise.all([queryStreams(point), queryRivers(point)]);
+  const [streamCandidates, riverCandidates] = await Promise.all([
+    queryStreams(point, streamsFeatureLayer),
+    queryRivers(point, riversFeatureLayer),
+  ]);
 
   const candidates = [...streamCandidates, ...riverCandidates];
 

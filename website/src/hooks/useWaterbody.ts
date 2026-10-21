@@ -10,11 +10,21 @@ const utmWkid = 26912;
 const webMercatorWkid = 3857;
 const webMercator = new SpatialReference({ wkid: webMercatorWkid });
 
-export default function useWaterbody() {
+export default function useWaterbody(
+  mapView: __esri.MapView | null,
+  streamsFeatureLayer: __esri.FeatureLayer | null,
+  riversFeatureLayer: __esri.FeatureLayer | null,
+) {
   const { data, setData } = useData();
 
   useEffect(() => {
-    if (data.UTM_X === null || data.UTM_Y === null) {
+    if (
+      data.UTM_X === null ||
+      data.UTM_Y === null ||
+      mapView === null ||
+      streamsFeatureLayer === null ||
+      riversFeatureLayer === null
+    ) {
       return;
     }
     function computeWebMercatorPoint() {
@@ -37,7 +47,7 @@ export default function useWaterbody() {
       }
 
       const webMercatorPoint = computeWebMercatorPoint();
-      const nearestWaterBody = await queryNearestWaterBody(webMercatorPoint);
+      const nearestWaterBody = await queryNearestWaterBody(webMercatorPoint, streamsFeatureLayer!, riversFeatureLayer!);
       const waterbodyInfo = {
         NEAREST_WATERBODY_DISTANCE: nearestWaterBody?.distanceInFeet ?? null,
         NEAREST_WATERBODY_ID: nearestWaterBody?.id ?? null,
@@ -67,5 +77,5 @@ export default function useWaterbody() {
     void fetchNearestWaterBody().catch((error) => {
       console.error('Error querying nearest waterbody:', error);
     });
-  }, [data.UTM_X, data.UTM_Y, setData]);
+  }, [data.UTM_X, data.UTM_Y, mapView, streamsFeatureLayer, riversFeatureLayer, setData]);
 }
