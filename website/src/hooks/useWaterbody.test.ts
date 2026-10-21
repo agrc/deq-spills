@@ -23,13 +23,14 @@ const mapView = {} as __esri.MapView;
 const streamsFeatureLayer = { queryFeatures: vi.fn() } as unknown as __esri.FeatureLayer;
 const riversFeatureLayer = { queryFeatures: vi.fn() } as unknown as __esri.FeatureLayer;
 
-function renderWaterbodyHook(setData: DataContextType['setData'] = () => undefined) {
+function renderWaterbodyHook(setData: DataContextType['setData'] = () => undefined, initialCoordinates = coordinates) {
+  let currentCoordinates = initialCoordinates;
   const wrapper = ({ children }: PropsWithChildren) =>
     createElement(
       DataContext.Provider,
       {
         value: {
-          data: { ...blankState, ...coordinates },
+          data: { ...blankState, ...currentCoordinates },
           requestFlowpathToken: async () => '',
           setData,
         },
@@ -37,7 +38,15 @@ function renderWaterbodyHook(setData: DataContextType['setData'] = () => undefin
       children,
     );
 
-  return renderHook(() => useWaterbody(mapView, streamsFeatureLayer, riversFeatureLayer), { wrapper });
+  const hook = renderHook(() => useWaterbody(mapView, streamsFeatureLayer, riversFeatureLayer), { wrapper });
+
+  return {
+    ...hook,
+    rerenderWithCoordinates: (nextCoordinates: typeof coordinates) => {
+      currentCoordinates = nextCoordinates;
+      hook.rerender();
+    },
+  };
 }
 
 describe('useWaterbody', () => {
@@ -165,6 +174,62 @@ describe('useWaterbody', () => {
       expect(updatedData.NEAREST_WATERBODY_NAME).toBe('Unnamed water body');
       expect(updatedData.NEAREST_WATERBODY_ID).toBe('lake:456');
       expect(updatedData.NEAREST_WATERBODY_DISTANCE).toBe(200);
+    }
+  });
+
+  it('reloads the waterbody data when coordinates change', async () => {
+    const firstWaterbody = {
+      distanceInFeet: 100,
+      id: 'stream:123',
+      name: 'First Stream',
+    };
+    const secondWaterbody = {
+      distanceInFeet: 250,
+      id: 'stream:456',
+      name: 'Second Stream',
+    };
+    mocks.queryNearestWaterBody.mockResolvedValueOnce(firstWaterbody).mockResolvedValueOnce(secondWaterbody);
+
+    const setData = vi.fn<DataContextType['setData']>();
+    const { rerenderWithCoordinates } = renderWaterbodyHook(setData);
+
+    await waitFor(() => expect(setData).toHaveBeenCalledOnce());
+    expect(mocks.queryNearestWaterBody).toHaveBeenCalledOnce();
+    expect(mocks.queryNearestWaterBody).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({
+        x: coordinates.UTM_X,
+        y: coordinates.UTM_Y,
+        spatialReference: expect.objectContaining({ wkid: 26912 }),
+      }),
+      streamsFeatureLayer,
+      riversFeatureLayer,
+    );
+
+    const newCoordinates = { UTM_X: 500000, UTM_Y: 4500000 };
+    rerenderWithCoordinates(newCoordinates);
+
+    await waitFor(() => expect(setData).toHaveBeenCalledTimes(2));
+    expect(mocks.queryNearestWaterBody).toHaveBeenCalledTimes(2);
+    expect(mocks.queryNearestWaterBody).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({
+        x: newCoordinates.UTM_X,
+        y: newCoordinates.UTM_Y,
+        spatialReference: expect.objectContaining({ wkid: 26912 }),
+      }),
+      streamsFeatureLayer,
+      riversFeatureLayer,
+    );
+
+    const updateData = setData.mock.calls[1]?.[0];
+    expect(typeof updateData).toBe('function');
+    if (typeof updateData === 'function') {
+      const updatedData = updateData({ ...blankState, ...newCoordinates });
+
+      expect(updatedData.NEAREST_WATERBODY_NAME).toBe(secondWaterbody.name);
+      expect(updatedData.NEAREST_WATERBODY_ID).toBe(secondWaterbody.id);
+      expect(updatedData.NEAREST_WATERBODY_DISTANCE).toBe(secondWaterbody.distanceInFeet);
     }
   });
 });
