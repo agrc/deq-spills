@@ -128,8 +128,15 @@ export default class Spills extends LightningElement {
 
     const utm_x = data.UTM_X.toString(); // salesforce stores the coordinate fields as strings ¯\_(ツ)_/¯
     const utm_y = data.UTM_Y.toString();
-    if (utm_x === this.utm_x && utm_y === this.utm_y) {
-      console.log("salesforce: no change in UTM_X or UTM_Y");
+    const waterbody_id = data.NEAREST_WATERBODY_ID;
+    if (
+      utm_x === this.utm_x &&
+      utm_y === this.utm_y &&
+      waterbody_id === this.waterbody_id
+    ) {
+      console.log(
+        "salesforce: no change in UTM_X, UTM_Y, or NEAREST_WATERBODY_ID"
+      );
       return;
     }
 
@@ -156,7 +163,8 @@ export default class Spills extends LightningElement {
       [OWNER_AGENCY.fieldApiName]: data.OWNER_AGENCY,
       [UTM_X.fieldApiName]: utm_x,
       [UTM_Y.fieldApiName]: utm_y,
-      [NEAREST_WATERBODY_DISTANCE.fieldApiName]: data.NEAREST_WATERBODY_DISTANCE,
+      [NEAREST_WATERBODY_DISTANCE.fieldApiName]:
+        data.NEAREST_WATERBODY_DISTANCE,
       [NEAREST_WATERBODY_ID.fieldApiName]: data.NEAREST_WATERBODY_ID,
       [NEAREST_WATERBODY_NAME.fieldApiName]: data.NEAREST_WATERBODY_NAME
     };
@@ -254,7 +262,6 @@ export default class Spills extends LightningElement {
     });
   }
 }
-
 
 /*
 Apex class:
