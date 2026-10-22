@@ -7,6 +7,9 @@ jest.mock(
 );
 
 import getJWTToken from "@salesforce/apex/FirebaseAuthProvider.getJWTToken";
+import UTM_X from "@salesforce/schema/Case.Utm_E_X_6_dgts__c";
+import UTM_Y from "@salesforce/schema/Case.Utm_N_Y_7_dgts__c";
+import { getRecord } from "lightning/uiRecordApi";
 import Spills from "c/spills";
 import { createElement } from "lwc";
 
@@ -170,5 +173,40 @@ describe("c-spills", () => {
 
     expect(getJWTToken).not.toHaveBeenCalled();
     expect(postMessage).not.toHaveBeenCalled();
+  });
+
+  it("sends coordinates when the record loads after the iframe", async () => {
+    const postMessage = jest.fn();
+    const element = createSpills();
+    const iframe = element.shadowRoot.querySelector("iframe");
+    Object.defineProperty(iframe, "contentWindow", {
+      configurable: true,
+      value: { postMessage }
+    });
+
+    await flushPromises();
+    iframe.dispatchEvent(new Event("load"));
+
+    expect(postMessage).not.toHaveBeenCalled();
+
+    getRecord.emit({
+      fields: {
+        [UTM_X.fieldApiName]: { value: "437156" },
+        [UTM_Y.fieldApiName]: { value: "4454301" }
+      }
+    });
+
+    expect(postMessage).toHaveBeenCalledWith(
+      {
+        iframeId: mockedValue,
+        data: {
+          ID: "500000000000001",
+          UTM_X: 437156,
+          UTM_Y: 4454301
+        },
+        type: "data-sync"
+      },
+      "https://spillsmap.dev.utah.gov"
+    );
   });
 });

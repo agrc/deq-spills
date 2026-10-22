@@ -34,6 +34,7 @@ export default class Spills extends LightningElement {
   @api isReadOnly;
   iframeId;
   hasIframeLoadListener = false;
+  iframeHasLoaded = false;
   sampleId = 1234;
 
   @wire(getRecord, { recordId: "$recordId", fields: [ID_FIELD, UTM_X, UTM_Y] })
@@ -56,6 +57,9 @@ export default class Spills extends LightningElement {
       console.log("salesforce: salesforce data updated", data);
       this.utm_x = data.fields[UTM_X.fieldApiName].value;
       this.utm_y = data.fields[UTM_Y.fieldApiName].value;
+      if (this.iframeHasLoaded) {
+        this.sendCoordinatesToIFrame();
+      }
     }
 
     console.log("instance " + this.instanceId);
@@ -228,14 +232,25 @@ export default class Spills extends LightningElement {
   }
 
   sendCoordinatesToIFrame() {
+    if (this.utm_x == null || this.utm_y == null) {
+      return;
+    }
+
+    const utm_x = parseInt(this.utm_x, 10);
+    const utm_y = parseInt(this.utm_y, 10);
+    if (!Number.isFinite(utm_x) || !Number.isFinite(utm_y)) {
+      console.warn("salesforce: cannot send invalid UTM coordinates to iframe");
+      return;
+    }
+
     console.log(`salesforce: sending coordinates to iframe ${this.iframeId}`);
 
     try {
       this.postMessageToIFrame({
         data: {
           ID: this.recordId,
-          UTM_X: parseInt(this.utm_x, 10),
-          UTM_Y: parseInt(this.utm_y, 10)
+          UTM_X: utm_x,
+          UTM_Y: utm_y
         },
         type: MESSAGE_TYPES.DATA_SYNC
       });
@@ -256,6 +271,7 @@ export default class Spills extends LightningElement {
     this.hasIframeLoadListener = true;
 
     this.refs.iframe.addEventListener("load", () => {
+      this.iframeHasLoaded = true;
       console.log("salesforce: iframe loaded", this.utm_x, this.utm_y);
 
       this.sendCoordinatesToIFrame();
