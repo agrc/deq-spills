@@ -1,5 +1,21 @@
 # Changelog
 
+## [3.1.6-rc.5](https://github.com/agrc/deq-spills/compare/v3.1.6-rc.4...v3.1.6-rc.5) (2026-10-22)
+
+
+### Features
+
+* hook skeleton ([5e55082](https://github.com/agrc/deq-spills/commit/5e550828c4b38aaa388c9906fcaa5367a163cf3b))
+* hook wire ([0eadfed](https://github.com/agrc/deq-spills/commit/0eadfed3cb403888d32c3d80a2fa5f3ae74d6e78))
+* more skeletoning ([908c2ce](https://github.com/agrc/deq-spills/commit/908c2ced52f8d79c39b45ff4950d5085ff5a4597))
+
+
+### Bug Fixes
+
+* race resolution with featurelayer loads and redundant layer creation elimination ([581567d](https://github.com/agrc/deq-spills/commit/581567d0a75b8bc52411bcff124313ef63f4c7f2))
+* recomputation check of waterbody ID and waterbody color abstraction ([76e2307](https://github.com/agrc/deq-spills/commit/76e23073b68c43f4760c948b2cfb81f36fd356f5))
+* repaired sync error ([c135bd1](https://github.com/agrc/deq-spills/commit/c135bd1ee4ecfc2b75316592a9d28f1615e994cc))
+
 ## [3.1.6-rc.4](https://github.com/agrc/deq-spills/compare/v3.1.6-rc.3...v3.1.6-rc.4) (2026-10-16)
 
 
