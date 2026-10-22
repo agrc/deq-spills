@@ -10,7 +10,7 @@ import DD_LONG from "@salesforce/schema/Case.Longitude__c";
 import MILEMARKER from "@salesforce/schema/Case.Mile_Marker__c";
 import CITY from "@salesforce/schema/Case.Nearest_Town_City__c";
 import NEAREST_WATERBODY_DISTANCE from "@salesforce/schema/Case.NearestWaterbodyDistance__c";
-import NEAREST_WATERBODY_ID from "@salesforce/schema/Case.NearestWaterbodyID__c";
+import { default as NEAREST_WATERBODY_ID } from "@salesforce/schema/Case.NearestWaterbodyID__c";
 import NEAREST_WATERBODY_NAME from "@salesforce/schema/Case.NearestWaterbodyName__c";
 import UTM_X from "@salesforce/schema/Case.Utm_E_X_6_dgts__c";
 import UTM_Y from "@salesforce/schema/Case.Utm_N_Y_7_dgts__c";
@@ -36,7 +36,10 @@ export default class Spills extends LightningElement {
   hasIframeLoadListener = false;
   sampleId = 1234;
 
-  @wire(getRecord, { recordId: "$recordId", fields: [ID_FIELD, UTM_X, UTM_Y] })
+  @wire(getRecord, {
+    recordId: "$recordId",
+    fields: [ID_FIELD, UTM_X, UTM_Y, NEAREST_WATERBODY_ID]
+  })
   wiredRecord({ error, data }) {
     if (error) {
       let message = "Unknown error";
@@ -56,6 +59,7 @@ export default class Spills extends LightningElement {
       console.log("salesforce: salesforce data updated", data);
       this.utm_x = data.fields[UTM_X.fieldApiName].value;
       this.utm_y = data.fields[UTM_Y.fieldApiName].value;
+      this.waterbody_id = data.fields[WATERBODY_ID.fieldApiName].value;
     }
 
     console.log("instance " + this.instanceId);
@@ -235,7 +239,8 @@ export default class Spills extends LightningElement {
         data: {
           ID: this.recordId,
           UTM_X: parseInt(this.utm_x, 10),
-          UTM_Y: parseInt(this.utm_y, 10)
+          UTM_Y: parseInt(this.utm_y, 10),
+          NEAREST_WATERBODY_ID: this.waterbody_id
         },
         type: MESSAGE_TYPES.DATA_SYNC
       });
