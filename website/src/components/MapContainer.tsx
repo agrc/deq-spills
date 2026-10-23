@@ -28,18 +28,23 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
   const mapNode = useRef<HTMLDivElement | null>(null);
   const mapComponent = useRef<EsriMap | null>(null);
   const mapView = useRef<MapView>(null);
-  const streamsFeatureLayer = useRef<FeatureLayer | null>(null);
-  const riversFeatureLayer = useRef<FeatureLayer | null>(null);
   const [selectorOptions, setSelectorOptions] = useState<LayerSelectorProps | null>(null);
+  const [waterbodyLayers, setWaterbodyLayers] = useState<{
+    streams: FeatureLayer;
+    rivers: FeatureLayer;
+  } | null>(null);
   const { setMapView, setFlowPathFeatureLayer, flowPathFeatureLayer } = useMapView();
   const { data, setData } = useData();
-  useWaterbody(mapView.current, streamsFeatureLayer.current, riversFeatureLayer.current);
+  useWaterbody(mapView.current, waterbodyLayers?.streams ?? null, waterbodyLayers?.rivers ?? null);
 
   // setup the Map
   useEffect(() => {
     if (!mapNode.current) {
       return;
     }
+
+    let isCurrent = true;
+    setWaterbodyLayers(null);
 
     mapComponent.current = new EsriMap();
 
@@ -51,6 +56,10 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
     mapView.current.constraints.snapToZoom = false;
 
     mapView.current.when(() => {
+      if (!isCurrent) {
+        return;
+      }
+
       const legend = new Legend({
         view: mapView.current!,
         basemapLegendVisible: true,
@@ -88,7 +97,7 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
       }
 
       if (waterbodyEnabled) {
-        streamsFeatureLayer.current = new FeatureLayer({
+        const streams = new FeatureLayer({
           url: config.URL.majorStreams,
           outFields: ['ComID', 'GNIS_Name'],
           renderer: {
@@ -104,7 +113,7 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
           legendEnabled: false,
         });
 
-        riversFeatureLayer.current = new FeatureLayer({
+        const rivers = new FeatureLayer({
           url: config.URL.majorRivers,
           outFields: ['COM_ID', 'NAME'],
           renderer: {
@@ -122,7 +131,16 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
           legendEnabled: false,
         });
 
-        mapView.current!.map!.addMany([streamsFeatureLayer.current, riversFeatureLayer.current]);
+        mapView.current!.map!.addMany([streams, rivers]);
+        void Promise.all([streams.when(), rivers.when()])
+          .then(() => {
+            if (isCurrent) {
+              setWaterbodyLayers({ streams, rivers });
+            }
+          })
+          .catch((error) => {
+            console.error('Error loading waterbody feature layers:', error);
+          });
       }
     });
 
@@ -204,6 +222,7 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
     setSelectorOptions(selectorOptions);
 
     return () => {
+      isCurrent = false;
       mapView.current?.destroy();
       mapComponent.current?.destroy();
     };
@@ -237,15 +256,15 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
 
   // highlight the nearest water body, since its id tells us whether it came from the streams or rivers layer
   useEffect(() => {
-    if (!waterbodyEnabled || !streamsFeatureLayer.current || !riversFeatureLayer.current) {
+    if (!waterbodyEnabled || !waterbodyLayers) {
       return;
     }
 
     const [type, id] = data.NEAREST_WATERBODY_ID?.split(':') ?? [];
 
-    streamsFeatureLayer.current.definitionExpression = type === 'stream' ? `ComID = ${id}` : '1=0';
-    riversFeatureLayer.current.definitionExpression = type === 'river' ? `COM_ID = ${id}` : '1=0';
-  }, [data.NEAREST_WATERBODY_ID, waterbodyEnabled]);
+    waterbodyLayers.streams.definitionExpression = type === 'stream' ? `ComID = ${id}` : '1=0';
+    waterbodyLayers.rivers.definitionExpression = type === 'river' ? `COM_ID = ${id}` : '1=0';
+  }, [data.NEAREST_WATERBODY_ID, waterbodyEnabled, waterbodyLayers]);
 
   // update graphic and update flow paths layer
   const { setGraphic } = useGraphicManager(mapView.current);

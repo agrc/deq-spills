@@ -36,7 +36,10 @@ export default class Spills extends LightningElement {
   hasIframeLoadListener = false;
   sampleId = 1234;
 
-  @wire(getRecord, { recordId: "$recordId", fields: [ID_FIELD, UTM_X, UTM_Y] })
+  @wire(getRecord, {
+    recordId: "$recordId",
+    fields: [ID_FIELD, UTM_X, UTM_Y, NEAREST_WATERBODY_ID]
+  })
   wiredRecord({ error, data }) {
     if (error) {
       let message = "Unknown error";
@@ -56,6 +59,7 @@ export default class Spills extends LightningElement {
       console.log("salesforce: salesforce data updated", data);
       this.utm_x = data.fields[UTM_X.fieldApiName].value;
       this.utm_y = data.fields[UTM_Y.fieldApiName].value;
+      this.waterbody_id = data.fields[NEAREST_WATERBODY_ID.fieldApiName].value;
     }
 
     console.log("instance " + this.instanceId);
@@ -235,7 +239,8 @@ export default class Spills extends LightningElement {
         data: {
           ID: this.recordId,
           UTM_X: parseInt(this.utm_x, 10),
-          UTM_Y: parseInt(this.utm_y, 10)
+          UTM_Y: parseInt(this.utm_y, 10),
+          NEAREST_WATERBODY_ID: this.waterbody_id
         },
         type: MESSAGE_TYPES.DATA_SYNC
       });

@@ -1,7 +1,7 @@
 import * as projectOperator from '@arcgis/core/geometry/operators/projectOperator';
 import Point from '@arcgis/core/geometry/Point';
 import SpatialReference from '@arcgis/core/geometry/SpatialReference';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import useData from '../hooks/useDataProvider';
 import { queryNearestWaterBody } from '../utilities/queryNearestWaterBody';
 import { getWaterbodyEnabled } from '../utilities/urlParameters';
@@ -17,6 +17,8 @@ export default function useWaterbody(
 ) {
   const { data, setData } = useData();
 
+  const previousCoordinates = useRef<{ x: typeof data.UTM_X; y: typeof data.UTM_Y } | null>(null);
+
   useEffect(() => {
     if (
       data.UTM_X === null ||
@@ -27,6 +29,10 @@ export default function useWaterbody(
     ) {
       return;
     }
+    const coordinatesChanged =
+      previousCoordinates.current !== null &&
+      (previousCoordinates.current.x !== data.UTM_X || previousCoordinates.current.y !== data.UTM_Y);
+
     function computeWebMercatorPoint() {
       const utmPoint = new Point({
         x: Number(data.UTM_X),
@@ -38,6 +44,10 @@ export default function useWaterbody(
     }
     const isWaterbodyEnabled = getWaterbodyEnabled();
     if (!isWaterbodyEnabled) {
+      return;
+    }
+    if (!coordinatesChanged && data.NEAREST_WATERBODY_ID !== null) {
+      console.log('Waterbody: not refetching');
       return;
     }
     console.log('Waterbody: change detected in UTM');
@@ -65,6 +75,7 @@ export default function useWaterbody(
       });
 
       setData((prevData) => {
+        // Race guard: ensure that the UTM coordinates haven't changed since the fetch started
         if (prevData.UTM_X !== data.UTM_X || prevData.UTM_Y !== data.UTM_Y) {
           return prevData;
         }
@@ -77,5 +88,5 @@ export default function useWaterbody(
     void fetchNearestWaterBody().catch((error) => {
       console.error('Error querying nearest waterbody:', error);
     });
-  }, [data.UTM_X, data.UTM_Y, mapView, streamsFeatureLayer, riversFeatureLayer, setData]);
+  }, [data.UTM_X, data.UTM_Y, data.NEAREST_WATERBODY_ID, mapView, streamsFeatureLayer, riversFeatureLayer, setData]);
 }
