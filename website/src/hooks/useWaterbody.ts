@@ -33,7 +33,6 @@ export default function useWaterbody(
       previousCoordinates.current !== null &&
       (previousCoordinates.current.x !== data.UTM_X || previousCoordinates.current.y !== data.UTM_Y);
 
-    previousCoordinates.current = { x: data.UTM_X, y: data.UTM_Y };
     function computeWebMercatorPoint() {
       const utmPoint = new Point({
         x: Number(data.UTM_X),

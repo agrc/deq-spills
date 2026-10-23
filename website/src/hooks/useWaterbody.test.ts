@@ -23,8 +23,19 @@ const mapView = {} as __esri.MapView;
 const streamsFeatureLayer = { queryFeatures: vi.fn() } as unknown as __esri.FeatureLayer;
 const riversFeatureLayer = { queryFeatures: vi.fn() } as unknown as __esri.FeatureLayer;
 
-function renderWaterbodyHook(setData: DataContextType['setData'] = () => undefined, initialCoordinates = coordinates) {
+type WaterbodyLayers = {
+  mapView: __esri.MapView;
+  streamsFeatureLayer: __esri.FeatureLayer;
+  riversFeatureLayer: __esri.FeatureLayer;
+};
+
+function renderWaterbodyHook(
+  setData: DataContextType['setData'] = () => undefined,
+  initialCoordinates = coordinates,
+  initialLayers: WaterbodyLayers | null = { mapView, streamsFeatureLayer, riversFeatureLayer },
+) {
   let currentCoordinates = initialCoordinates;
+  let currentLayers = initialLayers;
   const wrapper = ({ children }: PropsWithChildren) =>
     createElement(
       DataContext.Provider,
@@ -38,12 +49,24 @@ function renderWaterbodyHook(setData: DataContextType['setData'] = () => undefin
       children,
     );
 
-  const hook = renderHook(() => useWaterbody(mapView, streamsFeatureLayer, riversFeatureLayer), { wrapper });
+  const hook = renderHook(
+    () =>
+      useWaterbody(
+        currentLayers?.mapView ?? null,
+        currentLayers?.streamsFeatureLayer ?? null,
+        currentLayers?.riversFeatureLayer ?? null,
+      ),
+    { wrapper },
+  );
 
   return {
     ...hook,
     rerenderWithCoordinates: (nextCoordinates: typeof coordinates) => {
       currentCoordinates = nextCoordinates;
+      hook.rerender();
+    },
+    rerenderWithLayers: (nextLayers: WaterbodyLayers | null) => {
+      currentLayers = nextLayers;
       hook.rerender();
     },
   };
@@ -90,6 +113,19 @@ describe('useWaterbody', () => {
         riversFeatureLayer,
       );
     });
+  });
+
+  it('waits for the waterbody layers before looking up the nearest waterbody', async () => {
+    mocks.queryNearestWaterBody.mockResolvedValue(null);
+    const setData = vi.fn<DataContextType['setData']>();
+    const { rerenderWithLayers } = renderWaterbodyHook(setData, coordinates, null);
+
+    expect(mocks.queryNearestWaterBody).not.toHaveBeenCalled();
+    expect(setData).not.toHaveBeenCalled();
+
+    rerenderWithLayers({ mapView, streamsFeatureLayer, riversFeatureLayer });
+
+    await waitFor(() => expect(mocks.queryNearestWaterBody).toHaveBeenCalledOnce());
   });
 
   it('logs the waterbody fields before they are sent to salesforce if a waterbody is found', async () => {
