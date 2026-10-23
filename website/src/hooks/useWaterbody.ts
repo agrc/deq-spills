@@ -48,6 +48,7 @@ export default function useWaterbody(
       return;
     }
     if (!coordinatesChanged && data.NEAREST_WATERBODY_ID !== null) {
+      console.log('Waterbody: not refetching');
       return;
     }
     console.log('Waterbody: change detected in UTM');
