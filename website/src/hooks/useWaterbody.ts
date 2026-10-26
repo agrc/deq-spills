@@ -61,12 +61,10 @@ export default function useWaterbody(
     if (!isWaterbodyEnabled) {
       return;
     }
-    if (spillHasNotMoved()) {
+    if (spillHasNotMoved() && waterbodyIDAlreadySet()) {
       previousCoordinates.current = { x: data.UTM_X, y: data.UTM_Y };
-      if (waterbodyIDAlreadySet()) {
-        console.log('Waterbody: gate, fetching from SF instead of API');
-        return;
-      }
+      console.log('Waterbody: gate, fetching from SF instead of API');
+      return;
     }
     previousCoordinates.current = { x: data.UTM_X, y: data.UTM_Y };
     previousWaterbodyID.current = data.NEAREST_WATERBODY_ID;
