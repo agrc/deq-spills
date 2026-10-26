@@ -47,6 +47,9 @@ export function getData(): DataContextType['data'] {
       data[key] = blankState[key as keyof typeof blankState] as UrlParamValue;
     }
   }
+  if (!data.ID) {
+    data.ID = 'URL_PARAMS';
+  }
 
   return data as DataContextType['data'];
 }

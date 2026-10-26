@@ -18,9 +18,14 @@ export default function useWaterbody(
   const { data, setData } = useData();
 
   const previousCoordinates = useRef<{ x: typeof data.UTM_X; y: typeof data.UTM_Y } | null>(null);
+  const previousWaterbodyId = useRef<typeof data.NEAREST_WATERBODY_ID | null>(null);
 
   useEffect(() => {
+    if (data.ID === null) {
+      console.log('Data ID is null');
+    }
     if (
+      // data.ID === null ||
       data.UTM_X === null ||
       data.UTM_Y === null ||
       mapView === null ||
@@ -29,9 +34,45 @@ export default function useWaterbody(
     ) {
       return;
     }
-    const coordinatesChanged =
-      previousCoordinates.current !== null &&
-      (previousCoordinates.current.x !== data.UTM_X || previousCoordinates.current.y !== data.UTM_Y);
+    // function hasLocationGoneFromNonNullToDifferentNonNull() {
+    //   return (
+    //     previousCoordinates.current !== null &&
+    //     data.UTM_X !== null &&
+    //     data.UTM_Y !== null &&
+    //     (previousCoordinates.current.x !== data.UTM_X || previousCoordinates.current.y !== data.UTM_Y)
+    //   );
+    // }
+    function hasLocationGoneFromNullToNonNull() {
+      return previousCoordinates.current === null && data.UTM_X !== null && data.UTM_Y !== null;
+    }
+
+    // const coordinatesChanged =
+    //   previousCoordinates.current?.x !== data.UTM_X || previousCoordinates.current?.y !== data.UTM_Y;
+    const newAndPreviousCoordinatesEqual =
+      previousCoordinates.current?.x === data.UTM_X && previousCoordinates.current?.y === data.UTM_Y;
+
+    function gateExecution() {
+      // The click-only page (embedded true, readonly false, waterbody true) never has a data.ID set at any point.
+      if (data.ID !== null && (hasLocationGoneFromNullToNonNull() || newAndPreviousCoordinatesEqual)) {
+        return true;
+      }
+      // console.log('RETURNING FALSE: Has the location gone from null to non-null?', hasLocationGoneFromNullToNonNull());
+      // console.log('What did the coordinates change to?', { x: data.UTM_X, y: data.UTM_Y });
+      // console.log('Previous coordinates were:', previousCoordinates.current);
+      return false;
+    }
+    // Just console log for now:
+    // the clicker page isn't executing this.
+    // console.log('Has loc gone from non-null to other non-null?', hasLocationGoneFromNonNullToDifferentNonNull());
+
+    // if (hasLocationGoneFromNullToNonNull()) {
+    //   // is waterbody ID set? if it's null, we want to fetch, right? well....no.
+    //   // the problem is that waterbodyID is null at the beginning EVEN IF it exists in SF, and
+    //   //  I don't know how to differentiate
+    //   console.log("Location was null and now isn't, and waterbody ID is " + data.NEAREST_WATERBODY_ID);
+    // }
+
+    console.log('Would we gate execution?', gateExecution());
 
     function computeWebMercatorPoint() {
       const utmPoint = new Point({
@@ -46,12 +87,25 @@ export default function useWaterbody(
     if (!isWaterbodyEnabled) {
       return;
     }
-    if (!coordinatesChanged && data.NEAREST_WATERBODY_ID !== null) {
-      console.log('Waterbody: not refetching');
-      return;
+    // if (gateExecution()) {
+    //   console.log('Waterbody: not refetching');
+    //   return;
+    // }
+    // previousCoordinates.current = { x: data.UTM_X, y: data.UTM_Y };
+    console.log('Would we gate execution down below?', gateExecution());
+    if (gateExecution()) {
+      previousCoordinates.current = { x: data.UTM_X, y: data.UTM_Y };
+
+      if (data.NEAREST_WATERBODY_ID !== null && previousWaterbodyId.current === null) {
+        console.log('Waterbody: gate, fetching from SF instead of API');
+        return;
+      }
     }
-    console.log('Waterbody: change detected in UTM');
-    async function fetchNearestWaterBody() {
+    previousCoordinates.current = { x: data.UTM_X, y: data.UTM_Y };
+    previousWaterbodyId.current = data.NEAREST_WATERBODY_ID;
+
+    console.log('Waterbody: fetching nearest waterbody from API');
+    async function fetchNearestWaterBodyFromAPI() {
       if (!projectOperator.isLoaded()) {
         await projectOperator.load();
       }
@@ -75,6 +129,7 @@ export default function useWaterbody(
       });
 
       setData((prevData) => {
+        // Sends data to Salesforce.
         // Race guard: ensure that the UTM coordinates haven't changed since the fetch started
         if (prevData.UTM_X !== data.UTM_X || prevData.UTM_Y !== data.UTM_Y) {
           return prevData;
@@ -85,8 +140,17 @@ export default function useWaterbody(
         };
       });
     }
-    void fetchNearestWaterBody().catch((error) => {
+    void fetchNearestWaterBodyFromAPI().catch((error) => {
       console.error('Error querying nearest waterbody:', error);
     });
-  }, [data.UTM_X, data.UTM_Y, data.NEAREST_WATERBODY_ID, mapView, streamsFeatureLayer, riversFeatureLayer, setData]);
+  }, [
+    data.UTM_X,
+    data.UTM_Y,
+    data.ID,
+    data.NEAREST_WATERBODY_ID,
+    mapView,
+    streamsFeatureLayer,
+    riversFeatureLayer,
+    setData,
+  ]);
 }
