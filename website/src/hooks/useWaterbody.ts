@@ -18,7 +18,7 @@ export default function useWaterbody(
   const { data, setData } = useData();
 
   const previousCoordinates = useRef<{ x: typeof data.UTM_X; y: typeof data.UTM_Y } | null>(null);
-  const previousWaterbodyId = useRef<typeof data.NEAREST_WATERBODY_ID | null>(null);
+  const previousWaterbodyID = useRef<typeof data.NEAREST_WATERBODY_ID | null>(null);
 
   useEffect(() => {
     if (
@@ -36,12 +36,16 @@ export default function useWaterbody(
     const newAndPreviousCoordinatesEqual =
       previousCoordinates.current?.x === data.UTM_X && previousCoordinates.current?.y === data.UTM_Y;
 
-    function gateExecution() {
+    function spillHasNotMoved() {
       // The click-only page (embedded true, readonly false, waterbody true) never has a data.ID set at any point.
       if (data.ID !== null && (hasLocationGoneFromNullToNonNull() || newAndPreviousCoordinatesEqual)) {
         return true;
       }
       return false;
+    }
+
+    function waterbodyIDAlreadySet() {
+      return data.NEAREST_WATERBODY_ID !== null && previousWaterbodyID.current === null;
     }
 
     function computeWebMercatorPoint() {
@@ -57,15 +61,15 @@ export default function useWaterbody(
     if (!isWaterbodyEnabled) {
       return;
     }
-    if (gateExecution()) {
+    if (spillHasNotMoved()) {
       previousCoordinates.current = { x: data.UTM_X, y: data.UTM_Y };
-      if (data.NEAREST_WATERBODY_ID !== null && previousWaterbodyId.current === null) {
+      if (waterbodyIDAlreadySet()) {
         console.log('Waterbody: gate, fetching from SF instead of API');
         return;
       }
     }
     previousCoordinates.current = { x: data.UTM_X, y: data.UTM_Y };
-    previousWaterbodyId.current = data.NEAREST_WATERBODY_ID;
+    previousWaterbodyID.current = data.NEAREST_WATERBODY_ID;
     console.log('Waterbody: fetching nearest waterbody from API');
     async function fetchNearestWaterBodyFromAPI() {
       if (!projectOperator.isLoaded()) {
