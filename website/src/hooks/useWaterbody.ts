@@ -21,11 +21,7 @@ export default function useWaterbody(
   const previousWaterbodyId = useRef<typeof data.NEAREST_WATERBODY_ID | null>(null);
 
   useEffect(() => {
-    if (data.ID === null) {
-      console.log('Data ID is null');
-    }
     if (
-      // data.ID === null ||
       data.UTM_X === null ||
       data.UTM_Y === null ||
       mapView === null ||
@@ -34,20 +30,9 @@ export default function useWaterbody(
     ) {
       return;
     }
-    // function hasLocationGoneFromNonNullToDifferentNonNull() {
-    //   return (
-    //     previousCoordinates.current !== null &&
-    //     data.UTM_X !== null &&
-    //     data.UTM_Y !== null &&
-    //     (previousCoordinates.current.x !== data.UTM_X || previousCoordinates.current.y !== data.UTM_Y)
-    //   );
-    // }
     function hasLocationGoneFromNullToNonNull() {
       return previousCoordinates.current === null && data.UTM_X !== null && data.UTM_Y !== null;
     }
-
-    // const coordinatesChanged =
-    //   previousCoordinates.current?.x !== data.UTM_X || previousCoordinates.current?.y !== data.UTM_Y;
     const newAndPreviousCoordinatesEqual =
       previousCoordinates.current?.x === data.UTM_X && previousCoordinates.current?.y === data.UTM_Y;
 
@@ -56,23 +41,8 @@ export default function useWaterbody(
       if (data.ID !== null && (hasLocationGoneFromNullToNonNull() || newAndPreviousCoordinatesEqual)) {
         return true;
       }
-      // console.log('RETURNING FALSE: Has the location gone from null to non-null?', hasLocationGoneFromNullToNonNull());
-      // console.log('What did the coordinates change to?', { x: data.UTM_X, y: data.UTM_Y });
-      // console.log('Previous coordinates were:', previousCoordinates.current);
       return false;
     }
-    // Just console log for now:
-    // the clicker page isn't executing this.
-    // console.log('Has loc gone from non-null to other non-null?', hasLocationGoneFromNonNullToDifferentNonNull());
-
-    // if (hasLocationGoneFromNullToNonNull()) {
-    //   // is waterbody ID set? if it's null, we want to fetch, right? well....no.
-    //   // the problem is that waterbodyID is null at the beginning EVEN IF it exists in SF, and
-    //   //  I don't know how to differentiate
-    //   console.log("Location was null and now isn't, and waterbody ID is " + data.NEAREST_WATERBODY_ID);
-    // }
-
-    console.log('Would we gate execution?', gateExecution());
 
     function computeWebMercatorPoint() {
       const utmPoint = new Point({
@@ -87,12 +57,6 @@ export default function useWaterbody(
     if (!isWaterbodyEnabled) {
       return;
     }
-    // if (gateExecution()) {
-    //   console.log('Waterbody: not refetching');
-    //   return;
-    // }
-    // previousCoordinates.current = { x: data.UTM_X, y: data.UTM_Y };
-    console.log('Would we gate execution down below?', gateExecution());
     if (gateExecution()) {
       previousCoordinates.current = { x: data.UTM_X, y: data.UTM_Y };
 
