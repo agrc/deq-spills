@@ -59,7 +59,6 @@ export default function useWaterbody(
     }
     if (gateExecution()) {
       previousCoordinates.current = { x: data.UTM_X, y: data.UTM_Y };
-
       if (data.NEAREST_WATERBODY_ID !== null && previousWaterbodyId.current === null) {
         console.log('Waterbody: gate, fetching from SF instead of API');
         return;
@@ -67,7 +66,6 @@ export default function useWaterbody(
     }
     previousCoordinates.current = { x: data.UTM_X, y: data.UTM_Y };
     previousWaterbodyId.current = data.NEAREST_WATERBODY_ID;
-
     console.log('Waterbody: fetching nearest waterbody from API');
     async function fetchNearestWaterBodyFromAPI() {
       if (!projectOperator.isLoaded()) {
