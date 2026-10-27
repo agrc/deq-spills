@@ -4,7 +4,7 @@ import { getData, getIsEmbedded } from '../utilities/urlParameters';
 export type UrlParamValue = number | string | boolean | null;
 export type StateKey = keyof typeof blankState;
 export const blankState = {
-  ID: null,
+  ID: 'URL_PARAMS',
   ADDRESS: null,
   CITY: null,
   COUNTY: null,
