@@ -33,6 +33,7 @@ function renderWaterbodyHook(
   setData: DataContextType['setData'] = () => undefined,
   initialCoordinates = coordinates,
   initialLayers: WaterbodyLayers | null = { mapView, streamsFeatureLayer, riversFeatureLayer },
+  initialData: Partial<DataContextType['data']> = {},
 ) {
   let currentCoordinates = initialCoordinates;
   let currentLayers = initialLayers;
@@ -41,7 +42,7 @@ function renderWaterbodyHook(
       DataContext.Provider,
       {
         value: {
-          data: { ...blankState, ...currentCoordinates },
+          data: { ...blankState, ...currentCoordinates, ...initialData },
           requestFlowpathToken: async () => '',
           setData,
         },
@@ -267,5 +268,23 @@ describe('useWaterbody', () => {
       expect(updatedData.NEAREST_WATERBODY_ID).toBe(secondWaterbody.id);
       expect(updatedData.NEAREST_WATERBODY_DISTANCE).toBe(secondWaterbody.distanceInFeet);
     }
+  });
+
+  describe('useWaterbody: API query decisions', () => {
+    it('does not query the API when a nonexistent waterbody ID is passed into the URL', async () => {
+      window.history.pushState(
+        {},
+        '',
+        '?embedded=false&readonly=true&flowpath=true&waterbody=true&SPILL_NUMBER=00037919&UTM_X=437156&UTM_Y=4454301&NEAREST_WATERBODY_ID=test:666',
+      );
+      const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined);
+      const setData = vi.fn<DataContextType['setData']>();
+      renderWaterbodyHook(setData, coordinates, undefined, { NEAREST_WATERBODY_ID: 'test:666' });
+
+      await waitFor(() => {
+        expect(logSpy).toHaveBeenCalledWith('Waterbody: gate, fetching from SF instead of API');
+        expect(mocks.queryNearestWaterBody).not.toHaveBeenCalled();
+      });
+    });
   });
 });
