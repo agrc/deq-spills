@@ -8,6 +8,7 @@ jest.mock(
 
 import getJWTToken from "@salesforce/apex/FirebaseAuthProvider.getJWTToken";
 import Spills from "c/spills";
+import { getRecord } from "lightning/uiRecordApi";
 import { createElement } from "lwc";
 
 const flushPromises = async () => {
@@ -170,5 +171,40 @@ describe("c-spills", () => {
 
     expect(getJWTToken).not.toHaveBeenCalled();
     expect(postMessage).not.toHaveBeenCalled();
+  });
+
+  it("sends NEAREST_WATERBODY_ID along with the coordinates to the iframe", async () => {
+    const postMessage = jest.fn();
+    const element = createSpills();
+    const iframe = element.shadowRoot.querySelector("iframe");
+    Object.defineProperty(iframe, "contentWindow", {
+      configurable: true,
+      value: { postMessage }
+    });
+
+    getRecord.emit({
+      fields: {
+        Utm_E_X_6_dgts__c: { value: "420304" },
+        Utm_N_Y_7_dgts__c: { value: "4510276" },
+        NearestWaterbodyID__c: { value: "stream:83629887" }
+      }
+    });
+    await flushPromises();
+
+    iframe.dispatchEvent(new Event("load"));
+
+    expect(postMessage).toHaveBeenCalledWith(
+      {
+        iframeId: mockedValue,
+        data: {
+          ID: "500000000000001",
+          UTM_X: 420304,
+          UTM_Y: 4510276,
+          NEAREST_WATERBODY_ID: "stream:83629887"
+        },
+        type: "data-sync"
+      },
+      "https://spillsmap.dev.utah.gov"
+    );
   });
 });

@@ -231,7 +231,7 @@ export default class Spills extends LightningElement {
     );
   }
 
-  sendCoordinatesToIFrame() {
+  sendCoordinatesAndWaterbodyIDToIFrame() {
     console.log(`salesforce: sending coordinates to iframe ${this.iframeId}`);
 
     try {
@@ -263,7 +263,7 @@ export default class Spills extends LightningElement {
     this.refs.iframe.addEventListener("load", () => {
       console.log("salesforce: iframe loaded", this.utm_x, this.utm_y);
 
-      this.sendCoordinatesToIFrame();
+      this.sendCoordinatesAndWaterbodyIDToIFrame();
     });
   }
 }
