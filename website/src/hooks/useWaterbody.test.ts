@@ -100,7 +100,7 @@ describe('useWaterbody', () => {
     const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined);
     renderWaterbodyHook();
 
-    expect(logSpy).toHaveBeenCalledWith('Waterbody: change detected in UTM');
+    expect(logSpy).toHaveBeenCalledWith('Waterbody: fetching nearest waterbody from API');
     await waitFor(() => {
       expect(mocks.queryNearestWaterBody).toHaveBeenCalledOnce();
       expect(mocks.queryNearestWaterBody).toHaveBeenCalledWith(
