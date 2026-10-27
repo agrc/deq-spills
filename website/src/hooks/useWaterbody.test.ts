@@ -271,19 +271,79 @@ describe('useWaterbody', () => {
   });
 
   describe('useWaterbody: API query decisions', () => {
+    let logSpy: ReturnType<typeof vi.spyOn>;
+    let setData: ReturnType<typeof vi.fn<DataContextType['setData']>>;
+
+    beforeEach(() => {
+      logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined);
+      setData = vi.fn<DataContextType['setData']>();
+    });
+
     it('does not query the API when a nonexistent waterbody ID is passed into the URL', async () => {
       window.history.pushState(
         {},
         '',
         '?embedded=false&readonly=true&flowpath=true&waterbody=true&SPILL_NUMBER=00037919&UTM_X=437156&UTM_Y=4454301&NEAREST_WATERBODY_ID=test:666',
       );
-      const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined);
-      const setData = vi.fn<DataContextType['setData']>();
       renderWaterbodyHook(setData, coordinates, undefined, { NEAREST_WATERBODY_ID: 'test:666' });
 
       await waitFor(() => {
         expect(logSpy).toHaveBeenCalledWith('Waterbody: gate, fetching from SF instead of API');
         expect(mocks.queryNearestWaterBody).not.toHaveBeenCalled();
+      });
+    });
+
+    it('fetches from the API when embedded is false due to no Salesforce integration', async () => {
+      window.history.pushState(
+        {},
+        '',
+        '?embedded=false&readonly=true&flowpath=true&waterbody=true&SPILL_NUMBER=00037919&UTM_X=437156&UTM_Y=4454301',
+      );
+      renderWaterbodyHook(setData, coordinates);
+
+      await waitFor(() => {
+        expect(logSpy).toHaveBeenCalledWith('Waterbody: fetching nearest waterbody from API');
+        expect(mocks.queryNearestWaterBody).toHaveBeenCalled();
+      });
+    });
+
+    // Clicking to place the spill on the map triggers an API query
+    it('queries the API every time when embedded and no coordinates are specified in the URL', async () => {
+      window.history.pushState({}, '', '?embedded=true&readonly=false&flowpath=true&waterbody=true');
+      renderWaterbodyHook(setData, coordinates);
+
+      await waitFor(() => {
+        expect(logSpy).toHaveBeenCalledWith('Waterbody: fetching nearest waterbody from API');
+        expect(mocks.queryNearestWaterBody).toHaveBeenCalled();
+      });
+    });
+    // Duty-officer case:
+    it('fetches from Salesforce instead of the API when embedded and coordinates are sent to the iframe', async () => {
+      window.history.pushState({}, '', '?embedded=true&flowpath=true&waterbody=true');
+      renderWaterbodyHook(setData, { UTM_X: 420304, UTM_Y: 4511432 }, undefined, {
+        ID: 'a0123456789ABCDE',
+        NEAREST_WATERBODY_ID: 'stream:83629887',
+      });
+
+      await waitFor(() => {
+        expect(logSpy).toHaveBeenCalledWith('Waterbody: gate, fetching from SF instead of API');
+        expect(mocks.queryNearestWaterBody).not.toHaveBeenCalled();
+        expect(setData).not.toHaveBeenCalled();
+      });
+    });
+
+    it('queries Salesforce instead of the API when the NEAREST_WATERBODY_ID URL parameter represents a valid waterbody in Salesforce', async () => {
+      window.history.pushState(
+        {},
+        '',
+        '?embedded=false&readonly=true&flowpath=true&waterbody=true&SPILL_NUMBER=00037919&UTM_X=437156&UTM_Y=4454301&NEAREST_WATERBODY_ID=stream:83629887',
+      );
+      renderWaterbodyHook(setData, coordinates, undefined, { NEAREST_WATERBODY_ID: 'stream:83629887' });
+
+      await waitFor(() => {
+        expect(logSpy).toHaveBeenCalledWith('Waterbody: gate, fetching from SF instead of API');
+        expect(mocks.queryNearestWaterBody).not.toHaveBeenCalled();
+        expect(setData).not.toHaveBeenCalled();
       });
     });
   });
