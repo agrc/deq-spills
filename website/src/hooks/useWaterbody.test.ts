@@ -418,6 +418,26 @@ describe('useWaterbody', () => {
         rerenderWithCoordinates(coordinates);
         await waitFor(() => expect(mocks.queryNearestWaterBody).toHaveBeenCalledTimes(2));
       });
+      it.each([
+        ['a different waterbody ID', { distanceInFeet: 819, id: 'stream:82733401', name: 'Provo River' }],
+        ['no waterbody', null],
+      ])('queries the API only once when a moved spill resolves to %s', async (_, result) => {
+        mocks.queryNearestWaterBody.mockResolvedValue(result);
+        window.history.pushState({}, '', '?embedded=true&flowpath=true&waterbody=true');
+        const { rerenderWithData } = renderWaterbodyHook(setData, coordinates, undefined, salesforceData);
+
+        const movedCoordinates = { UTM_X: 500000, UTM_Y: 4500000 };
+        rerenderWithData(movedCoordinates);
+        await waitFor(() => expect(setData).toHaveBeenCalledOnce());
+
+        // apply the lookup result to state, which re-runs the effect for the same coordinates
+        const updateData = setData.mock.calls[0]![0] as (prev: DataContextType['data']) => DataContextType['data'];
+        const updatedData = updateData({ ...blankState, ...salesforceData, ...movedCoordinates });
+        rerenderWithData({ NEAREST_WATERBODY_ID: updatedData.NEAREST_WATERBODY_ID });
+
+        await waitFor(() => expect(mocks.queryNearestWaterBody).toHaveBeenCalledOnce());
+        expect(setData).toHaveBeenCalledOnce();
+      });
     });
 
     describe('embedded without Salesforce record data (click-only)', () => {
