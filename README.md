@@ -48,7 +48,8 @@ When used as a standalone website, data is passed via Url parameters. This is us
 Example test Urls:
 
 <http://localhost:5173/?ID=a0123456789ABCDE&UTM_X=420304&UTM_Y=4511432>  
-<http://localhost:5173/?ID=a0123456789ABCDE&UTM_X=420304&UTM_Y=4511432&flowpath=true>
+<http://localhost:5173/?ID=a0123456789ABCDE&UTM_X=420304&UTM_Y=4511432&flowpath=true>  
+<http://localhost:5173/?embedded=false&readonly=true&flowpath=true&waterbody=true&SPILL_NUMBER=00037919&UTM_X=437156&UTM_Y=4454301&NEAREST_WATERBODY_ID=stream:83629887&ID=a0123456789ABCDE&NEAREST_WATERBODY_DISTANCE=600>
 
 ### Embedded
 

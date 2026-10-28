@@ -10,17 +10,32 @@ const utmWkid = 26912;
 const webMercatorWkid = 3857;
 const webMercator = new SpatialReference({ wkid: webMercatorWkid });
 
+type Location = { x: number; y: number };
+type InitialLocation = Location & { waterbodyId: string | null };
+
+function isSameLocation(a: Location | null, b: Location) {
+  return a !== null && a.x === b.x && a.y === b.y;
+}
+
 export default function useWaterbody(
   mapView: __esri.MapView | null,
   streamsFeatureLayer: __esri.FeatureLayer | null,
   riversFeatureLayer: __esri.FeatureLayer | null,
 ) {
-  const { data, setData } = useData();
+  const { data, isInitialDataLoaded, setData } = useData();
 
-  const previousCoordinates = useRef<{ x: typeof data.UTM_X; y: typeof data.UTM_Y } | null>(null);
-  const previousWaterbodyID = useRef<typeof data.NEAREST_WATERBODY_ID | null>(null);
+  // undefined: initial data not loaded yet; null: initial data had no location
+  const initialLocation = useRef<InitialLocation | null | undefined>(undefined);
+  const lastHandledLocation = useRef<Location | null>(null);
 
   useEffect(() => {
+    if (isInitialDataLoaded && initialLocation.current === undefined) {
+      initialLocation.current =
+        data.UTM_X !== null && data.UTM_Y !== null
+          ? { x: data.UTM_X, y: data.UTM_Y, waterbodyId: data.NEAREST_WATERBODY_ID }
+          : null;
+    }
+
     if (
       data.UTM_X === null ||
       data.UTM_Y === null ||
@@ -29,23 +44,6 @@ export default function useWaterbody(
       riversFeatureLayer === null
     ) {
       return;
-    }
-    function hasLocationGoneFromNullToNonNull() {
-      return previousCoordinates.current === null && data.UTM_X !== null && data.UTM_Y !== null;
-    }
-    const newAndPreviousCoordinatesEqual =
-      previousCoordinates.current?.x === data.UTM_X && previousCoordinates.current?.y === data.UTM_Y;
-
-    function spillHasNotMoved() {
-      // The click-only page (embedded true, readonly false, waterbody true) never has a data.ID set at any point.
-      if (data.ID !== null && (hasLocationGoneFromNullToNonNull() || newAndPreviousCoordinatesEqual)) {
-        return true;
-      }
-      return false;
-    }
-
-    function waterbodyIDAlreadySet() {
-      return data.NEAREST_WATERBODY_ID !== null && previousWaterbodyID.current === null;
     }
 
     function computeWebMercatorPoint() {
@@ -61,13 +59,26 @@ export default function useWaterbody(
     if (!isWaterbodyEnabled) {
       return;
     }
-    if (spillHasNotMoved() && waterbodyIDAlreadySet()) {
-      previousCoordinates.current = { x: data.UTM_X, y: data.UTM_Y };
+
+    const location = { x: data.UTM_X, y: data.UTM_Y };
+    // re-runs caused by NEAREST_WATERBODY_ID being updated should not trigger another query
+    if (isSameLocation(lastHandledLocation.current, location)) {
+      return;
+    }
+    const isFirstLocation = lastHandledLocation.current === null;
+    lastHandledLocation.current = location;
+
+    // the initial location from Salesforce or the URL already has a waterbody, so don't recompute it
+    if (
+      isFirstLocation &&
+      initialLocation.current &&
+      initialLocation.current.waterbodyId !== null &&
+      isSameLocation(initialLocation.current, location)
+    ) {
       console.log('Waterbody: gate, fetching from SF instead of API');
       return;
     }
-    previousCoordinates.current = { x: data.UTM_X, y: data.UTM_Y };
-    previousWaterbodyID.current = data.NEAREST_WATERBODY_ID;
+
     console.log('Waterbody: fetching nearest waterbody from API');
     async function fetchNearestWaterBodyFromAPI() {
       if (!projectOperator.isLoaded()) {
@@ -110,8 +121,8 @@ export default function useWaterbody(
   }, [
     data.UTM_X,
     data.UTM_Y,
-    data.ID,
     data.NEAREST_WATERBODY_ID,
+    isInitialDataLoaded,
     mapView,
     streamsFeatureLayer,
     riversFeatureLayer,

@@ -13,7 +13,8 @@ export function getUrlParam(param: string): UrlParamValue {
   const isBoolean = booleanKeys.includes(param);
   if (value) {
     if (numericKeys.includes(param)) {
-      return parseFloat(value);
+      const number = parseFloat(value);
+      return Number.isNaN(number) ? null : number;
     } else if (isBoolean) {
       return value === 'true';
     }
@@ -46,9 +47,6 @@ export function getData(): DataContextType['data'] {
     if (!data[key] && blankState[key as keyof typeof blankState] !== null) {
       data[key] = blankState[key as keyof typeof blankState] as UrlParamValue;
     }
-  }
-  if (!data.ID) {
-    data.ID = 'URL_PARAMS';
   }
 
   return data as DataContextType['data'];

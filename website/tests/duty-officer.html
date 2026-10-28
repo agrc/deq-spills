@@ -11,24 +11,39 @@
       FLOWPATH_TOKEN_RESPONSE: 'flowpath-token-response',
     };
 
-    window.addEventListener('iframe-is-listening', () => {
-      console.log('window loaded');
-      const iframe = document.querySelector('iframe');
+    // matches the flow path saved in the feature service for the test spill record
+    const SPILL_DATA = {
+      ID: 'a0123456789ABCDE', // test spill record Id
+      UTM_X: 437052,
+      UTM_Y: 4454335,
+      NEAREST_WATERBODY_DISTANCE: 413,
+      NEAREST_WATERBODY_ID: 'stream:83629887',
+      NEAREST_WATERBODY_NAME: 'Provo River',
+    };
 
-      iframe.contentWindow.postMessage(
+    function sendData(data) {
+      document.querySelector('iframe').contentWindow.postMessage(
         {
-          data: {
-            ID: 'a0123456789ABCDE', // test spill record Id
-            UTM_X: 420304,
-            UTM_Y: 4511432,
-            NEAREST_WATERBODY_ID: 'stream:83629887',
-          },
+          data,
           iframeId: '1234',
           type: MESSAGE_TYPES.DATA_SYNC,
         },
         'http://localhost:5173',
       );
+    }
+
+    window.addEventListener('iframe-is-listening', () => {
+      console.log('window loaded');
+
+      sendData(SPILL_DATA);
     });
+
+    // Moves the spill back to the hard-coded location, the same as clicking there on the map.
+    // This recomputes and saves the flow path and nearest waterbody for that location.
+    // It only has an effect if the spill has been moved since the page loaded.
+    function resetLocation() {
+      sendData({ UTM_X: SPILL_DATA.UTM_X, UTM_Y: SPILL_DATA.UTM_Y });
+    }
 
     window.addEventListener('message', (event) => {
       if (!event.data.iframeId) {
@@ -55,6 +70,9 @@
     <div class="h-[2000px] w-full bg-white p-4 md:w-1/2 lg:w-3/4">
       <div class="h-[700px]">
         <p class="h-40">A bunch of form content</p>
+        <button type="button" class="mb-2 rounded border border-slate-400 px-3 py-1" onclick="resetLocation()">
+          Reset spill location (recomputes the flow path)
+        </button>
         <iframe
           src="./?embedded=true&flowpath=true&waterbody=true"
           style="border-color: rgb(201, 201, 201); border-width: 1px; border-style: solid"
