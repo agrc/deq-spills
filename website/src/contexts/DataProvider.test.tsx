@@ -1,6 +1,7 @@
 import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import type { DataContextType } from './DataProvider';
 
 (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -17,9 +18,7 @@ async function renderDataProvider(search = '?embedded=true') {
   const { DataProvider, EMBEDDED_MESSAGE_TYPES } = await import('./DataProvider');
   const { default: useData } = await import('../hooks/useDataProvider');
 
-  let contextValue: {
-    requestFlowpathToken: () => Promise<string>;
-  };
+  let contextValue: DataContextType;
 
   function Bridge() {
     contextValue = useData();
@@ -160,6 +159,73 @@ describe('DataProvider', () => {
     });
 
     await rejection;
+  });
+
+  it('marks initial data as loaded only after the first data message in embedded mode', async () => {
+    vi.spyOn(window.parent, 'postMessage').mockImplementation(() => undefined);
+    const { EMBEDDED_MESSAGE_TYPES, context } = await renderDataProvider();
+
+    expect(context().isInitialDataLoaded).toBe(false);
+    expect(context().data.ID).toBeNull();
+
+    await act(async () => {
+      dispatchMessage('https://salesforce.example', {
+        data: {
+          ID: '500000000000001',
+          NEAREST_WATERBODY_ID: 'stream:83629887',
+          UTM_X: 420304,
+          UTM_Y: 4511432,
+        },
+        iframeId: 'iframe-1',
+        type: EMBEDDED_MESSAGE_TYPES.DATA_SYNC,
+      });
+    });
+
+    expect(context().isInitialDataLoaded).toBe(true);
+    expect(context().data).toMatchObject({
+      ID: '500000000000001',
+      NEAREST_WATERBODY_ID: 'stream:83629887',
+      UTM_X: 420304,
+      UTM_Y: 4511432,
+    });
+  });
+
+  it('does not mark initial data as loaded for token messages', async () => {
+    const { EMBEDDED_MESSAGE_TYPES, context } = await renderDataProvider();
+
+    await act(async () => {
+      dispatchMessage('https://salesforce.example', {
+        iframeId: 'iframe-1',
+        requestId: 'unknown',
+        token: 'jwt-token',
+        type: EMBEDDED_MESSAGE_TYPES.FLOWPATH_TOKEN_RESPONSE,
+      });
+    });
+
+    expect(context().isInitialDataLoaded).toBe(false);
+  });
+
+  it('converts NaN coordinates from Salesforce to null', async () => {
+    vi.spyOn(window.parent, 'postMessage').mockImplementation(() => undefined);
+    const { EMBEDDED_MESSAGE_TYPES, context } = await renderDataProvider();
+
+    await act(async () => {
+      dispatchMessage('https://salesforce.example', {
+        data: { ID: '500000000000001', UTM_X: NaN, UTM_Y: 'not a number' },
+        iframeId: 'iframe-1',
+        type: EMBEDDED_MESSAGE_TYPES.DATA_SYNC,
+      });
+    });
+
+    expect(context().data.UTM_X).toBeNull();
+    expect(context().data.UTM_Y).toBeNull();
+  });
+
+  it('marks initial data as loaded immediately in standalone mode', async () => {
+    const { context } = await renderDataProvider('/?UTM_X=420304&UTM_Y=4511432');
+
+    expect(context().isInitialDataLoaded).toBe(true);
+    expect(context().data.UTM_X).toBe(420304);
   });
 
   it('rejects token requests outside embedded mode', async () => {

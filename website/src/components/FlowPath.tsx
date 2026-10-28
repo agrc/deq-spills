@@ -2,10 +2,11 @@ import Polyline from '@arcgis/core/geometry/Polyline';
 import { useMutation } from '@tanstack/react-query';
 import { Button, Dialog, Popover, Select, SelectItem, Spinner, useFirebaseFunctions } from '@ugrc/utah-design-system';
 import { httpsCallable } from 'firebase/functions';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { DialogTrigger, type Key } from 'react-aria-components';
-import { FIELDS, FLOWPATH_LENGTHS, type FlowpathInput, type IPolyline } from '../../functions/common/shared';
+import { FLOWPATH_LENGTHS, type FlowpathInput, type IPolyline } from '../../functions/common/shared';
 import useData from '../hooks/useDataProvider';
+import useFlowPathTriggers from '../hooks/useFlowPathTriggers';
 import useMapView from '../hooks/useMapView';
 import { getDefinitionExpression } from '../utilities/getDefinitionExpression';
 
@@ -17,7 +18,6 @@ export default function FlowPath() {
   const getFlowPath = httpsCallable<FlowpathInput, IPolyline>(functions, 'getFlowPath');
   const { mapView, flowPathFeatureLayer } = useMapView();
   const [dropdownValue, setDropdownValue] = useState<number>(FLOWPATH_LENGTHS[0]!.value);
-  const previousCoordinates = useRef<string | null>(null);
 
   const { mutate, isPending } = useMutation({
     mutationFn: async ({ length }: { length: number }) => {
@@ -65,52 +65,7 @@ export default function FlowPath() {
     },
   });
 
-  // initialize
-  useEffect(() => {
-    if (!flowPathFeatureLayer || !mapView || !data.ID) {
-      return;
-    }
-
-    flowPathFeatureLayer.when(() => {
-      flowPathFeatureLayer
-        .queryFeatures({
-          cacheHint: false,
-          where: getDefinitionExpression(data.ID!),
-          returnGeometry: true,
-          outFields: [FIELDS.LENGTH],
-        })
-        .then((results) => {
-          if (results.features.length > 0) {
-            const graphic = results.features[0];
-            const initialLength = graphic!.attributes[FIELDS.LENGTH] as number;
-            setDropdownValue(initialLength);
-            console.log('Flowpath loaded from feature service with length:', initialLength);
-          } else {
-            setDropdownValue(FLOWPATH_LENGTHS[0]!.value);
-            mutate({ length: FLOWPATH_LENGTHS[0]!.value });
-          }
-        });
-    });
-  }, [data.ID, flowPathFeatureLayer, mapView, mutate]);
-
-  // handle coordinate changes
-  useEffect(() => {
-    if (!data.ID || !data.UTM_X || !data.UTM_Y) {
-      return;
-    }
-
-    const coordinates = `${data.UTM_X},${data.UTM_Y}`;
-    if (!previousCoordinates.current) {
-      // we only want this to fire when the coordinates change, not on the initial load
-      previousCoordinates.current = coordinates;
-      return;
-    }
-
-    if (previousCoordinates.current !== coordinates) {
-      mutate({ length: dropdownValue });
-      previousCoordinates.current = coordinates;
-    }
-  }, [data.ID, data.UTM_X, data.UTM_Y, dropdownValue, mutate]);
+  useFlowPathTriggers({ dropdownValue, flowPathFeatureLayer, mapView, mutate, setDropdownValue });
 
   const onSelectionChange = (value: Key | null) => {
     setDropdownValue(value as number);

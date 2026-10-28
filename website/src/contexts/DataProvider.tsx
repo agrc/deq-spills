@@ -4,7 +4,7 @@ import { getData, getIsEmbedded } from '../utilities/urlParameters';
 export type UrlParamValue = number | string | boolean | null;
 export type StateKey = keyof typeof blankState;
 export const blankState = {
-  ID: 'URL_PARAMS',
+  ID: null,
   ADDRESS: null,
   CITY: null,
   COUNTY: null,
@@ -54,6 +54,8 @@ export type DataContextType = {
     NEAREST_WATERBODY_ID: StringOrNull;
     NEAREST_WATERBODY_NAME: StringOrNull;
   };
+  // false in embedded mode until the first data message is received from Salesforce
+  isInitialDataLoaded: boolean;
   requestFlowpathToken: () => Promise<string>;
   setData: React.Dispatch<React.SetStateAction<DataContextType['data']>>;
 };
@@ -90,6 +92,7 @@ function createRequestId() {
 
 export const DataProvider = ({ children }: { children: React.ReactNode }) => {
   const [data, setData] = useState<DataContextType['data']>(!isEmbedded ? urlData : blankState);
+  const [isInitialDataLoaded, setIsInitialDataLoaded] = useState<boolean>(!isEmbedded);
   const iframeId = useRef<StringOrNull>(null);
   const pendingTokenRequests = useRef<Map<string, PendingTokenRequest>>(new Map());
   const salesforceOrigin = useRef<StringOrNull>(null);
@@ -213,11 +216,9 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
         const value = newData[key];
 
         if (numericKeys.includes(key) && value !== null && value !== undefined) {
-          if (typeof value === 'number') {
-            newData[key] = value;
-          } else if (typeof value === 'string') {
-            newData[key] = parseFloat(value);
-          }
+          // Salesforce sends NaN when a numeric field is empty (e.g. parseInt(null))
+          const number = typeof value === 'string' ? parseFloat(value) : value;
+          newData[key] = typeof number === 'number' && !Number.isNaN(number) ? number : null;
         } else if (booleanKeys.includes(key) && typeof value === 'string') {
           newData[key] = value === 'true';
         }
@@ -227,6 +228,7 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
         ...prevValue,
         ...newData,
       }));
+      setIsInitialDataLoaded(true);
     },
     [clearPendingTokenRequest],
   );
@@ -266,5 +268,9 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
     };
   }, [handleMessageFromSalesforce, rejectAllPendingTokenRequests]);
 
-  return <DataContext.Provider value={{ data, requestFlowpathToken, setData }}>{children}</DataContext.Provider>;
+  return (
+    <DataContext.Provider value={{ data, isInitialDataLoaded, requestFlowpathToken, setData }}>
+      {children}
+    </DataContext.Provider>
+  );
 };
