@@ -34,6 +34,7 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
     streams: FeatureLayer;
     rivers: FeatureLayer;
   } | null>(null);
+  const [waterbodyLayerStatus, setWaterbodyLayerStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const { setMapView, setFlowPathFeatureLayer, flowPathFeatureLayer } = useMapView();
   const { data, setData } = useData();
   const { isPending: isWaterbodySearchPending } = useWaterbody(
@@ -59,6 +60,8 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
 
     let isCurrent = true;
     setWaterbodyLayers(null);
+    setWaterbodyLayerStatus(waterbodyEnabled ? 'loading' : 'ready');
+    setWaterbodyExtent({ id: null, extent: null });
 
     mapComponent.current = new EsriMap();
 
@@ -150,10 +153,14 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
           .then(() => {
             if (isCurrent) {
               setWaterbodyLayers({ streams, rivers });
+              setWaterbodyLayerStatus('ready');
             }
           })
           .catch((error) => {
             console.error('Error loading waterbody feature layers:', error);
+            if (isCurrent) {
+              setWaterbodyLayerStatus('error');
+            }
           });
       }
     });
@@ -354,7 +361,10 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
     waterbodyExtent: waterbodyExtent.id === currentWaterbodyId ? waterbodyExtent.extent : null,
     isPending:
       (flowPathEnabled && (!flowPathFeatureLayer || flowPathExtent.isPending)) ||
-      (waterbodyEnabled && (!waterbodyLayers || isWaterbodySearchPending || waterbodyExtent.id !== currentWaterbodyId)),
+      (waterbodyEnabled &&
+        (waterbodyLayerStatus === 'loading' ||
+          isWaterbodySearchPending ||
+          waterbodyExtent.id !== currentWaterbodyId)),
   });
 
   // update the spill location graphic
