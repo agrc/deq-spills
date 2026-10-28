@@ -5,10 +5,11 @@ import Legend from '@arcgis/core/widgets/Legend';
 import { LayerSelector, type LayerSelectorProps } from '@ugrc/utah-design-system';
 import { useEffect, useRef, useState } from 'react';
 
+import * as reactiveUtils from '@arcgis/core/core/reactiveUtils';
 import Graphic from '@arcgis/core/Graphic';
 import { useGraphicManager, utahMercatorExtent } from '@ugrc/utilities/hooks';
-import { FIELDS } from '../../functions/common/shared';
 import config from '../config';
+import useAutoZoom, { queryLayerExtent } from '../hooks/useAutoZoom';
 import useData from '../hooks/useDataProvider';
 import useMapView from '../hooks/useMapView';
 import useWaterbody from '../hooks/useWaterbody';
@@ -35,7 +36,20 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
   } | null>(null);
   const { setMapView, setFlowPathFeatureLayer, flowPathFeatureLayer } = useMapView();
   const { data, setData } = useData();
-  useWaterbody(mapView.current, waterbodyLayers?.streams ?? null, waterbodyLayers?.rivers ?? null);
+  const { isPending: isWaterbodySearchPending } = useWaterbody(
+    mapView.current,
+    waterbodyLayers?.streams ?? null,
+    waterbodyLayers?.rivers ?? null,
+  );
+  const [flowPathExtent, setFlowPathExtent] = useState<{ extent: __esri.Extent | null; isPending: boolean }>({
+    extent: null,
+    isPending: false,
+  });
+  // the id is stored with the extent so that we know when the extent is out of date
+  const [waterbodyExtent, setWaterbodyExtent] = useState<{ id: string | null; extent: __esri.Extent | null }>({
+    id: null,
+    extent: null,
+  });
 
   // setup the Map
   useEffect(() => {
@@ -256,85 +270,133 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
 
   // highlight the nearest water body, since its id tells us whether it came from the streams or rivers layer
   useEffect(() => {
-    if (!waterbodyEnabled || !waterbodyLayers) {
+    if (!waterbodyEnabled || !waterbodyLayers || !mapView.current) {
       return;
     }
 
-    const [type, id] = data.NEAREST_WATERBODY_ID?.split(':') ?? [];
+    const waterbodyId = data.NEAREST_WATERBODY_ID ?? null;
+    const [type, id] = waterbodyId?.split(':') ?? [];
+    const streamsWhere = type === 'stream' ? `ComID = ${id}` : '1=0';
+    const riversWhere = type === 'river' ? `COM_ID = ${id}` : '1=0';
 
-    waterbodyLayers.streams.definitionExpression = type === 'stream' ? `ComID = ${id}` : '1=0';
-    waterbodyLayers.rivers.definitionExpression = type === 'river' ? `COM_ID = ${id}` : '1=0';
+    waterbodyLayers.streams.definitionExpression = streamsWhere;
+    waterbodyLayers.rivers.definitionExpression = riversWhere;
+
+    const layer = type === 'stream' ? waterbodyLayers.streams : type === 'river' ? waterbodyLayers.rivers : null;
+    if (!layer) {
+      setWaterbodyExtent({ id: waterbodyId, extent: null });
+
+      return;
+    }
+
+    let isCurrent = true;
+    queryLayerExtent(layer, type === 'stream' ? streamsWhere : riversWhere, mapView.current.spatialReference)
+      .catch((error) => {
+        console.error('Error querying nearest waterbody extent:', error);
+
+        return null;
+      })
+      .then((extent) => {
+        if (isCurrent) {
+          setWaterbodyExtent({ id: waterbodyId, extent });
+        }
+      });
+
+    return () => {
+      isCurrent = false;
+    };
   }, [data.NEAREST_WATERBODY_ID, waterbodyEnabled, waterbodyLayers]);
 
-  // update graphic and update flow paths layer
-  const { setGraphic } = useGraphicManager(mapView.current);
-  const coordinatesChanged = useRef(false);
+  // track the extent of the flow path that is currently displayed, the definition expression is updated
+  // anytime the flow path is loaded or recomputed (see FlowPath.tsx)
   useEffect(() => {
-    if (!data.UTM_X || !data.UTM_Y || (flowPathEnabled && !flowPathFeatureLayer)) {
+    if (!flowPathFeatureLayer || !mapView.current) {
+      setFlowPathExtent({ extent: null, isPending: false });
+
       return;
     }
 
-    const graphic = new Graphic({
-      geometry: {
-        type: 'point',
-        x: data.UTM_X,
-        y: data.UTM_Y,
-        spatialReference: {
-          wkid: 26912,
-        },
-      },
-      symbol: {
-        type: 'simple-marker',
-        color: [255, 255, 0],
-        size: 11,
-        outline: {
-          color: [0, 0, 0],
-          width: 1,
-        },
-      },
-    });
-    setGraphic(graphic);
+    const view = mapView.current;
+    let latestRequestId = 0;
+    const handle = reactiveUtils.watch(
+      () => flowPathFeatureLayer.definitionExpression,
+      (expression) => {
+        const requestId = ++latestRequestId;
+        setFlowPathExtent((previous) => ({ ...previous, isPending: true }));
 
-    // this should only happen once when the coordinates change from null to a value, if they change after that, FlowPaths.tsx takes care of zooming
-    if (flowPathEnabled && flowPathFeatureLayer && coordinatesChanged.current === false) {
-      flowPathFeatureLayer.definitionExpression = getDefinitionExpression(data.ID!);
-      flowPathFeatureLayer
-        .when(() => {
-          flowPathFeatureLayer
-            .queryFeatures({
-              cacheHint: false,
-              returnGeometry: true,
-              outFields: [FIELDS.LENGTH],
-              where: flowPathFeatureLayer!.definitionExpression,
-            })
-            .then((results) => {
-              if (results.features.length > 0) {
-                const flowPathGraphic = results.features[0];
-                mapView.current!.goTo(flowPathGraphic!.geometry!.extent!.expand(1.1));
-              } else {
-                mapView.current?.goTo({
-                  target: graphic,
-                  zoom: config.DEFAULT_ZOOM_LEVEL,
-                });
-              }
-            })
-            .catch((error) => {
-              console.error('Error querying flow path features:', error);
-            });
-        })
-        .catch((error) => {
-          console.error('Error loading flow path feature layer:', error);
-        });
-    } else {
-      mapView.current?.when(() => {
-        mapView.current?.goTo({
-          target: graphic,
-          zoom: config.DEFAULT_ZOOM_LEVEL,
-        });
-      });
+        queryLayerExtent(flowPathFeatureLayer, expression ?? '1=0', view.spatialReference)
+          .catch((error) => {
+            console.error('Error querying flow path extent:', error);
+
+            return null;
+          })
+          .then((extent) => {
+            if (requestId === latestRequestId) {
+              setFlowPathExtent({ extent, isPending: false });
+            }
+          });
+      },
+      { initial: true },
+    );
+
+    return () => {
+      latestRequestId++;
+      handle.remove();
+    };
+  }, [flowPathFeatureLayer]);
+
+  const currentWaterbodyId = waterbodyEnabled && waterbodyLayers ? (data.NEAREST_WATERBODY_ID ?? null) : null;
+  useAutoZoom({
+    mapView: mapView.current,
+    utmX: data.UTM_X,
+    utmY: data.UTM_Y,
+    flowPathExtent: flowPathExtent.extent,
+    waterbodyExtent: waterbodyExtent.id === currentWaterbodyId ? waterbodyExtent.extent : null,
+    isPending:
+      (flowPathEnabled && (!flowPathFeatureLayer || flowPathExtent.isPending)) ||
+      (waterbodyEnabled && (!waterbodyLayers || isWaterbodySearchPending || waterbodyExtent.id !== currentWaterbodyId)),
+  });
+
+  // update the spill location graphic
+  const { setGraphic } = useGraphicManager(mapView.current);
+  useEffect(() => {
+    if (!data.UTM_X || !data.UTM_Y) {
+      return;
     }
-    coordinatesChanged.current = true;
-  }, [data.ID, data.UTM_X, data.UTM_Y, flowPathEnabled, flowPathFeatureLayer, setGraphic]);
+
+    setGraphic(
+      new Graphic({
+        geometry: {
+          type: 'point',
+          x: data.UTM_X,
+          y: data.UTM_Y,
+          spatialReference: {
+            wkid: 26912,
+          },
+        },
+        symbol: {
+          type: 'simple-marker',
+          color: [255, 255, 0],
+          size: 11,
+          outline: {
+            color: [0, 0, 0],
+            width: 1,
+          },
+        },
+      }),
+    );
+  }, [data.UTM_X, data.UTM_Y, setGraphic]);
+
+  // show the saved flow path once the record has a location, after that FlowPath.tsx updates the layer
+  const hasShownSavedFlowPath = useRef(false);
+  useEffect(() => {
+    if (hasShownSavedFlowPath.current || !flowPathFeatureLayer || !data.ID || !data.UTM_X || !data.UTM_Y) {
+      return;
+    }
+
+    hasShownSavedFlowPath.current = true;
+    flowPathFeatureLayer.definitionExpression = getDefinitionExpression(data.ID);
+  }, [data.ID, data.UTM_X, data.UTM_Y, flowPathFeatureLayer]);
 
   return (
     <div ref={mapNode} className="flex-1">

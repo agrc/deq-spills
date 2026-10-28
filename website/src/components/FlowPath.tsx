@@ -1,4 +1,3 @@
-import Polyline from '@arcgis/core/geometry/Polyline';
 import { useMutation } from '@tanstack/react-query';
 import { Button, Dialog, Popover, Select, SelectItem, Spinner, useFirebaseFunctions } from '@ugrc/utah-design-system';
 import { httpsCallable } from 'firebase/functions';
@@ -31,14 +30,16 @@ export default function FlowPath() {
 
       setErrorMessage(null);
 
-      const token = await requestFlowpathToken();
       const definitionExpression = flowPathFeatureLayer.definitionExpression || getDefinitionExpression(data.ID!);
 
-      console.log('Fetching flow path with length:', length);
-      flowPathFeatureLayer.definitionExpression = '2=1'; // hide layer while loading
+      // hide the out-of-date flow path while loading so that it is not included in the map auto zoom
+      flowPathFeatureLayer.definitionExpression = '2=1';
 
       try {
-        const result = await getFlowPath({
+        const token = await requestFlowpathToken();
+
+        console.log('Fetching flow path with length:', length);
+        await getFlowPath({
           id: data.ID!,
           length,
           token,
@@ -46,11 +47,8 @@ export default function FlowPath() {
           utmY: data.UTM_Y!,
         });
 
-        const geometry = Polyline.fromJSON(result.data);
-
-        mapView!.goTo(geometry.extent!.expand(1.1));
-
         // calling refresh didn't work reliably
+        // updating the definition expression also triggers the map auto zoom (see MapContainer.tsx)
         flowPathFeatureLayer.definitionExpression = getDefinitionExpression(data.ID!);
 
         setIsOpen(false);

@@ -1,7 +1,7 @@
 import * as projectOperator from '@arcgis/core/geometry/operators/projectOperator';
 import Point from '@arcgis/core/geometry/Point';
 import SpatialReference from '@arcgis/core/geometry/SpatialReference';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import useData from '../hooks/useDataProvider';
 import { queryNearestWaterBody } from '../utilities/queryNearestWaterBody';
 import { getWaterbodyEnabled } from '../utilities/urlParameters';
@@ -27,6 +27,8 @@ export default function useWaterbody(
   // undefined: initial data not loaded yet; null: initial data had no location
   const initialLocation = useRef<InitialLocation | null | undefined>(undefined);
   const lastHandledLocation = useRef<Location | null>(null);
+  const latestRequestId = useRef(0);
+  const [isPending, setIsPending] = useState(false);
 
   useEffect(() => {
     if (isInitialDataLoaded && initialLocation.current === undefined) {
@@ -80,6 +82,8 @@ export default function useWaterbody(
     }
 
     console.log('Waterbody: fetching nearest waterbody from API');
+    const requestId = ++latestRequestId.current;
+    setIsPending(true);
     async function fetchNearestWaterBodyFromAPI() {
       if (!projectOperator.isLoaded()) {
         await projectOperator.load();
@@ -115,9 +119,15 @@ export default function useWaterbody(
         };
       });
     }
-    void fetchNearestWaterBodyFromAPI().catch((error) => {
-      console.error('Error querying nearest waterbody:', error);
-    });
+    void fetchNearestWaterBodyFromAPI()
+      .catch((error) => {
+        console.error('Error querying nearest waterbody:', error);
+      })
+      .finally(() => {
+        if (requestId === latestRequestId.current) {
+          setIsPending(false);
+        }
+      });
   }, [
     data.UTM_X,
     data.UTM_Y,
@@ -128,4 +138,6 @@ export default function useWaterbody(
     riversFeatureLayer,
     setData,
   ]);
+
+  return { isPending };
 }
