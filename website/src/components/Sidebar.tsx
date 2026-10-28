@@ -12,7 +12,7 @@ const fieldAliases: Record<keyof DataContextType['data'], string> = {
   HIGHWAY: 'Highway',
   INDIAN: 'Tribal Land',
   MILEMARKER: 'Mile Marker',
-  NEAREST_WATERBODY_DISTANCE: 'Nearest Waterbody Distance',
+  NEAREST_WATERBODY_DISTANCE: 'Nearest Waterbody Distance (feet)',
   NEAREST_WATERBODY_ID: 'Nearest Waterbody ID',
   NEAREST_WATERBODY_NAME: 'Nearest Waterbody Name',
   OWNER_AGENCY: 'Owner/Agency',
