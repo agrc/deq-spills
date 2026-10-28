@@ -32,6 +32,11 @@ describe('urlParameters', () => {
       expect(getUrlParam('UTM_X')).toBe(123);
     });
 
+    it('should return null if a numeric parameter has a non-numeric value', () => {
+      window.location.search = '?UTM_X=abc';
+      expect(getUrlParam('UTM_X')).toBeNull();
+    });
+
     it('should return decoded value for non-numeric parameters', () => {
       window.location.search = '?name=John%20Doe';
       expect(getUrlParam('name')).toBe('John Doe');
