@@ -1,5 +1,22 @@
 # Changelog
 
+## [3.1.6-rc.6](https://github.com/agrc/deq-spills/compare/v3.1.6-rc.5...v3.1.6-rc.6) (2026-10-29)
+
+
+### Features
+
+* initial guard, but more to debug ([591fefb](https://github.com/agrc/deq-spills/commit/591fefb449ec89005d7bb7866a3319639c03a737))
+
+
+### Bug Fixes
+
+* deciding when to load ([565e9bb](https://github.com/agrc/deq-spills/commit/565e9bb670339875a18a02f08738def152878193))
+* race condition fix and recomputation adjustment ([66271ad](https://github.com/agrc/deq-spills/commit/66271ad36c8b51a61ab6d833fb629dfac9f1413f))
+* remove hard-coded ID value in favor of a is data loaded flag ([6bef62e](https://github.com/agrc/deq-spills/commit/6bef62ecfffa0f5deff7b5bcb126ac1f96b9d3a4))
+* **salesforce:** address all waterbody fields in salesforce comparison ([8c1c671](https://github.com/agrc/deq-spills/commit/8c1c671a69fe1e09575c0fe38e93547d408e026a))
+* **website:** add units to waterbody distance ([ef1627e](https://github.com/agrc/deq-spills/commit/ef1627e9e4cc1343b2674bbf499f80b48f1db164))
+* **website:** auto-zoom to waterbody and flowpath ([5dc8f19](https://github.com/agrc/deq-spills/commit/5dc8f191472aebed9144e90a28b11a966ac989e4))
+
 ## [3.1.6-rc.5](https://github.com/agrc/deq-spills/compare/v3.1.6-rc.4...v3.1.6-rc.5) (2026-10-22)
 
 
