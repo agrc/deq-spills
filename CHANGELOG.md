@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.6](https://github.com/agrc/deq-spills/compare/v3.1.5...v3.1.6) (2026-10-30)
+
+
+### Dependencies
+
+* **dev:** bump postcss from 8.5.14 to 8.5.23 in /website ([05ada2d](https://github.com/agrc/deq-spills/commit/05ada2d790390b140aa19dabd562a1255bba14d5))
+
 ## [3.1.5](https://github.com/agrc/deq-spills/compare/v3.1.4...v3.1.5) (2026-05-27)
 
 
