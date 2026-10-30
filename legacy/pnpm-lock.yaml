@@ -39,7 +39,7 @@ importers:
         version: 1.8.14
       firebase-tools:
         specifier: ^15.18.0
-        version: 15.18.0(@types/node@25.6.2)(encoding@0.1.13)
+        version: 15.18.0(@types/node@25.6.2)(encoding@0.1.13)(supports-color@7.2.0)
       globals:
         specifier: ^17.5.0
         version: 17.6.0
@@ -57,25 +57,25 @@ importers:
         version: 2.0.1(grunt@1.6.2)
       grunt-contrib-connect:
         specifier: ^5.0.1
-        version: 5.0.1
+        version: 5.0.1(supports-color@7.2.0)
       grunt-contrib-copy:
         specifier: ^1.0.0
         version: 1.0.0
       grunt-contrib-jasmine:
         specifier: ^4.0.0
-        version: 4.0.0(encoding@0.1.13)(grunt@1.6.2)
+        version: 4.0.0(encoding@0.1.13)(grunt@1.6.2)(supports-color@7.2.0)
       grunt-contrib-uglify:
         specifier: ^5.2.2
         version: 5.2.2
       grunt-contrib-watch:
         specifier: ^1.1.0
-        version: 1.1.0
+        version: 1.1.0(supports-color@7.2.0)
       grunt-dojo:
         specifier: ^1.1.2
         version: 1.1.2(grunt@1.6.2)
       grunt-eslint:
         specifier: ^26.0.0
-        version: 26.0.0(grunt@1.6.2)
+        version: 26.0.0(grunt@1.6.2)(supports-color@7.2.0)
       grunt-processhtml:
         specifier: ^0.4.4
         version: 0.4.4
@@ -1401,6 +1401,7 @@ packages:
   eslint@9.39.4:
     resolution: {integrity: sha512-XoMjdBOwe/esVgEvLmNsD3IRHkm7fbKIUGvrleloJXUZgDHig2IPWNniv+GwjyJXzuNqVjlr5+4yVUZjycJwfQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
     peerDependencies:
       jiti: '*'
@@ -2643,8 +2644,8 @@ packages:
   moo@0.5.3:
     resolution: {integrity: sha512-m2fmM2dDm7GZQsY7KK2cme8agi+AAljILjQnof7p1ZMDe6dQ4bdnSMx0cPppudoeNv5hEFQirN6u+O4fDE0IWA==}
 
-  morgan@1.10.1:
-    resolution: {integrity: sha512-223dMRJtI/l25dJKWpgij2cMtywuG/WiUKXdvwfbhGKBhy1puASqXwFzmWZ7+K73vUPoR7SS2Qz2cI/g9MKw0A==}
+  morgan@1.12.1:
+    resolution: {integrity: sha512-tljKC0ex20AjO58Ob/eZ53JloycbVswbVNCHx6V6VLGzqt/w8dIynVGL0G8qVjNKwiA7sYSogCrN6QtJ82IV+g==}
     engines: {node: '>= 0.8.0'}
 
   ms@2.0.0:
@@ -3991,22 +3992,22 @@ snapshots:
 
   '@electric-sql/pglite@0.3.16': {}
 
-  '@eslint-community/eslint-utils@4.9.1(eslint@8.57.1)':
+  '@eslint-community/eslint-utils@4.9.1(eslint@8.57.1(supports-color@7.2.0))':
     dependencies:
-      eslint: 8.57.1
+      eslint: 8.57.1(supports-color@7.2.0)
       eslint-visitor-keys: 3.4.3
 
-  '@eslint-community/eslint-utils@4.9.1(eslint@9.39.4)':
+  '@eslint-community/eslint-utils@4.9.1(eslint@9.39.4(supports-color@7.2.0))':
     dependencies:
-      eslint: 9.39.4
+      eslint: 9.39.4(supports-color@7.2.0)
       eslint-visitor-keys: 3.4.3
 
   '@eslint-community/regexpp@4.12.2': {}
 
-  '@eslint/config-array@0.21.2':
+  '@eslint/config-array@0.21.2(supports-color@7.2.0)':
     dependencies:
       '@eslint/object-schema': 2.1.7
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
       minimatch: 3.1.5
     transitivePeerDependencies:
       - supports-color
@@ -4019,10 +4020,10 @@ snapshots:
     dependencies:
       '@types/json-schema': 7.0.15
 
-  '@eslint/eslintrc@2.1.4':
+  '@eslint/eslintrc@2.1.4(supports-color@7.2.0)':
     dependencies:
       ajv: 6.15.0
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
       espree: 9.6.1
       globals: 13.24.0
       ignore: 5.3.2
@@ -4033,10 +4034,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@eslint/eslintrc@3.3.5':
+  '@eslint/eslintrc@3.3.5(supports-color@7.2.0)':
     dependencies:
       ajv: 6.15.0
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
       espree: 10.4.0
       globals: 14.0.0
       ignore: 5.3.2
@@ -4060,11 +4061,11 @@ snapshots:
 
   '@gar/promisify@1.1.3': {}
 
-  '@google-cloud/cloud-sql-connector@1.10.0':
+  '@google-cloud/cloud-sql-connector@1.10.0(supports-color@7.2.0)':
     dependencies:
-      '@googleapis/sqladmin': 35.2.0
-      gaxios: 7.1.4
-      google-auth-library: 10.6.2
+      '@googleapis/sqladmin': 35.2.0(supports-color@7.2.0)
+      gaxios: 7.1.4(supports-color@7.2.0)
+      google-auth-library: 10.6.2(supports-color@7.2.0)
       p-throttle: 7.0.0
     transitivePeerDependencies:
       - supports-color
@@ -4079,7 +4080,7 @@ snapshots:
 
   '@google-cloud/promisify@5.0.0': {}
 
-  '@google-cloud/pubsub@5.3.0':
+  '@google-cloud/pubsub@5.3.0(supports-color@7.2.0)':
     dependencies:
       '@google-cloud/paginator': 6.0.0
       '@google-cloud/precise-date': 5.0.0
@@ -4090,8 +4091,8 @@ snapshots:
       '@opentelemetry/semantic-conventions': 1.39.0
       arrify: 2.0.1
       extend: 3.0.2
-      google-auth-library: 10.6.2
-      google-gax: 5.0.6
+      google-auth-library: 10.6.2(supports-color@7.2.0)
+      google-gax: 5.0.6(supports-color@7.2.0)
       heap-js: 2.7.1
       is-stream-ended: 0.1.4
       lodash.snakecase: 4.1.1
@@ -4099,9 +4100,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@googleapis/sqladmin@35.2.0':
+  '@googleapis/sqladmin@35.2.0(supports-color@7.2.0)':
     dependencies:
-      googleapis-common: 8.0.1
+      googleapis-common: 8.0.1(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -4133,10 +4134,10 @@ snapshots:
 
   '@humanfs/types@0.15.0': {}
 
-  '@humanwhocodes/config-array@0.13.0':
+  '@humanwhocodes/config-array@0.13.0(supports-color@7.2.0)':
     dependencies:
       '@humanwhocodes/object-schema': 2.0.3
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
       minimatch: 9.0.9
     transitivePeerDependencies:
       - supports-color
@@ -4289,7 +4290,7 @@ snapshots:
 
   '@jsdevtools/ono@7.1.3': {}
 
-  '@modelcontextprotocol/sdk@1.29.0(zod@3.25.76)':
+  '@modelcontextprotocol/sdk@1.29.0(supports-color@7.2.0)(zod@3.25.76)':
     dependencies:
       '@hono/node-server': 1.19.14(hono@4.12.21)
       ajv: 8.20.0
@@ -4299,8 +4300,8 @@ snapshots:
       cross-spawn: 7.0.6
       eventsource: 3.0.7
       eventsource-parser: 3.0.8
-      express: 5.2.1
-      express-rate-limit: 8.5.2(express@5.2.1)
+      express: 5.2.1(supports-color@7.2.0)
+      express-rate-limit: 8.5.2(express@5.2.1(supports-color@7.2.0))
       hono: 4.12.21
       jose: 6.2.3
       json-schema-typed: 8.0.2
@@ -4361,11 +4362,11 @@ snapshots:
     dependencies:
       which: 3.0.1
 
-  '@npmcli/run-script@6.0.2':
+  '@npmcli/run-script@6.0.2(supports-color@7.2.0)':
     dependencies:
       '@npmcli/node-gyp': 3.0.0
       '@npmcli/promise-spawn': 6.0.2
-      node-gyp: 9.4.1
+      node-gyp: 9.4.1(supports-color@7.2.0)
       read-package-json-fast: 3.0.2
       which: 3.0.1
     transitivePeerDependencies:
@@ -4420,11 +4421,11 @@ snapshots:
 
   '@protobufjs/utf8@1.1.1': {}
 
-  '@puppeteer/browsers@0.5.0':
+  '@puppeteer/browsers@0.5.0(supports-color@7.2.0)':
     dependencies:
-      debug: 4.3.4
-      extract-zip: 2.0.1
-      https-proxy-agent: 5.0.1
+      debug: 4.3.4(supports-color@7.2.0)
+      extract-zip: 2.0.1(supports-color@7.2.0)
+      https-proxy-agent: 5.0.1(supports-color@7.2.0)
       progress: 2.0.3
       proxy-from-env: 1.1.0
       tar-fs: 3.1.2
@@ -4442,18 +4443,18 @@ snapshots:
 
   '@sigstore/protobuf-specs@0.2.1': {}
 
-  '@sigstore/sign@1.0.0':
+  '@sigstore/sign@1.0.0(supports-color@7.2.0)':
     dependencies:
       '@sigstore/bundle': 1.1.0
       '@sigstore/protobuf-specs': 0.2.1
-      make-fetch-happen: 11.1.1
+      make-fetch-happen: 11.1.1(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
 
-  '@sigstore/tuf@1.0.3':
+  '@sigstore/tuf@1.0.3(supports-color@7.2.0)':
     dependencies:
       '@sigstore/protobuf-specs': 0.2.1
-      tuf-js: 1.1.7
+      tuf-js: 1.1.7(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -4519,9 +4520,9 @@ snapshots:
 
   acorn@8.16.0: {}
 
-  agent-base@6.0.2:
+  agent-base@6.0.2(supports-color@7.2.0):
     dependencies:
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -4720,11 +4721,11 @@ snapshots:
       inherits: 2.0.4
       readable-stream: 3.6.2
 
-  body-parser@1.20.5:
+  body-parser@1.20.5(supports-color@7.2.0):
     dependencies:
       bytes: 3.1.2
       content-type: 1.0.5
-      debug: 2.6.9
+      debug: 2.6.9(supports-color@7.2.0)
       depd: 2.0.0
       destroy: 1.2.0
       http-errors: 2.0.1
@@ -4737,11 +4738,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  body-parser@2.2.2:
+  body-parser@2.2.2(supports-color@7.2.0):
     dependencies:
       bytes: 3.1.2
       content-type: 1.0.5
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
       http-errors: 2.0.1
       iconv-lite: 0.7.2
       on-finished: 2.4.1
@@ -5001,11 +5002,11 @@ snapshots:
     dependencies:
       mime-db: 1.52.0
 
-  compression@1.8.1:
+  compression@1.8.1(supports-color@7.2.0):
     dependencies:
       bytes: 3.1.2
       compressible: 2.0.18
-      debug: 2.6.9
+      debug: 2.6.9(supports-color@7.2.0)
       negotiator: 0.6.4
       on-headers: 1.1.0
       safe-buffer: 5.2.1
@@ -5031,10 +5032,10 @@ snapshots:
 
   connect-livereload@0.6.1: {}
 
-  connect@3.7.0:
+  connect@3.7.0(supports-color@7.2.0):
     dependencies:
-      debug: 2.6.9
-      finalhandler: 1.1.2
+      debug: 2.6.9(supports-color@7.2.0)
+      finalhandler: 1.1.2(supports-color@7.2.0)
       parseurl: 1.3.3
       utils-merge: 1.0.1
     transitivePeerDependencies:
@@ -5112,25 +5113,35 @@ snapshots:
 
   dateformat@4.6.3: {}
 
-  debug@2.6.9:
+  debug@2.6.9(supports-color@7.2.0):
     dependencies:
       ms: 2.0.0
+    optionalDependencies:
+      supports-color: 7.2.0
 
-  debug@3.2.7:
+  debug@3.2.7(supports-color@7.2.0):
     dependencies:
       ms: 2.1.3
+    optionalDependencies:
+      supports-color: 7.2.0
 
-  debug@4.3.1:
+  debug@4.3.1(supports-color@7.2.0):
     dependencies:
       ms: 2.1.2
+    optionalDependencies:
+      supports-color: 7.2.0
 
-  debug@4.3.4:
+  debug@4.3.4(supports-color@7.2.0):
     dependencies:
       ms: 2.1.2
+    optionalDependencies:
+      supports-color: 7.2.0
 
-  debug@4.4.3:
+  debug@4.4.3(supports-color@7.2.0):
     dependencies:
       ms: 2.1.3
+    optionalDependencies:
+      supports-color: 7.2.0
 
   deep-equal-in-any-order@2.2.0:
     dependencies:
@@ -5283,20 +5294,20 @@ snapshots:
 
   eslint-visitor-keys@4.2.1: {}
 
-  eslint@8.57.1:
+  eslint@8.57.1(supports-color@7.2.0):
     dependencies:
-      '@eslint-community/eslint-utils': 4.9.1(eslint@8.57.1)
+      '@eslint-community/eslint-utils': 4.9.1(eslint@8.57.1(supports-color@7.2.0))
       '@eslint-community/regexpp': 4.12.2
-      '@eslint/eslintrc': 2.1.4
+      '@eslint/eslintrc': 2.1.4(supports-color@7.2.0)
       '@eslint/js': 8.57.1
-      '@humanwhocodes/config-array': 0.13.0
+      '@humanwhocodes/config-array': 0.13.0(supports-color@7.2.0)
       '@humanwhocodes/module-importer': 1.0.1
       '@nodelib/fs.walk': 1.2.8
       '@ungap/structured-clone': 1.3.1
       ajv: 6.15.0
       chalk: 4.1.2
       cross-spawn: 7.0.6
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
       doctrine: 3.0.0
       escape-string-regexp: 4.0.0
       eslint-scope: 7.2.2
@@ -5326,14 +5337,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint@9.39.4:
+  eslint@9.39.4(supports-color@7.2.0):
     dependencies:
-      '@eslint-community/eslint-utils': 4.9.1(eslint@9.39.4)
+      '@eslint-community/eslint-utils': 4.9.1(eslint@9.39.4(supports-color@7.2.0))
       '@eslint-community/regexpp': 4.12.2
-      '@eslint/config-array': 0.21.2
+      '@eslint/config-array': 0.21.2(supports-color@7.2.0)
       '@eslint/config-helpers': 0.4.2
       '@eslint/core': 0.17.0
-      '@eslint/eslintrc': 3.3.5
+      '@eslint/eslintrc': 3.3.5(supports-color@7.2.0)
       '@eslint/js': 9.39.4
       '@eslint/plugin-kit': 0.4.1
       '@humanfs/node': 0.16.8
@@ -5343,7 +5354,7 @@ snapshots:
       ajv: 6.15.0
       chalk: 4.1.2
       cross-spawn: 7.0.6
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
       escape-string-regexp: 4.0.0
       eslint-scope: 8.4.0
       eslint-visitor-keys: 4.2.1
@@ -5413,18 +5424,18 @@ snapshots:
     dependencies:
       eventsource-parser: 3.0.8
 
-  exegesis-express@4.0.0:
+  exegesis-express@4.0.0(supports-color@7.2.0):
     dependencies:
-      exegesis: 4.3.0
+      exegesis: 4.3.0(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
 
-  exegesis@4.3.0:
+  exegesis@4.3.0(supports-color@7.2.0):
     dependencies:
       '@apidevtools/json-schema-ref-parser': 9.1.2
       ajv: 8.20.0
       ajv-formats: 2.1.1(ajv@8.20.0)
-      body-parser: 1.20.5
+      body-parser: 1.20.5(supports-color@7.2.0)
       content-type: 1.0.5
       deep-freeze: 0.0.1
       events-listener: 1.1.0
@@ -5450,26 +5461,26 @@ snapshots:
 
   exponential-backoff@3.1.3: {}
 
-  express-rate-limit@8.5.2(express@5.2.1):
+  express-rate-limit@8.5.2(express@5.2.1(supports-color@7.2.0)):
     dependencies:
-      express: 5.2.1
+      express: 5.2.1(supports-color@7.2.0)
       ip-address: 10.2.0
 
-  express@4.22.2:
+  express@4.22.2(supports-color@7.2.0):
     dependencies:
       accepts: 1.3.8
       array-flatten: 1.1.1
-      body-parser: 1.20.5
+      body-parser: 1.20.5(supports-color@7.2.0)
       content-disposition: 0.5.4
       content-type: 1.0.5
       cookie: 0.7.2
       cookie-signature: 1.0.7
-      debug: 2.6.9
+      debug: 2.6.9(supports-color@7.2.0)
       depd: 2.0.0
       encodeurl: 2.0.0
       escape-html: 1.0.3
       etag: 1.8.1
-      finalhandler: 1.3.2
+      finalhandler: 1.3.2(supports-color@7.2.0)
       fresh: 0.5.2
       http-errors: 2.0.1
       merge-descriptors: 1.0.3
@@ -5481,8 +5492,8 @@ snapshots:
       qs: 6.15.1
       range-parser: 1.2.1
       safe-buffer: 5.2.1
-      send: 0.19.2
-      serve-static: 1.16.3
+      send: 0.19.2(supports-color@7.2.0)
+      serve-static: 1.16.3(supports-color@7.2.0)
       setprototypeof: 1.2.0
       statuses: 2.0.2
       type-is: 1.6.18
@@ -5491,20 +5502,20 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  express@5.2.1:
+  express@5.2.1(supports-color@7.2.0):
     dependencies:
       accepts: 2.0.0
-      body-parser: 2.2.2
+      body-parser: 2.2.2(supports-color@7.2.0)
       content-disposition: 1.1.0
       content-type: 1.0.5
       cookie: 0.7.2
       cookie-signature: 1.2.2
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
       depd: 2.0.0
       encodeurl: 2.0.0
       escape-html: 1.0.3
       etag: 1.8.1
-      finalhandler: 2.1.1
+      finalhandler: 2.1.1(supports-color@7.2.0)
       fresh: 2.0.0
       http-errors: 2.0.1
       merge-descriptors: 2.0.0
@@ -5515,9 +5526,9 @@ snapshots:
       proxy-addr: 2.0.7
       qs: 6.15.1
       range-parser: 1.2.1
-      router: 2.2.0
-      send: 1.2.1
-      serve-static: 2.2.1
+      router: 2.2.0(supports-color@7.2.0)
+      send: 1.2.1(supports-color@7.2.0)
+      serve-static: 2.2.1(supports-color@7.2.0)
       statuses: 2.0.2
       type-is: 2.1.0
       vary: 1.1.2
@@ -5526,9 +5537,9 @@ snapshots:
 
   extend@3.0.2: {}
 
-  extract-zip@2.0.1:
+  extract-zip@2.0.1(supports-color@7.2.0):
     dependencies:
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
       get-stream: 5.2.0
       yauzl: 2.10.0
     optionalDependencies:
@@ -5590,9 +5601,9 @@ snapshots:
     dependencies:
       to-regex-range: 5.0.1
 
-  finalhandler@1.1.2:
+  finalhandler@1.1.2(supports-color@7.2.0):
     dependencies:
-      debug: 2.6.9
+      debug: 2.6.9(supports-color@7.2.0)
       encodeurl: 1.0.2
       escape-html: 1.0.3
       on-finished: 2.3.0
@@ -5602,9 +5613,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  finalhandler@1.3.2:
+  finalhandler@1.3.2(supports-color@7.2.0):
     dependencies:
-      debug: 2.6.9
+      debug: 2.6.9(supports-color@7.2.0)
       encodeurl: 2.0.0
       escape-html: 1.0.3
       on-finished: 2.4.1
@@ -5614,9 +5625,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  finalhandler@2.1.1:
+  finalhandler@2.1.1(supports-color@7.2.0):
     dependencies:
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
       encodeurl: 2.0.0
       escape-html: 1.0.3
       on-finished: 2.4.1
@@ -5656,21 +5667,21 @@ snapshots:
       object.pick: 1.3.0
       parse-filepath: 1.0.2
 
-  firebase-tools@15.18.0(@types/node@25.6.2)(encoding@0.1.13):
+  firebase-tools@15.18.0(@types/node@25.6.2)(encoding@0.1.13)(supports-color@7.2.0):
     dependencies:
       '@apphosting/common': 0.0.8
       '@electric-sql/pglite': 0.3.16
       '@electric-sql/pglite-tools': 0.2.21(@electric-sql/pglite@0.3.16)
-      '@google-cloud/cloud-sql-connector': 1.10.0
-      '@google-cloud/pubsub': 5.3.0
+      '@google-cloud/cloud-sql-connector': 1.10.0(supports-color@7.2.0)
+      '@google-cloud/pubsub': 5.3.0(supports-color@7.2.0)
       '@inquirer/prompts': 7.10.1(@types/node@25.6.2)
-      '@modelcontextprotocol/sdk': 1.29.0(zod@3.25.76)
+      '@modelcontextprotocol/sdk': 1.29.0(supports-color@7.2.0)(zod@3.25.76)
       abort-controller: 3.0.0
       ajv: 8.20.0
       ajv-formats: 3.0.1(ajv@8.20.0)
       archiver: 7.0.1
       async-lock: 1.4.1
-      body-parser: 1.20.5
+      body-parser: 1.20.5(supports-color@7.2.0)
       chokidar: 3.6.0
       cjson: 0.3.3
       cli-table3: 0.6.5
@@ -5682,16 +5693,16 @@ snapshots:
       cross-spawn: 7.0.6
       csv-parse: 5.6.0
       deep-equal-in-any-order: 2.2.0
-      exegesis: 4.3.0
-      exegesis-express: 4.0.0
-      express: 4.22.2
+      exegesis: 4.3.0(supports-color@7.2.0)
+      exegesis-express: 4.0.0(supports-color@7.2.0)
+      express: 4.22.2(supports-color@7.2.0)
       filesize: 6.4.0
       form-data: 4.0.5
       fs-extra: 10.1.0
       fuzzy: 0.1.3
-      gaxios: 6.7.1(encoding@0.1.13)
+      gaxios: 6.7.1(encoding@0.1.13)(supports-color@7.2.0)
       glob: 10.5.0
-      google-auth-library: 9.15.1(encoding@0.1.13)
+      google-auth-library: 9.15.1(encoding@0.1.13)(supports-color@7.2.0)
       ignore: 7.0.5
       js-yaml: 3.14.2
       jsonwebtoken: 9.0.3
@@ -5703,7 +5714,7 @@ snapshots:
       marked-terminal: 7.3.0(marked@13.0.3)
       mime: 2.6.0
       minimatch: 9.0.9
-      morgan: 1.10.1
+      morgan: 1.12.1(supports-color@7.2.0)
       node-fetch: 2.6.7(encoding@0.1.13)
       open: 6.4.0
       ora: 5.4.1
@@ -5711,20 +5722,20 @@ snapshots:
       pg: 8.21.0
       pg-gateway: 0.3.0-beta.4
       pglite-2: '@electric-sql/pglite@0.2.17'
-      portfinder: 1.0.38
+      portfinder: 1.0.38(supports-color@7.2.0)
       progress: 2.0.3
-      proxy-agent: 6.5.0
+      proxy-agent: 6.5.0(supports-color@7.2.0)
       retry: 0.13.1
       semver: 7.7.4
       sql-formatter: 15.8.0
       stream-chain: 2.2.5
       stream-json: 1.9.1
-      superstatic: 10.0.0(encoding@0.1.13)
+      superstatic: 10.0.0(encoding@0.1.13)(supports-color@7.2.0)
       tar: 7.5.15
-      tcp-port-used: 1.0.2
+      tcp-port-used: 1.0.2(supports-color@7.2.0)
       tmp: 0.2.5
       triple-beam: 1.4.1
-      universal-analytics: 0.5.4
+      universal-analytics: 0.5.4(supports-color@7.2.0)
       update-notifier-cjs: 5.1.7(encoding@0.1.13)
       uuid: 8.3.2
       winston: 3.19.0
@@ -5825,10 +5836,10 @@ snapshots:
       strip-ansi: 6.0.1
       wide-align: 1.1.5
 
-  gaxios@6.7.1(encoding@0.1.13):
+  gaxios@6.7.1(encoding@0.1.13)(supports-color@7.2.0):
     dependencies:
       extend: 3.0.2
-      https-proxy-agent: 7.0.6
+      https-proxy-agent: 7.0.6(supports-color@7.2.0)
       is-stream: 2.0.1
       node-fetch: 2.7.0(encoding@0.1.13)
       uuid: 9.0.1
@@ -5836,10 +5847,10 @@ snapshots:
       - encoding
       - supports-color
 
-  gaxios@7.1.4:
+  gaxios@7.1.4(supports-color@7.2.0):
     dependencies:
       extend: 3.0.2
-      https-proxy-agent: 7.0.6
+      https-proxy-agent: 7.0.6(supports-color@7.2.0)
       node-fetch: 3.3.2
     transitivePeerDependencies:
       - supports-color
@@ -5848,18 +5859,18 @@ snapshots:
     dependencies:
       globule: 1.3.4
 
-  gcp-metadata@6.1.1(encoding@0.1.13):
+  gcp-metadata@6.1.1(encoding@0.1.13)(supports-color@7.2.0):
     dependencies:
-      gaxios: 6.7.1(encoding@0.1.13)
+      gaxios: 6.7.1(encoding@0.1.13)(supports-color@7.2.0)
       google-logging-utils: 0.0.2
       json-bigint: 1.0.0
     transitivePeerDependencies:
       - encoding
       - supports-color
 
-  gcp-metadata@8.1.2:
+  gcp-metadata@8.1.2(supports-color@7.2.0):
     dependencies:
-      gaxios: 7.1.4
+      gaxios: 7.1.4(supports-color@7.2.0)
       google-logging-utils: 1.1.3
       json-bigint: 1.0.0
     transitivePeerDependencies:
@@ -5889,11 +5900,11 @@ snapshots:
     dependencies:
       pump: 3.0.4
 
-  get-uri@6.0.5:
+  get-uri@6.0.5(supports-color@7.2.0):
     dependencies:
       basic-ftp: 5.3.1
       data-uri-to-buffer: 6.0.2
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -5989,41 +6000,41 @@ snapshots:
       lodash: 4.18.1
       minimatch: 9.0.9
 
-  google-auth-library@10.6.2:
+  google-auth-library@10.6.2(supports-color@7.2.0):
     dependencies:
       base64-js: 1.5.1
       ecdsa-sig-formatter: 1.0.11
-      gaxios: 7.1.4
-      gcp-metadata: 8.1.2
+      gaxios: 7.1.4(supports-color@7.2.0)
+      gcp-metadata: 8.1.2(supports-color@7.2.0)
       google-logging-utils: 1.1.3
       jws: 4.0.1
     transitivePeerDependencies:
       - supports-color
 
-  google-auth-library@9.15.1(encoding@0.1.13):
+  google-auth-library@9.15.1(encoding@0.1.13)(supports-color@7.2.0):
     dependencies:
       base64-js: 1.5.1
       ecdsa-sig-formatter: 1.0.11
-      gaxios: 6.7.1(encoding@0.1.13)
-      gcp-metadata: 6.1.1(encoding@0.1.13)
-      gtoken: 7.1.0(encoding@0.1.13)
+      gaxios: 6.7.1(encoding@0.1.13)(supports-color@7.2.0)
+      gcp-metadata: 6.1.1(encoding@0.1.13)(supports-color@7.2.0)
+      gtoken: 7.1.0(encoding@0.1.13)(supports-color@7.2.0)
       jws: 4.0.1
     transitivePeerDependencies:
       - encoding
       - supports-color
 
-  google-gax@5.0.6:
+  google-gax@5.0.6(supports-color@7.2.0):
     dependencies:
       '@grpc/grpc-js': 1.14.4
       '@grpc/proto-loader': 0.8.1
       duplexify: 4.1.3
-      google-auth-library: 10.6.2
+      google-auth-library: 10.6.2(supports-color@7.2.0)
       google-logging-utils: 1.1.3
       node-fetch: 3.3.2
       object-hash: 3.0.0
       proto3-json-serializer: 3.0.4
       protobufjs: 7.6.0
-      retry-request: 8.0.2
+      retry-request: 8.0.2(supports-color@7.2.0)
       rimraf: 5.0.10
     transitivePeerDependencies:
       - supports-color
@@ -6032,11 +6043,11 @@ snapshots:
 
   google-logging-utils@1.1.3: {}
 
-  googleapis-common@8.0.1:
+  googleapis-common@8.0.1(supports-color@7.2.0):
     dependencies:
       extend: 3.0.2
-      gaxios: 7.1.4
-      google-auth-library: 10.6.2
+      gaxios: 7.1.4(supports-color@7.2.0)
+      google-auth-library: 10.6.2(supports-color@7.2.0)
       qs: 6.15.1
       url-template: 2.0.8
     transitivePeerDependencies:
@@ -6074,17 +6085,17 @@ snapshots:
       grunt: 1.6.2
       rimraf: 2.7.1
 
-  grunt-contrib-connect@5.0.1:
+  grunt-contrib-connect@5.0.1(supports-color@7.2.0):
     dependencies:
       async: 3.2.6
-      connect: 3.7.0
+      connect: 3.7.0(supports-color@7.2.0)
       connect-livereload: 0.6.1
       http2-wrapper: 2.2.1
-      morgan: 1.10.1
+      morgan: 1.12.1(supports-color@7.2.0)
       open: 8.4.2
       portscanner: 2.2.0
-      serve-index: 1.9.2
-      serve-static: 1.16.3
+      serve-index: 1.9.2(supports-color@7.2.0)
+      serve-static: 1.16.3(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -6093,13 +6104,13 @@ snapshots:
       chalk: 1.1.3
       file-sync-cmp: 0.1.1
 
-  grunt-contrib-jasmine@4.0.0(encoding@0.1.13)(grunt@1.6.2):
+  grunt-contrib-jasmine@4.0.0(encoding@0.1.13)(grunt@1.6.2)(supports-color@7.2.0):
     dependencies:
       chalk: 4.1.2
-      grunt-eslint: 24.3.0(grunt@1.6.2)
+      grunt-eslint: 24.3.0(grunt@1.6.2)(supports-color@7.2.0)
       lodash: 4.18.1
-      pacote: 15.2.0
-      puppeteer: 19.11.1(encoding@0.1.13)
+      pacote: 15.2.0(supports-color@7.2.0)
+      puppeteer: 19.11.1(encoding@0.1.13)(supports-color@7.2.0)
       rimraf: 4.4.1
       sprintf-js: 1.1.3
     transitivePeerDependencies:
@@ -6121,12 +6132,12 @@ snapshots:
       uglify-js: 3.17.4
       uri-path: 1.0.0
 
-  grunt-contrib-watch@1.1.0:
+  grunt-contrib-watch@1.1.0(supports-color@7.2.0):
     dependencies:
       async: 2.6.4
       gaze: 1.1.3
       lodash: 4.18.1
-      tiny-lr: 1.1.1
+      tiny-lr: 1.1.1(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -6134,18 +6145,18 @@ snapshots:
     dependencies:
       grunt: 1.6.2
 
-  grunt-eslint@24.3.0(grunt@1.6.2):
+  grunt-eslint@24.3.0(grunt@1.6.2)(supports-color@7.2.0):
     dependencies:
       chalk: 4.1.2
-      eslint: 8.57.1
+      eslint: 8.57.1(supports-color@7.2.0)
       grunt: 1.6.2
     transitivePeerDependencies:
       - supports-color
 
-  grunt-eslint@26.0.0(grunt@1.6.2):
+  grunt-eslint@26.0.0(grunt@1.6.2)(supports-color@7.2.0):
     dependencies:
       chalk: 4.1.2
-      eslint: 9.39.4
+      eslint: 9.39.4(supports-color@7.2.0)
       grunt: 1.6.2
     transitivePeerDependencies:
       - jiti
@@ -6203,9 +6214,9 @@ snapshots:
       minimatch: 3.1.5
       nopt: 5.0.0
 
-  gtoken@7.1.0(encoding@0.1.13):
+  gtoken@7.1.0(encoding@0.1.13)(supports-color@7.2.0):
     dependencies:
-      gaxios: 6.7.1(encoding@0.1.13)
+      gaxios: 6.7.1(encoding@0.1.13)(supports-color@7.2.0)
       jws: 4.0.1
     transitivePeerDependencies:
       - encoding
@@ -6276,18 +6287,18 @@ snapshots:
 
   http-parser-js@0.5.10: {}
 
-  http-proxy-agent@5.0.0:
+  http-proxy-agent@5.0.0(supports-color@7.2.0):
     dependencies:
       '@tootallnate/once': 3.0.1
-      agent-base: 6.0.2
-      debug: 4.4.3
+      agent-base: 6.0.2(supports-color@7.2.0)
+      debug: 4.4.3(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
 
-  http-proxy-agent@7.0.2:
+  http-proxy-agent@7.0.2(supports-color@7.2.0):
     dependencies:
       agent-base: 7.1.4
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -6296,17 +6307,17 @@ snapshots:
       quick-lru: 5.1.1
       resolve-alpn: 1.2.1
 
-  https-proxy-agent@5.0.1:
+  https-proxy-agent@5.0.1(supports-color@7.2.0):
     dependencies:
-      agent-base: 6.0.2
-      debug: 4.4.3
+      agent-base: 6.0.2(supports-color@7.2.0)
+      debug: 4.4.3(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
 
-  https-proxy-agent@7.0.6:
+  https-proxy-agent@7.0.6(supports-color@7.2.0):
     dependencies:
       agent-base: 7.1.4
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -6716,13 +6727,13 @@ snapshots:
     dependencies:
       semver: 6.3.1
 
-  make-fetch-happen@10.2.1:
+  make-fetch-happen@10.2.1(supports-color@7.2.0):
     dependencies:
       agentkeepalive: 4.6.0
       cacache: 16.1.3
       http-cache-semantics: 4.2.0
-      http-proxy-agent: 5.0.0
-      https-proxy-agent: 5.0.1
+      http-proxy-agent: 5.0.0(supports-color@7.2.0)
+      https-proxy-agent: 5.0.1(supports-color@7.2.0)
       is-lambda: 1.0.1
       lru-cache: 7.18.3
       minipass: 3.3.6
@@ -6732,19 +6743,19 @@ snapshots:
       minipass-pipeline: 1.2.4
       negotiator: 0.6.4
       promise-retry: 2.0.1
-      socks-proxy-agent: 7.0.0
+      socks-proxy-agent: 7.0.0(supports-color@7.2.0)
       ssri: 9.0.1
     transitivePeerDependencies:
       - bluebird
       - supports-color
 
-  make-fetch-happen@11.1.1:
+  make-fetch-happen@11.1.1(supports-color@7.2.0):
     dependencies:
       agentkeepalive: 4.6.0
       cacache: 17.1.4
       http-cache-semantics: 4.2.0
-      http-proxy-agent: 5.0.0
-      https-proxy-agent: 5.0.1
+      http-proxy-agent: 5.0.0(supports-color@7.2.0)
+      https-proxy-agent: 5.0.1(supports-color@7.2.0)
       is-lambda: 1.0.1
       lru-cache: 7.18.3
       minipass: 5.0.0
@@ -6753,7 +6764,7 @@ snapshots:
       minipass-pipeline: 1.2.4
       negotiator: 0.6.4
       promise-retry: 2.0.1
-      socks-proxy-agent: 7.0.0
+      socks-proxy-agent: 7.0.0(supports-color@7.2.0)
       ssri: 10.0.6
     transitivePeerDependencies:
       - supports-color
@@ -6903,12 +6914,12 @@ snapshots:
 
   moo@0.5.3: {}
 
-  morgan@1.10.1:
+  morgan@1.12.1(supports-color@7.2.0):
     dependencies:
       basic-auth: 2.0.1
-      debug: 2.6.9
+      debug: 2.6.9(supports-color@7.2.0)
       depd: 2.0.0
-      on-finished: 2.3.0
+      on-finished: 2.4.1
       on-headers: 1.1.0
     transitivePeerDependencies:
       - supports-color
@@ -6996,13 +7007,13 @@ snapshots:
       which: 6.0.1
     optional: true
 
-  node-gyp@9.4.1:
+  node-gyp@9.4.1(supports-color@7.2.0):
     dependencies:
       env-paths: 2.2.1
       exponential-backoff: 3.1.3
       glob: 7.2.3
       graceful-fs: 4.2.11
-      make-fetch-happen: 10.2.1
+      make-fetch-happen: 10.2.1(supports-color@7.2.0)
       nopt: 6.0.0
       npmlog: 6.0.2
       rimraf: 3.0.2
@@ -7063,9 +7074,9 @@ snapshots:
       npm-package-arg: 10.1.0
       semver: 7.7.4
 
-  npm-registry-fetch@14.0.5:
+  npm-registry-fetch@14.0.5(supports-color@7.2.0):
     dependencies:
-      make-fetch-happen: 11.1.1
+      make-fetch-happen: 11.1.1(supports-color@7.2.0)
       minipass: 5.0.0
       minipass-fetch: 3.0.5
       minipass-json-stream: 1.0.2
@@ -7191,16 +7202,16 @@ snapshots:
 
   p-try@2.2.0: {}
 
-  pac-proxy-agent@7.2.0:
+  pac-proxy-agent@7.2.0(supports-color@7.2.0):
     dependencies:
       '@tootallnate/quickjs-emscripten': 0.23.0
       agent-base: 7.1.4
-      debug: 4.4.3
-      get-uri: 6.0.5
-      http-proxy-agent: 7.0.2
-      https-proxy-agent: 7.0.6
+      debug: 4.4.3(supports-color@7.2.0)
+      get-uri: 6.0.5(supports-color@7.2.0)
+      http-proxy-agent: 7.0.2(supports-color@7.2.0)
+      https-proxy-agent: 7.0.6(supports-color@7.2.0)
       pac-resolver: 7.0.1
-      socks-proxy-agent: 8.0.5
+      socks-proxy-agent: 8.0.5(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -7211,24 +7222,24 @@ snapshots:
 
   package-json-from-dist@1.0.1: {}
 
-  pacote@15.2.0:
+  pacote@15.2.0(supports-color@7.2.0):
     dependencies:
       '@npmcli/git': 4.1.0
       '@npmcli/installed-package-contents': 2.1.0
       '@npmcli/promise-spawn': 6.0.2
-      '@npmcli/run-script': 6.0.2
+      '@npmcli/run-script': 6.0.2(supports-color@7.2.0)
       cacache: 17.1.4
       fs-minipass: 3.0.3
       minipass: 5.0.0
       npm-package-arg: 10.1.0
       npm-packlist: 7.0.4
       npm-pick-manifest: 8.0.2
-      npm-registry-fetch: 14.0.5
+      npm-registry-fetch: 14.0.5(supports-color@7.2.0)
       proc-log: 3.0.0
       promise-retry: 2.0.1
       read-package-json: 6.0.4
       read-package-json-fast: 3.0.2
-      sigstore: 1.9.0
+      sigstore: 1.9.0(supports-color@7.2.0)
       ssri: 10.0.6
       tar: 7.5.15
     transitivePeerDependencies:
@@ -7349,10 +7360,10 @@ snapshots:
     dependencies:
       find-up: 3.0.0
 
-  portfinder@1.0.38:
+  portfinder@1.0.38(supports-color@7.2.0):
     dependencies:
       async: 3.2.6
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -7421,16 +7432,16 @@ snapshots:
       forwarded: 0.2.0
       ipaddr.js: 1.9.1
 
-  proxy-agent@6.5.0:
+  proxy-agent@6.5.0(supports-color@7.2.0):
     dependencies:
       agent-base: 7.1.4
-      debug: 4.4.3
-      http-proxy-agent: 7.0.2
-      https-proxy-agent: 7.0.6
+      debug: 4.4.3(supports-color@7.2.0)
+      http-proxy-agent: 7.0.2(supports-color@7.2.0)
+      https-proxy-agent: 7.0.6(supports-color@7.2.0)
       lru-cache: 7.18.3
-      pac-proxy-agent: 7.2.0
+      pac-proxy-agent: 7.2.0(supports-color@7.2.0)
       proxy-from-env: 1.1.0
-      socks-proxy-agent: 8.0.5
+      socks-proxy-agent: 8.0.5(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -7447,15 +7458,15 @@ snapshots:
     dependencies:
       escape-goat: 2.1.1
 
-  puppeteer-core@19.11.1(encoding@0.1.13):
+  puppeteer-core@19.11.1(encoding@0.1.13)(supports-color@7.2.0):
     dependencies:
-      '@puppeteer/browsers': 0.5.0
+      '@puppeteer/browsers': 0.5.0(supports-color@7.2.0)
       chromium-bidi: 0.4.7(devtools-protocol@0.0.1107588)
       cross-fetch: 3.1.5(encoding@0.1.13)
-      debug: 4.3.4
+      debug: 4.3.4(supports-color@7.2.0)
       devtools-protocol: 0.0.1107588
-      extract-zip: 2.0.1
-      https-proxy-agent: 5.0.1
+      extract-zip: 2.0.1(supports-color@7.2.0)
+      https-proxy-agent: 5.0.1(supports-color@7.2.0)
       proxy-from-env: 1.1.0
       tar-fs: 3.1.2
       unbzip2-stream: 1.4.3
@@ -7469,14 +7480,14 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  puppeteer@19.11.1(encoding@0.1.13):
+  puppeteer@19.11.1(encoding@0.1.13)(supports-color@7.2.0):
     dependencies:
-      '@puppeteer/browsers': 0.5.0
+      '@puppeteer/browsers': 0.5.0(supports-color@7.2.0)
       cosmiconfig: 8.1.3
-      https-proxy-agent: 5.0.1
+      https-proxy-agent: 5.0.1(supports-color@7.2.0)
       progress: 2.0.3
       proxy-from-env: 1.1.0
-      puppeteer-core: 19.11.1(encoding@0.1.13)
+      puppeteer-core: 19.11.1(encoding@0.1.13)(supports-color@7.2.0)
     transitivePeerDependencies:
       - bare-abort-controller
       - bare-buffer
@@ -7628,10 +7639,10 @@ snapshots:
 
   ret@0.1.15: {}
 
-  retry-request@8.0.2:
+  retry-request@8.0.2(supports-color@7.2.0):
     dependencies:
       extend: 3.0.2
-      teeny-request: 10.1.2
+      teeny-request: 10.1.2(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -7657,9 +7668,9 @@ snapshots:
     dependencies:
       glob: 10.5.0
 
-  router@2.2.0:
+  router@2.2.0(supports-color@7.2.0):
     dependencies:
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
       depd: 2.0.0
       is-promise: 4.0.0
       parseurl: 1.3.3
@@ -7691,9 +7702,9 @@ snapshots:
 
   semver@7.7.4: {}
 
-  send@0.19.2:
+  send@0.19.2(supports-color@7.2.0):
     dependencies:
-      debug: 2.6.9
+      debug: 2.6.9(supports-color@7.2.0)
       depd: 2.0.0
       destroy: 1.2.0
       encodeurl: 2.0.0
@@ -7709,9 +7720,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  send@1.2.1:
+  send@1.2.1(supports-color@7.2.0):
     dependencies:
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
       encodeurl: 2.0.0
       escape-html: 1.0.3
       etag: 1.8.1
@@ -7725,11 +7736,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  serve-index@1.9.2:
+  serve-index@1.9.2(supports-color@7.2.0):
     dependencies:
       accepts: 1.3.8
       batch: 0.6.1
-      debug: 2.6.9
+      debug: 2.6.9(supports-color@7.2.0)
       escape-html: 1.0.3
       http-errors: 1.8.1
       mime-types: 2.1.35
@@ -7737,21 +7748,21 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  serve-static@1.16.3:
+  serve-static@1.16.3(supports-color@7.2.0):
     dependencies:
       encodeurl: 2.0.0
       escape-html: 1.0.3
       parseurl: 1.3.3
-      send: 0.19.2
+      send: 0.19.2(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
 
-  serve-static@2.2.1:
+  serve-static@2.2.1(supports-color@7.2.0):
     dependencies:
       encodeurl: 2.0.0
       escape-html: 1.0.3
       parseurl: 1.3.3
-      send: 1.2.1
+      send: 1.2.1(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -7797,13 +7808,13 @@ snapshots:
 
   signal-exit@4.1.0: {}
 
-  sigstore@1.9.0:
+  sigstore@1.9.0(supports-color@7.2.0):
     dependencies:
       '@sigstore/bundle': 1.1.0
       '@sigstore/protobuf-specs': 0.2.1
-      '@sigstore/sign': 1.0.0
-      '@sigstore/tuf': 1.0.3
-      make-fetch-happen: 11.1.1
+      '@sigstore/sign': 1.0.0(supports-color@7.2.0)
+      '@sigstore/tuf': 1.0.3(supports-color@7.2.0)
+      make-fetch-happen: 11.1.1(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -7813,18 +7824,18 @@ snapshots:
 
   smart-buffer@4.2.0: {}
 
-  socks-proxy-agent@7.0.0:
+  socks-proxy-agent@7.0.0(supports-color@7.2.0):
     dependencies:
-      agent-base: 6.0.2
-      debug: 4.4.3
+      agent-base: 6.0.2(supports-color@7.2.0)
+      debug: 4.4.3(supports-color@7.2.0)
       socks: 2.8.8
     transitivePeerDependencies:
       - supports-color
 
-  socks-proxy-agent@8.0.5:
+  socks-proxy-agent@8.0.5(supports-color@7.2.0):
     dependencies:
       agent-base: 7.1.4
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
       socks: 2.8.8
     transitivePeerDependencies:
       - supports-color
@@ -7941,12 +7952,12 @@ snapshots:
 
   stubs@3.0.0: {}
 
-  superstatic@10.0.0(encoding@0.1.13):
+  superstatic@10.0.0(encoding@0.1.13)(supports-color@7.2.0):
     dependencies:
       basic-auth-connect: 1.1.0
       commander: 10.0.1
-      compression: 1.8.1
-      connect: 3.7.0
+      compression: 1.8.1(supports-color@7.2.0)
+      connect: 3.7.0(supports-color@7.2.0)
       destroy: 1.2.0
       glob-slasher: 1.0.1
       is-url: 1.2.4
@@ -7954,11 +7965,11 @@ snapshots:
       lodash: 4.18.1
       mime-types: 2.1.35
       minimatch: 6.2.3
-      morgan: 1.10.1
+      morgan: 1.12.1(supports-color@7.2.0)
       on-finished: 2.4.1
       on-headers: 1.1.0
       path-to-regexp: 1.9.0
-      router: 2.2.0
+      router: 2.2.0(supports-color@7.2.0)
       update-notifier-cjs: 5.1.7(encoding@0.1.13)
     optionalDependencies:
       re2: 1.24.1
@@ -8010,17 +8021,17 @@ snapshots:
       minizlib: 3.1.0
       yallist: 5.0.0
 
-  tcp-port-used@1.0.2:
+  tcp-port-used@1.0.2(supports-color@7.2.0):
     dependencies:
-      debug: 4.3.1
+      debug: 4.3.1(supports-color@7.2.0)
       is2: 2.0.9
     transitivePeerDependencies:
       - supports-color
 
-  teeny-request@10.1.2:
+  teeny-request@10.1.2(supports-color@7.2.0):
     dependencies:
-      http-proxy-agent: 7.0.2
-      https-proxy-agent: 7.0.6
+      http-proxy-agent: 7.0.2(supports-color@7.2.0)
+      https-proxy-agent: 7.0.6(supports-color@7.2.0)
       node-fetch: 3.3.2
       stream-events: 1.0.5
     transitivePeerDependencies:
@@ -8053,10 +8064,10 @@ snapshots:
 
   through@2.3.8: {}
 
-  tiny-lr@1.1.1:
+  tiny-lr@1.1.1(supports-color@7.2.0):
     dependencies:
       body: 5.1.0
-      debug: 3.2.7
+      debug: 3.2.7(supports-color@7.2.0)
       faye-websocket: 0.10.0
       livereload-js: 2.4.0
       object-assign: 4.1.1
@@ -8090,11 +8101,11 @@ snapshots:
 
   tsscmp@1.0.6: {}
 
-  tuf-js@1.1.7:
+  tuf-js@1.1.7(supports-color@7.2.0):
     dependencies:
       '@tufjs/models': 1.0.4
-      debug: 4.4.3
-      make-fetch-happen: 11.1.1
+      debug: 4.4.3(supports-color@7.2.0)
+      make-fetch-happen: 11.1.1(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -8160,9 +8171,9 @@ snapshots:
     dependencies:
       crypto-random-string: 2.0.0
 
-  universal-analytics@0.5.4:
+  universal-analytics@0.5.4(supports-color@7.2.0):
     dependencies:
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
       uuid: 14.0.0
     transitivePeerDependencies:
       - supports-color
