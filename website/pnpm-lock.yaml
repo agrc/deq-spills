@@ -1473,8 +1473,8 @@ packages:
   '@lit/reactive-element@2.1.2':
     resolution: {integrity: sha512-pbCDiVMnne1lYUIaYNN5wrwQXDtHaYtg7YEFPeW+hws6U47WeFvISGUWekPGKWOP1ygrs0ef0o1VJMk1exos5A==}
 
-  '@modelcontextprotocol/sdk@1.28.0':
-    resolution: {integrity: sha512-gmloF+i+flI8ouQK7MWW4mOwuMh4RePBuPFAEPC6+pdqyWOUMDOixb6qZ69owLJpz6XmyllCouc4t8YWO+E2Nw==}
+  '@modelcontextprotocol/sdk@1.32.2':
+    resolution: {integrity: sha512-SWsVtH/0vULSQStoZ6xxH2K09Li8fXYTMC64ZeogCdpZ3XSi1eCPOByV1OpuJxuI3OcmHhosDWYyii07tpPsLw==}
     engines: {node: '>=18'}
     peerDependencies:
       '@cfworker/json-schema': ^4.1.1
@@ -9068,7 +9068,7 @@ snapshots:
     dependencies:
       '@lit-labs/ssr-dom-shim': 1.5.1
 
-  '@modelcontextprotocol/sdk@1.28.0(supports-color@8.1.1)(zod@3.25.76)':
+  '@modelcontextprotocol/sdk@1.32.2(supports-color@8.1.1)(zod@3.25.76)':
     dependencies:
       '@hono/node-server': 1.19.14(hono@4.12.18)
       ajv: 8.18.0
@@ -12922,7 +12922,7 @@ snapshots:
       '@google-cloud/cloud-sql-connector': 1.9.2(supports-color@8.1.1)
       '@google-cloud/pubsub': 5.3.0(supports-color@8.1.1)
       '@inquirer/prompts': 7.10.1(@types/node@25.6.1)
-      '@modelcontextprotocol/sdk': 1.28.0(supports-color@8.1.1)(zod@3.25.76)
+      '@modelcontextprotocol/sdk': 1.32.2(supports-color@8.1.1)(zod@3.25.76)
       abort-controller: 3.0.0
       ajv: 8.18.0
       ajv-formats: 3.0.1(ajv@8.18.0)
