@@ -1,5 +1,30 @@
 # Changelog
 
+## [3.1.6](https://github.com/agrc/deq-spills/compare/v3.1.5...v3.1.6) (2026-11-06)
+
+
+### Bug Fixes
+
+* **legacy:** update land ownership vector tile service ([b47965b](https://github.com/agrc/deq-spills/commit/b47965b761f17ca113347db7f47bbb3f9452f14c))
+
+
+### Dependencies
+
+* bump @grpc/grpc-js from 1.14.4 to 1.14.7 in /legacy ([595a134](https://github.com/agrc/deq-spills/commit/595a13430017020de105d887e92ca55dafe0d399))
+* bump @modelcontextprotocol/sdk from 1.29.0 to 1.32.2 in /legacy ([7c14aa5](https://github.com/agrc/deq-spills/commit/7c14aa5beb975b393ebdad0b3755081553ea4dda))
+* bump compression from 1.8.1 to 1.8.2 in /legacy ([db006b8](https://github.com/agrc/deq-spills/commit/db006b85362ec303b4efa5321d670ba8e8d3d837))
+* bump fast-uri from 3.1.2 to 3.1.9 in /legacy ([389d613](https://github.com/agrc/deq-spills/commit/389d6131f66a22d61734ac876005d379fb20095e))
+* bump form-data from 4.0.5 to 4.0.6 in /legacy ([8039f70](https://github.com/agrc/deq-spills/commit/8039f70595f28cd66d7d4557232dc80dafb02db8))
+* bump hono from 4.12.21 to 4.13.16 in /legacy ([af04498](https://github.com/agrc/deq-spills/commit/af04498341722d4a4ba17d6678a7d6a6c40ab017))
+* bump ip-address from 10.2.0 to 10.7.6 in /legacy ([eb8fbf9](https://github.com/agrc/deq-spills/commit/eb8fbf9e48cfa2b475fb335d8f4d1125428f1e2f))
+* bump morgan from 1.10.1 to 1.12.1 in /legacy ([4f4cc4d](https://github.com/agrc/deq-spills/commit/4f4cc4ddb3a504237e9e289b3d7fafec3c91eba6))
+* bump proxy-addr from 2.0.7 to 2.0.8 in /legacy ([45a71cf](https://github.com/agrc/deq-spills/commit/45a71cf8c4dbd195783d6cb4f6d3fbc8789324fb))
+* bump tmp from 0.2.5 to 0.2.7 in /legacy ([95c3ad6](https://github.com/agrc/deq-spills/commit/95c3ad63d2240dd90046a40e53a9d57ebaec4722))
+* bump undici from 6.25.0 to 6.29.1 in /legacy ([45feed8](https://github.com/agrc/deq-spills/commit/45feed8ec858a5062721f4ddeee7d5e6c9cb8cea))
+* bump websocket-driver from 0.7.4 to 0.7.5 in /legacy ([f5cc47b](https://github.com/agrc/deq-spills/commit/f5cc47b466c27c9ecd41925dc3580c7d4f5b54e6))
+* **dev:** bump postcss from 8.5.14 to 8.5.23 in /website ([05ada2d](https://github.com/agrc/deq-spills/commit/05ada2d790390b140aa19dabd562a1255bba14d5))
+* upgrading safe dependencies ([09bd4a2](https://github.com/agrc/deq-spills/commit/09bd4a22bb4450da08c851fe647297baedc3006d))
+
 ## [3.1.5](https://github.com/agrc/deq-spills/compare/v3.1.4...v3.1.5) (2026-05-27)
 
 
