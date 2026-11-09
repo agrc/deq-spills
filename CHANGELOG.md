@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.1.7](https://github.com/agrc/deq-spills/compare/v3.1.6...v3.1.7) (2026-11-09)
+
+
+### Dependencies
+
+* bump @grpc/grpc-js from 1.14.6 to 1.14.7 in /legacy ([ea7ebb5](https://github.com/agrc/deq-spills/commit/ea7ebb5f115283897475c1e630cd30d64a7b5ce4))
+* bump @hono/node-server from 1.19.14 to 2.1.6 in /legacy ([b73d7a8](https://github.com/agrc/deq-spills/commit/b73d7a8c0127a903f36ac7276f5c795ff11f0f87))
+* **dev:** bump the safe-dependencies group across 2 directories with 5 updates ([6f20ec9](https://github.com/agrc/deq-spills/commit/6f20ec973f4da8ff95c7ef419dc025f54097c58c))
+
 ## [3.1.6](https://github.com/agrc/deq-spills/compare/v3.1.5...v3.1.6) (2026-11-06)
 
 
