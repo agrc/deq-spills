@@ -119,7 +119,7 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled }
         });
         const lakes = new FeatureLayer({
           url: config.URL.majorLakes,
-          outFields: ['GNIS_ID', 'GNIS_Name'],
+          outFields: ['Permanent_Identifier', 'GNIS_Name'],
           renderer: {
             type: 'simple',
             symbol: {
@@ -258,7 +258,7 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled }
     const [type, id] = waterbodyId?.split(':') ?? [];
     const streamsWhere = type === 'stream' ? `ComID = ${id}` : '1=0';
     const riversWhere = type === 'river' ? `COM_ID = ${id}` : '1=0';
-    const lakesWhere = type === 'lake' ? `GNIS_ID = '${id}'` : '1=0';
+    const lakesWhere = type === 'lake' ? `Permanent_Identifier = '${id}'` : '1=0';
 
     waterbodyLayers.streams.definitionExpression = streamsWhere;
     waterbodyLayers.rivers.definitionExpression = riversWhere;
