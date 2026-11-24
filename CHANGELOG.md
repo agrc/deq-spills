@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.1.8-rc.1](https://github.com/agrc/deq-spills/compare/v3.1.6-rc.6...v3.1.8-rc.1) (2026-11-24)
+
+
+### Features
+
+* add lakes ([459d6d4](https://github.com/agrc/deq-spills/commit/459d6d440b12b11b810160de543c0b82ee4fbff9))
+* switching to Permanent_Identifier ([c2866c5](https://github.com/agrc/deq-spills/commit/c2866c5d326228d186ce31848f6786ed88a9e07a))
+
 ## [3.1.6-rc.6](https://github.com/agrc/deq-spills/compare/v3.1.6-rc.5...v3.1.6-rc.6) (2026-10-29)
 
 
