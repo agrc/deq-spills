@@ -55,21 +55,45 @@ async function queryRivers(point: __esri.Point, riversFeatureLayer: __esri.Featu
   }));
 }
 
+async function queryLakes(point: __esri.Point, lakesFeatureLayer: __esri.FeatureLayer): Promise<NearestWaterBody[]> {
+  const result = await lakesFeatureLayer.queryFeatures({
+    geometry: point,
+    spatialRelationship: 'intersects',
+    distance: searchDistanceInFeet,
+    units: 'feet',
+    returnGeometry: true,
+    outFields: ['GNIS_ID', 'GNIS_Name'],
+    where: '1=1',
+  });
+
+  return result.features.map((feature) => ({
+    distanceInFeet: Math.round(
+      geodeticDistanceOperator.execute(point, feature.geometry!, {
+        unit: 'feet',
+      }),
+    ),
+    id: `lake:${feature.attributes.GNIS_ID}`,
+    name: feature.attributes.GNIS_Name ?? null,
+  }));
+}
+
 export async function queryNearestWaterBody(
   point: __esri.Point,
   streamsFeatureLayer: __esri.FeatureLayer,
   riversFeatureLayer: __esri.FeatureLayer,
+  lakesFeatureLayer: __esri.FeatureLayer,
 ): Promise<NearestWaterBody | null> {
   if (!geodeticDistanceOperator.isLoaded()) {
     await geodeticDistanceOperator.load();
   }
 
-  const [streamCandidates, riverCandidates] = await Promise.all([
+  const [streamCandidates, riverCandidates, lakeCandidates] = await Promise.all([
     queryStreams(point, streamsFeatureLayer),
     queryRivers(point, riversFeatureLayer),
+    queryLakes(point, lakesFeatureLayer),
   ]);
 
-  const candidates = [...streamCandidates, ...riverCandidates];
+  const candidates = [...streamCandidates, ...riverCandidates, ...lakeCandidates];
 
   if (candidates.length === 0) {
     return null;

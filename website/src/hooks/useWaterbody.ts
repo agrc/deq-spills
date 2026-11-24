@@ -21,6 +21,7 @@ export default function useWaterbody(
   mapView: __esri.MapView | null,
   streamsFeatureLayer: __esri.FeatureLayer | null,
   riversFeatureLayer: __esri.FeatureLayer | null,
+  lakesFeatureLayer: __esri.FeatureLayer | null,
 ) {
   const { data, isInitialDataLoaded, setData } = useData();
 
@@ -43,7 +44,8 @@ export default function useWaterbody(
       data.UTM_Y === null ||
       mapView === null ||
       streamsFeatureLayer === null ||
-      riversFeatureLayer === null
+      riversFeatureLayer === null ||
+      lakesFeatureLayer === null
     ) {
       return;
     }
@@ -90,7 +92,12 @@ export default function useWaterbody(
       }
 
       const webMercatorPoint = computeWebMercatorPoint();
-      const nearestWaterBody = await queryNearestWaterBody(webMercatorPoint, streamsFeatureLayer!, riversFeatureLayer!);
+      const nearestWaterBody = await queryNearestWaterBody(
+        webMercatorPoint,
+        streamsFeatureLayer!,
+        riversFeatureLayer!,
+        lakesFeatureLayer!,
+      );
       const waterbodyInfo = {
         NEAREST_WATERBODY_DISTANCE: nearestWaterBody?.distanceInFeet ?? null,
         NEAREST_WATERBODY_ID: nearestWaterBody?.id ?? null,
@@ -136,6 +143,7 @@ export default function useWaterbody(
     mapView,
     streamsFeatureLayer,
     riversFeatureLayer,
+    lakesFeatureLayer,
     setData,
   ]);
 
