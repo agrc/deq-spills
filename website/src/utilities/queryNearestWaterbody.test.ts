@@ -52,7 +52,9 @@ describe('queryNearestWaterBody', () => {
         },
       ],
     });
-    mocks.execute.mockImplementation((_, geometry: __esri.Geometry) => (geometry === streamGeometry ? 42 : 12));
+    mocks.execute.mockImplementation((_, geometry: __esri.Geometry) =>
+      geometry === streamGeometry ? 42 : geometry === riverGeometry ? 12 : 100,
+    );
 
     const result = await queryNearestWaterBody(point, streamsFeatureLayer, riversFeatureLayer, lakesFeatureLayer);
 
