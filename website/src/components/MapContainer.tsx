@@ -33,6 +33,7 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
   const [waterbodyLayers, setWaterbodyLayers] = useState<{
     streams: FeatureLayer;
     rivers: FeatureLayer;
+    lakes: FeatureLayer;
   } | null>(null);
   const [waterbodyLayerStatus, setWaterbodyLayerStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const { setMapView, setFlowPathFeatureLayer, flowPathFeatureLayer } = useMapView();
@@ -41,6 +42,7 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
     mapView.current,
     waterbodyLayers?.streams ?? null,
     waterbodyLayers?.rivers ?? null,
+    waterbodyLayers?.lakes ?? null,
   );
   const [flowPathExtent, setFlowPathExtent] = useState<{ extent: __esri.Extent | null; isPending: boolean }>({
     extent: null,
@@ -129,6 +131,24 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
           definitionExpression: '1=0', // start with no features
           legendEnabled: false,
         });
+        const lakes = new FeatureLayer({
+          url: config.URL.majorLakes,
+          outFields: ['GNIS_ID', 'GNIS_Name'],
+          renderer: {
+            type: 'simple',
+            symbol: {
+              type: 'simple-fill',
+              color: WATERBODY_COLOR,
+              style: 'solid',
+              outline: {
+                color: WATERBODY_COLOR,
+                width: 4,
+              },
+            },
+          },
+          definitionExpression: '1=0', // start with no features
+          legendEnabled: false,
+        });
 
         const rivers = new FeatureLayer({
           url: config.URL.majorRivers,
@@ -148,11 +168,11 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
           legendEnabled: false,
         });
 
-        mapView.current!.map!.addMany([streams, rivers]);
-        void Promise.all([streams.when(), rivers.when()])
+        mapView.current!.map!.addMany([streams, rivers, lakes]);
+        void Promise.all([streams.when(), rivers.when(), lakes.when()])
           .then(() => {
             if (isCurrent) {
-              setWaterbodyLayers({ streams, rivers });
+              setWaterbodyLayers({ streams, rivers, lakes });
               setWaterbodyLayerStatus('ready');
             }
           })
@@ -285,11 +305,20 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
     const [type, id] = waterbodyId?.split(':') ?? [];
     const streamsWhere = type === 'stream' ? `ComID = ${id}` : '1=0';
     const riversWhere = type === 'river' ? `COM_ID = ${id}` : '1=0';
+    const lakesWhere = type === 'lake' ? `GNIS_ID = '${id}'` : '1=0';
 
     waterbodyLayers.streams.definitionExpression = streamsWhere;
     waterbodyLayers.rivers.definitionExpression = riversWhere;
+    waterbodyLayers.lakes.definitionExpression = lakesWhere;
 
-    const layer = type === 'stream' ? waterbodyLayers.streams : type === 'river' ? waterbodyLayers.rivers : null;
+    const layer =
+      type === 'stream'
+        ? waterbodyLayers.streams
+        : type === 'river'
+          ? waterbodyLayers.rivers
+          : type === 'lake'
+            ? waterbodyLayers.lakes
+            : null;
     if (!layer) {
       setWaterbodyExtent({ id: waterbodyId, extent: null });
 
@@ -297,7 +326,11 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
     }
 
     let isCurrent = true;
-    queryLayerExtent(layer, type === 'stream' ? streamsWhere : riversWhere, mapView.current.spatialReference)
+    queryLayerExtent(
+      layer,
+      type === 'stream' ? streamsWhere : type === 'river' ? riversWhere : lakesWhere,
+      mapView.current.spatialReference,
+    )
       .catch((error) => {
         console.error('Error querying nearest waterbody extent:', error);
 
@@ -362,9 +395,7 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
     isPending:
       (flowPathEnabled && (!flowPathFeatureLayer || flowPathExtent.isPending)) ||
       (waterbodyEnabled &&
-        (waterbodyLayerStatus === 'loading' ||
-          isWaterbodySearchPending ||
-          waterbodyExtent.id !== currentWaterbodyId)),
+        (waterbodyLayerStatus === 'loading' || isWaterbodySearchPending || waterbodyExtent.id !== currentWaterbodyId)),
   });
 
   // update the spill location graphic

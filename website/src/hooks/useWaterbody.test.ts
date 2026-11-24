@@ -22,6 +22,7 @@ const coordinates = { UTM_X: 437156, UTM_Y: 4454301 };
 const mapView = {} as __esri.MapView;
 const streamsFeatureLayer = { queryFeatures: vi.fn() } as unknown as __esri.FeatureLayer;
 const riversFeatureLayer = { queryFeatures: vi.fn() } as unknown as __esri.FeatureLayer;
+const lakesFeatureLayer = { queryFeatures: vi.fn() } as unknown as __esri.FeatureLayer;
 
 type Coordinates = Pick<DataContextType['data'], 'UTM_X' | 'UTM_Y'>;
 
@@ -29,12 +30,13 @@ type WaterbodyLayers = {
   mapView: __esri.MapView;
   streamsFeatureLayer: __esri.FeatureLayer;
   riversFeatureLayer: __esri.FeatureLayer;
+  lakesFeatureLayer: __esri.FeatureLayer;
 };
 
 function renderWaterbodyHook(
   setData: DataContextType['setData'] = () => undefined,
   initialCoordinates: Coordinates = coordinates,
-  initialLayers: WaterbodyLayers | null = { mapView, streamsFeatureLayer, riversFeatureLayer },
+  initialLayers: WaterbodyLayers | null = { mapView, streamsFeatureLayer, riversFeatureLayer, lakesFeatureLayer },
   initialData: Partial<DataContextType['data']> = {},
   initialIsInitialDataLoaded = true,
 ) {
@@ -62,6 +64,7 @@ function renderWaterbodyHook(
         currentLayers?.mapView ?? null,
         currentLayers?.streamsFeatureLayer ?? null,
         currentLayers?.riversFeatureLayer ?? null,
+        currentLayers?.lakesFeatureLayer ?? null,
       ),
     { wrapper },
   );
@@ -123,6 +126,7 @@ describe('useWaterbody', () => {
         }),
         streamsFeatureLayer,
         riversFeatureLayer,
+        lakesFeatureLayer,
       );
     });
   });
@@ -135,7 +139,7 @@ describe('useWaterbody', () => {
     expect(mocks.queryNearestWaterBody).not.toHaveBeenCalled();
     expect(setData).not.toHaveBeenCalled();
 
-    rerenderWithLayers({ mapView, streamsFeatureLayer, riversFeatureLayer });
+    rerenderWithLayers({ mapView, streamsFeatureLayer, riversFeatureLayer, lakesFeatureLayer });
 
     await waitFor(() => expect(mocks.queryNearestWaterBody).toHaveBeenCalledOnce());
   });
@@ -252,6 +256,7 @@ describe('useWaterbody', () => {
       }),
       streamsFeatureLayer,
       riversFeatureLayer,
+      lakesFeatureLayer,
     );
 
     const newCoordinates = { UTM_X: 500000, UTM_Y: 4500000 };
@@ -268,6 +273,7 @@ describe('useWaterbody', () => {
       }),
       streamsFeatureLayer,
       riversFeatureLayer,
+      lakesFeatureLayer,
     );
 
     const updateData = setData.mock.calls[1]?.[0];
@@ -377,7 +383,7 @@ describe('useWaterbody', () => {
         );
 
         rerenderWithData({ ...salesforceData, UTM_X: 420304, UTM_Y: 4511432 }, true);
-        rerenderWithLayers({ mapView, streamsFeatureLayer, riversFeatureLayer });
+        rerenderWithLayers({ mapView, streamsFeatureLayer, riversFeatureLayer, lakesFeatureLayer });
 
         await waitFor(() => expect(logSpy).toHaveBeenCalledWith(gateMessage));
         expect(mocks.queryNearestWaterBody).not.toHaveBeenCalled();

@@ -12,6 +12,7 @@ const config = {
       'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/UtahMajor_Streams/FeatureServer/0',
     majorRivers:
       'https://services1.arcgis.com/99lidPhWCzftIe9K/ArcGIS/rest/services/UtahMajorRiversPoly/FeatureServer/0',
+    majorLakes: 'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/UtahLakesNHD/FeatureServer/0',
   },
   LOCATION_QUERIES: {
     city: {
