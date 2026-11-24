@@ -62,7 +62,7 @@ async function queryLakes(point: __esri.Point, lakesFeatureLayer: __esri.Feature
     distance: searchDistanceInFeet,
     units: 'feet',
     returnGeometry: true,
-    outFields: ['GNIS_ID', 'GNIS_Name'],
+    outFields: ['Permanent_Identifier', 'GNIS_Name'],
     where: '1=1',
   });
 
@@ -72,7 +72,7 @@ async function queryLakes(point: __esri.Point, lakesFeatureLayer: __esri.Feature
         unit: 'feet',
       }),
     ),
-    id: `lake:${feature.attributes.GNIS_ID}`,
+    id: `lake:${feature.attributes.Permanent_Identifier}`,
     name: feature.attributes.GNIS_Name ?? null,
   }));
 }

@@ -47,7 +47,7 @@ describe('queryNearestWaterBody', () => {
     mocks.queryLakes.mockResolvedValue({
       features: [
         {
-          attributes: { GNIS_ID: 789, GNIS_Name: 'Great Lake' },
+          attributes: { Permanent_Identifier: 789, GNIS_Name: 'Great Lake' },
           geometry: lakeGeometry,
         },
       ],
@@ -79,7 +79,7 @@ describe('queryNearestWaterBody', () => {
     );
     expect(mocks.queryLakes).toHaveBeenCalledWith(
       expect.objectContaining({
-        outFields: ['GNIS_ID', 'GNIS_Name'],
+        outFields: ['Permanent_Identifier', 'GNIS_Name'],
       }),
     );
   });
