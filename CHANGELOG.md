@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.1.8-rc.2](https://github.com/agrc/deq-spills/compare/v3.1.8-rc.1...v3.1.8-rc.2) (2026-11-25)
+
+
+### Features
+
+* add lakes ([37a180f](https://github.com/agrc/deq-spills/commit/37a180f76aaab71aea2c8525e2b1841365124f5d))
+* switching to Permanent_Identifier ([ba55fbd](https://github.com/agrc/deq-spills/commit/ba55fbdb619fb50433ce009d0c796a43cc1fae5b))
+
+
+### Bug Fixes
+
+* **website:** switch to new land ownership layer ([069bd44](https://github.com/agrc/deq-spills/commit/069bd440df7bbe96b95283331a6297d265b913d0))
+
 ## [3.1.8-rc.1](https://github.com/agrc/deq-spills/compare/v3.1.6-rc.6...v3.1.8-rc.1) (2026-11-24)
 
 
