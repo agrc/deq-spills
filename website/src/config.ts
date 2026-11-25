@@ -5,7 +5,8 @@ const config = {
   MARKER_FILL_COLOR: [234, 202, 0, 0.5] as [number, number, number, number],
   MARKER_OUTLINE_COLOR: [77, 42, 84, 1] as [number, number, number, number],
   URL: {
-    landownership: 'https://gis.trustlands.utah.gov/mapping/rest/services/Land_Ownership/FeatureServer/0',
+    landownership:
+      'https://gis.trustlands.utah.gov/mapping/rest/services/Land_Ownership_Agency_Web_Mercator/FeatureServer/0',
     waterSystems:
       'https://services2.arcgis.com/NnxP4LZ3zX8wWmP9/ArcGIS/rest/services/Utah_DDW_Public_Water_System_Sources/FeatureServer/0',
     majorStreams:
@@ -16,16 +17,16 @@ const config = {
   },
   LOCATION_QUERIES: {
     city: {
-      table: 'boundaries.municipal_boundaries',
-      field: 'name',
+      url: 'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/UtahMunicipalBoundaries/FeatureServer/0',
+      field: 'Name',
     },
     county: {
-      table: 'boundaries.county_boundaries',
-      field: 'name',
+      url: 'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/UtahCountyBoundaries/FeatureServer/0',
+      field: 'NAME',
     },
     agency: {
-      table: 'cadastre.land_ownership',
-      field: 'agency',
+      url: 'https://gis.trustlands.utah.gov/mapping/rest/services/Land_Ownership_Agency_Web_Mercator/FeatureServer/0',
+      field: 'land_owner',
     },
   },
 };

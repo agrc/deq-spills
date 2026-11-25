@@ -217,7 +217,7 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, 
                 labelingInfo: [
                   {
                     labelExpressionInfo: {
-                      expression: '$feature.agency',
+                      expression: '$feature.land_owner',
                     },
                     minScale: 200000,
                   },

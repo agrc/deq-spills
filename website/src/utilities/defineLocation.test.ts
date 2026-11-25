@@ -3,11 +3,15 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 const mocks = vi.hoisted(() => ({
   execute: vi.fn(),
   isLoaded: vi.fn(),
-  queryNearestWaterBody: vi.fn(),
-  search: vi.fn(),
+  queryFeatures: vi.fn(),
 }));
 
 vi.mock('@arcgis/core/geometry/operators/projectOperator', () => mocks);
+vi.mock('@arcgis/core/layers/FeatureLayer', () => ({
+  default: class MockFeatureLayer {
+    queryFeatures = mocks.queryFeatures;
+  },
+}));
 
 vi.mock('@arcgis/core/geometry/SpatialReference', () => ({
   default: class MockSpatialReference {
@@ -19,9 +23,7 @@ vi.mock('@arcgis/core/geometry/SpatialReference', () => ({
   },
 }));
 
-vi.mock('@ugrc/utilities', () => ({ search: mocks.search }));
-vi.mock('./queryNearestWaterBody', () => ({ queryNearestWaterBody: mocks.queryNearestWaterBody }));
-
+import config from '../config';
 import { defineLocation } from './defineLocation';
 
 describe('defineLocation', () => {
@@ -41,20 +43,19 @@ describe('defineLocation', () => {
       spatialReference,
       toJSON: () => ({ x: input.x, y: input.y }),
     }));
-    mocks.search.mockImplementation(async (_apiKey: string, _table: string, fields: string[]) => {
-      const field = fields[0]!;
+    mocks.queryFeatures.mockImplementation(async (query: { outFields: string[] }) => {
+      const field = query.outFields[0]!;
 
-      return [{ attributes: { [field]: 'Agency' } }];
+      return { features: [{ attributes: { [field]: 'Agency' } }] };
     });
-    mocks.queryNearestWaterBody.mockResolvedValue(null);
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
   });
 
-  it('returns null when a successful search finds no result', async () => {
-    mocks.search.mockResolvedValue([]);
+  it('returns null when a feature service has no matching result', async () => {
+    mocks.queryFeatures.mockResolvedValue({ features: [] });
     vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     const result = await defineLocation(point);
@@ -64,11 +65,42 @@ describe('defineLocation', () => {
     expect(result.COUNTY).toBeNull();
   });
 
-  it('returns null when the search API returns an error response', async () => {
-    mocks.search.mockResolvedValue({ status: 500 });
+  it('returns null when a feature service request fails', async () => {
+    mocks.queryFeatures.mockRejectedValue(new Error('Feature service request failed'));
     vi.spyOn(console, 'error').mockImplementation(() => {});
 
     const result = await defineLocation(point);
     expect(result.OWNER_AGENCY).toBeNull();
+  });
+
+  it('queries the configured feature services with their respective fields', async () => {
+    await defineLocation(point);
+
+    expect(config.LOCATION_QUERIES).toEqual({
+      city: {
+        url: 'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/UtahMunicipalBoundaries/FeatureServer/0',
+        field: 'Name',
+      },
+      county: {
+        url: 'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/UtahCountyBoundaries/FeatureServer/0',
+        field: 'NAME',
+      },
+      agency: {
+        url: 'https://gis.trustlands.utah.gov/mapping/rest/services/Land_Ownership_Agency_Web_Mercator/FeatureServer/0',
+        field: 'land_mngr_type',
+      },
+    });
+    expect(mocks.queryFeatures).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({ outFields: ['land_mngr_type'], geometry: expect.anything() }),
+    );
+    expect(mocks.queryFeatures).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({ outFields: ['Name'], geometry: expect.anything() }),
+    );
+    expect(mocks.queryFeatures).toHaveBeenNthCalledWith(
+      3,
+      expect.objectContaining({ outFields: ['NAME'], geometry: expect.anything() }),
+    );
   });
 });
