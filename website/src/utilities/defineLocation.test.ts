@@ -87,12 +87,12 @@ describe('defineLocation', () => {
       },
       agency: {
         url: 'https://gis.trustlands.utah.gov/mapping/rest/services/Land_Ownership_Agency_Web_Mercator/FeatureServer/0',
-        field: 'land_mngr_type',
+        field: 'land_owner',
       },
     });
     expect(mocks.queryFeatures).toHaveBeenNthCalledWith(
       1,
-      expect.objectContaining({ outFields: ['land_mngr_type'], geometry: expect.anything() }),
+      expect.objectContaining({ outFields: ['land_owner'], geometry: expect.anything() }),
     );
     expect(mocks.queryFeatures).toHaveBeenNthCalledWith(
       2,
