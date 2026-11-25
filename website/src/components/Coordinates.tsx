@@ -327,7 +327,7 @@ export default function Coordinates() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const point = await getUtmPoint(coordinateType, values);
-    const locationData = await defineLocation(point);
+    const locationData = await defineLocation(point, null, null, null);
     setData((prevData) => ({ ...prevData, ...locationData }));
     clearAndClose();
   };

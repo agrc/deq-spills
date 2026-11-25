@@ -13,7 +13,8 @@ export function getUrlParam(param: string): UrlParamValue {
   const isBoolean = booleanKeys.includes(param);
   if (value) {
     if (numericKeys.includes(param)) {
-      return parseFloat(value);
+      const number = parseFloat(value);
+      return Number.isNaN(number) ? null : number;
     } else if (isBoolean) {
       return value === 'true';
     }
@@ -32,6 +33,10 @@ export function getIsReadOnly(): boolean {
 
 export function getFlowPathEnabled(): boolean {
   return getUrlParam('flowpath') === 'true';
+}
+
+export function getWaterbodyEnabled(): boolean {
+  return getUrlParam('waterbody') === 'true';
 }
 
 export function getData(): DataContextType['data'] {

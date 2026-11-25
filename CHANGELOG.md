@@ -42,6 +42,74 @@
 * **dev:** bump postcss from 8.5.14 to 8.5.23 in /website ([05ada2d](https://github.com/agrc/deq-spills/commit/05ada2d790390b140aa19dabd562a1255bba14d5))
 * upgrading safe dependencies ([09bd4a2](https://github.com/agrc/deq-spills/commit/09bd4a22bb4450da08c851fe647297baedc3006d))
 
+## [3.1.6-rc.6](https://github.com/agrc/deq-spills/compare/v3.1.6-rc.5...v3.1.6-rc.6) (2026-10-29)
+
+
+### Features
+
+* initial guard, but more to debug ([591fefb](https://github.com/agrc/deq-spills/commit/591fefb449ec89005d7bb7866a3319639c03a737))
+
+
+### Bug Fixes
+
+* deciding when to load ([565e9bb](https://github.com/agrc/deq-spills/commit/565e9bb670339875a18a02f08738def152878193))
+* race condition fix and recomputation adjustment ([66271ad](https://github.com/agrc/deq-spills/commit/66271ad36c8b51a61ab6d833fb629dfac9f1413f))
+* remove hard-coded ID value in favor of a is data loaded flag ([6bef62e](https://github.com/agrc/deq-spills/commit/6bef62ecfffa0f5deff7b5bcb126ac1f96b9d3a4))
+* **salesforce:** address all waterbody fields in salesforce comparison ([8c1c671](https://github.com/agrc/deq-spills/commit/8c1c671a69fe1e09575c0fe38e93547d408e026a))
+* **website:** add units to waterbody distance ([ef1627e](https://github.com/agrc/deq-spills/commit/ef1627e9e4cc1343b2674bbf499f80b48f1db164))
+* **website:** auto-zoom to waterbody and flowpath ([5dc8f19](https://github.com/agrc/deq-spills/commit/5dc8f191472aebed9144e90a28b11a966ac989e4))
+
+## [3.1.6-rc.5](https://github.com/agrc/deq-spills/compare/v3.1.6-rc.4...v3.1.6-rc.5) (2026-10-22)
+
+
+### Features
+
+* hook skeleton ([5e55082](https://github.com/agrc/deq-spills/commit/5e550828c4b38aaa388c9906fcaa5367a163cf3b))
+* hook wire ([0eadfed](https://github.com/agrc/deq-spills/commit/0eadfed3cb403888d32c3d80a2fa5f3ae74d6e78))
+* more skeletoning ([908c2ce](https://github.com/agrc/deq-spills/commit/908c2ced52f8d79c39b45ff4950d5085ff5a4597))
+
+
+### Bug Fixes
+
+* race resolution with featurelayer loads and redundant layer creation elimination ([581567d](https://github.com/agrc/deq-spills/commit/581567d0a75b8bc52411bcff124313ef63f4c7f2))
+* recomputation check of waterbody ID and waterbody color abstraction ([76e2307](https://github.com/agrc/deq-spills/commit/76e23073b68c43f4760c948b2cfb81f36fd356f5))
+* repaired sync error ([c135bd1](https://github.com/agrc/deq-spills/commit/c135bd1ee4ecfc2b75316592a9d28f1615e994cc))
+
+## [3.1.6-rc.4](https://github.com/agrc/deq-spills/compare/v3.1.6-rc.3...v3.1.6-rc.4) (2026-10-16)
+
+
+### Features
+
+* 127-3 change polyline color ([#264](https://github.com/agrc/deq-spills/issues/264)) ([42adee1](https://github.com/agrc/deq-spills/commit/42adee1246bd4b32e37cb8b6556c330b96521861))
+
+## [3.1.6-rc.3](https://github.com/agrc/deq-spills/compare/v3.1.6-rc.2...v3.1.6-rc.3) (2026-10-15)
+
+
+### Bug Fixes
+
+* no nearest waterbody handling ([bd38751](https://github.com/agrc/deq-spills/commit/bd38751e24bd38b35690132427ed1533ccd926ef))
+
+## [3.1.6-rc.2](https://github.com/agrc/deq-spills/compare/v3.1.6-rc.1...v3.1.6-rc.2) (2026-09-11)
+
+
+### Features
+
+* adding geometry as feature layer ([7e6b446](https://github.com/agrc/deq-spills/commit/7e6b446f5e88c0660c1c4625eda1915d055a6d0f))
+
+## [3.1.6-rc.1](https://github.com/agrc/deq-spills/compare/v3.1.5...v3.1.6-rc.1) (2026-09-10)
+
+
+### Features
+
+* basic neare ([f012c56](https://github.com/agrc/deq-spills/commit/f012c56d7606764fca754f0354da4f2092d24632))
+* basic waterbody query logic ([58dbf7c](https://github.com/agrc/deq-spills/commit/58dbf7c1c6a1332a829ee611734599f69fb47937))
+
+
+### Documentation
+
+* update readme and cspell ([2c604c8](https://github.com/agrc/deq-spills/commit/2c604c8e7fd512812f3755175ad537762acd726e))
+* update README with better local running instructions ([02065c6](https://github.com/agrc/deq-spills/commit/02065c628936df8fd132e3d6ce73031938691497))
+
 ## [3.1.5](https://github.com/agrc/deq-spills/compare/v3.1.4...v3.1.5) (2026-05-27)
 
 

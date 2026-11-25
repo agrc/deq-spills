@@ -5,12 +5,14 @@ import Legend from '@arcgis/core/widgets/Legend';
 import { LayerSelector, type LayerSelectorProps } from '@ugrc/utah-design-system';
 import { useEffect, useRef, useState } from 'react';
 
+import * as reactiveUtils from '@arcgis/core/core/reactiveUtils';
 import Graphic from '@arcgis/core/Graphic';
 import { useGraphicManager, utahMercatorExtent } from '@ugrc/utilities/hooks';
-import { FIELDS } from '../../functions/common/shared';
 import config from '../config';
+import useAutoZoom, { queryLayerExtent } from '../hooks/useAutoZoom';
 import useData from '../hooks/useDataProvider';
 import useMapView from '../hooks/useMapView';
+import useWaterbody from '../hooks/useWaterbody';
 import { defineLocation } from '../utilities/defineLocation';
 import { getDefinitionExpression } from '../utilities/getDefinitionExpression';
 
@@ -18,9 +20,12 @@ type MapContainerProps = {
   isEmbedded: boolean;
   isReadOnly: boolean;
   flowPathEnabled: boolean;
+  waterbodyEnabled: boolean;
 };
 
-export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled }: MapContainerProps) {
+const WATERBODY_COLOR = [64, 224, 208, 0.5];
+
+export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled, waterbodyEnabled }: MapContainerProps) {
   const mapNode = useRef<HTMLDivElement | null>(null);
   const mapComponent = useRef<EsriMap | null>(null);
   const mapView = useRef<MapView>(null);
@@ -55,6 +60,11 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled }
       return;
     }
 
+    let isCurrent = true;
+    setWaterbodyLayers(null);
+    setWaterbodyLayerStatus(waterbodyEnabled ? 'loading' : 'ready');
+    setWaterbodyExtent({ id: null, extent: null });
+
     mapComponent.current = new EsriMap();
 
     mapView.current = new MapView({
@@ -65,6 +75,10 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled }
     mapView.current.constraints.snapToZoom = false;
 
     mapView.current.when(() => {
+      if (!isCurrent) {
+        return;
+      }
+
       const legend = new Legend({
         view: mapView.current!,
         basemapLegendVisible: true,
@@ -210,6 +224,38 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled }
                 ],
               }),
           },
+          {
+            label: 'Streams',
+            function: () =>
+              new FeatureLayer({
+                url: config.URL.majorStreams,
+                outFields: ['ComID', 'GNIS_Name'],
+                labelingInfo: [
+                  {
+                    labelExpressionInfo: {
+                      expression: '$feature.GNIS_Name',
+                    },
+                    minScale: 200000,
+                  },
+                ],
+              }),
+          },
+          {
+            label: 'Rivers',
+            function: () =>
+              new FeatureLayer({
+                url: config.URL.majorRivers,
+                outFields: ['COM_ID', 'NAME'],
+                labelingInfo: [
+                  {
+                    labelExpressionInfo: {
+                      expression: '$feature.NAME',
+                    },
+                    minScale: 200000,
+                  },
+                ],
+              }),
+          },
         ],
       },
     };
@@ -217,10 +263,11 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled }
     setSelectorOptions(selectorOptions);
 
     return () => {
+      isCurrent = false;
       mapView.current?.destroy();
       mapComponent.current?.destroy();
     };
-  }, [flowPathEnabled, setFlowPathFeatureLayer, setMapView]);
+  }, [flowPathEnabled, setFlowPathFeatureLayer, setMapView, waterbodyEnabled]);
 
   // add click event handlers
   useEffect(() => {
@@ -246,7 +293,7 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled }
     return () => {
       handle?.remove();
     };
-  }, [isEmbedded, isReadOnly, setData]);
+  }, [isEmbedded, isReadOnly, setData, waterbodyEnabled]);
 
   // highlight the nearest water body, since its id tells us whether it came from the streams or rivers layer
   useEffect(() => {
@@ -353,73 +400,44 @@ export default function MapContainer({ isEmbedded, isReadOnly, flowPathEnabled }
 
   // update the spill location graphic
   const { setGraphic } = useGraphicManager(mapView.current);
-  const coordinatesChanged = useRef(false);
   useEffect(() => {
-    if (!data.UTM_X || !data.UTM_Y || (flowPathEnabled && !flowPathFeatureLayer)) {
+    if (!data.UTM_X || !data.UTM_Y) {
       return;
     }
 
-    const graphic = new Graphic({
-      geometry: {
-        type: 'point',
-        x: data.UTM_X,
-        y: data.UTM_Y,
-        spatialReference: {
-          wkid: 26912,
+    setGraphic(
+      new Graphic({
+        geometry: {
+          type: 'point',
+          x: data.UTM_X,
+          y: data.UTM_Y,
+          spatialReference: {
+            wkid: 26912,
+          },
         },
-      },
-      symbol: {
-        type: 'simple-marker',
-        color: [255, 255, 0],
-        size: 11,
-        outline: {
-          color: [0, 0, 0],
-          width: 1,
+        symbol: {
+          type: 'simple-marker',
+          color: [255, 255, 0],
+          size: 11,
+          outline: {
+            color: [0, 0, 0],
+            width: 1,
+          },
         },
-      },
-    });
-    setGraphic(graphic);
+      }),
+    );
+  }, [data.UTM_X, data.UTM_Y, setGraphic]);
 
-    // this should only happen once when the coordinates change from null to a value, if they change after that, FlowPaths.tsx takes care of zooming
-    if (flowPathEnabled && flowPathFeatureLayer && coordinatesChanged.current === false) {
-      flowPathFeatureLayer.definitionExpression = getDefinitionExpression(data.ID!);
-      flowPathFeatureLayer
-        .when(() => {
-          flowPathFeatureLayer
-            .queryFeatures({
-              cacheHint: false,
-              returnGeometry: true,
-              outFields: [FIELDS.LENGTH],
-              where: flowPathFeatureLayer!.definitionExpression,
-            })
-            .then((results) => {
-              if (results.features.length > 0) {
-                const flowPathGraphic = results.features[0];
-                mapView.current!.goTo(flowPathGraphic!.geometry!.extent!.expand(1.1));
-              } else {
-                mapView.current?.goTo({
-                  target: graphic,
-                  zoom: config.DEFAULT_ZOOM_LEVEL,
-                });
-              }
-            })
-            .catch((error) => {
-              console.error('Error querying flow path features:', error);
-            });
-        })
-        .catch((error) => {
-          console.error('Error loading flow path feature layer:', error);
-        });
-    } else {
-      mapView.current?.when(() => {
-        mapView.current?.goTo({
-          target: graphic,
-          zoom: config.DEFAULT_ZOOM_LEVEL,
-        });
-      });
+  // show the saved flow path once the record has a location, after that FlowPath.tsx updates the layer
+  const hasShownSavedFlowPath = useRef(false);
+  useEffect(() => {
+    if (hasShownSavedFlowPath.current || !flowPathFeatureLayer || !data.ID || !data.UTM_X || !data.UTM_Y) {
+      return;
     }
-    coordinatesChanged.current = true;
-  }, [data.ID, data.UTM_X, data.UTM_Y, flowPathEnabled, flowPathFeatureLayer, setGraphic]);
+
+    hasShownSavedFlowPath.current = true;
+    flowPathFeatureLayer.definitionExpression = getDefinitionExpression(data.ID);
+  }, [data.ID, data.UTM_X, data.UTM_Y, flowPathFeatureLayer]);
 
   return (
     <div ref={mapNode} className="flex-1">

@@ -8,6 +8,37 @@ Staging: <https://spillsmap.dev.utah.gov/>
 
 Production: <https://spillsmap.deq.utah.gov/>
 
+### Local Development
+
+Prerequisites: Node.js 22 and pnpm.
+
+From the `website` directory, install dependencies and copy the ArcGIS assets:
+
+```sh
+pnpm install
+pnpm copy:arcgis
+```
+
+Create `website/.env.local` from the tracked `.env` template, then add the values for the blank variables. Ask a project maintainer for the Firebase configuration and ArcGIS API keys.
+
+```sh
+cp .env .env.local
+```
+
+Create `website/functions/.secret.local` with the ArcGIS Online API key used by the Functions emulator:
+
+```dotenv
+AGOL_API_KEY=your-arcgis-online-api-key
+```
+
+The tracked `website/functions/.env` file provides the non-secret local Functions parameters. Start the Vite development server and Firebase Functions emulator:
+
+```sh
+pnpm start
+```
+
+The application is then available at <http://localhost:5173/>. The standard map works without Salesforce authentication. To exercise flow-path functionality locally, use the configured development bypass token with the embedded test page or an equivalent request.
+
 This is a normal web application hosted in firebase. It is used in two different contexts:
 
 ### Standalone
@@ -18,6 +49,7 @@ Example test Urls:
 
 <http://localhost:5173/?ID=a0123456789ABCDE&UTM_X=420304&UTM_Y=4511432>  
 <http://localhost:5173/?ID=a0123456789ABCDE&UTM_X=420304&UTM_Y=4511432&flowpath=true>
+<http://localhost:5173/?embedded=false&readonly=true&flowpath=true&waterbody=true&SPILL_NUMBER=00037919&UTM_X=437052&UTM_Y=4454335&NEAREST_WATERBODY_ID=stream:83629887&NEAREST_WATERBODY_NAME=Provo%20River&ID=testID&NEAREST_WATERBODY_DISTANCE=413>
 
 ### Embedded
 
@@ -31,11 +63,12 @@ The following pages can be used to test the different embedded contexts:
 
 ### Url Parameters
 
-| Parameter  | Description                                                                                                               |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `embedded` | Set to true if the application is being used in an embedded context. This hides the header and footer among other things. |
-| `readonly` | Set to true to hide the location editing controls and disable location updates via map clicks.                            |
-| `flowpath` | Set to true to enable the flow path calculations and controls                                                             |
+| Parameter          | Description                                                                                                               |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------- |
+| `embedded`         | Set to true if the application is being used in an embedded context. This hides the header and footer among other things. |
+| `readonly`         | Set to true to hide the location editing controls and disable location updates via map clicks.                            |
+| `flowpath`         | Set to true to enable the flow path calculations and controls                                                             |
+| `waterbody`       | Set to true to enable the nearest waterbody calculation                                                                   |
 
 Additionally, when in standalone mode, any of the properties of [`DataContextType['data']`](website/src/contexts/DataProvider.tsx) can be passed as Url parameters. These show up in a sidebar.
 
@@ -58,7 +91,7 @@ Development Model: Org
 1. Install Salesforce CLI (`pnpm install -g @salesforce/cli`)
 1. Install [Salesforce Extension Pack for VS Code](https://marketplace.visualstudio.com/items?itemName=salesforce.salesforcedx-vscode)
 1. Authorize Org Sandbox
-   1. `org:login:web --alias utahdeqorg --instance-url https://utahdeqorg--eid.sandbox.my.salesforce.com/ --set-default`
+   1. `sf org:login:web --alias utahdeqorg --instance-url https://utahdeqorg--eid.sandbox.my.salesforce.com/ --set-default`
 
 ### Pulling Changes from Org
 

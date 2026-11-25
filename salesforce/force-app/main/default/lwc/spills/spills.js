@@ -1,3 +1,4 @@
+import getJWTToken from "@salesforce/apex/FirebaseAuthProvider.getJWTToken";
 import ADDRESS from "@salesforce/schema/Case.Address_Location__c";
 import COUNTY from "@salesforce/schema/Case.County__c";
 import HIGHWAY from "@salesforce/schema/Case.Highway__c";
@@ -8,12 +9,14 @@ import DD_LAT from "@salesforce/schema/Case.Latitude__c";
 import DD_LONG from "@salesforce/schema/Case.Longitude__c";
 import MILEMARKER from "@salesforce/schema/Case.Mile_Marker__c";
 import CITY from "@salesforce/schema/Case.Nearest_Town_City__c";
+import NEAREST_WATERBODY_DISTANCE from "@salesforce/schema/Case.NearestWaterbodyDistance__c";
+import NEAREST_WATERBODY_ID from "@salesforce/schema/Case.NearestWaterbodyID__c";
+import NEAREST_WATERBODY_NAME from "@salesforce/schema/Case.NearestWaterbodyName__c";
 import UTM_X from "@salesforce/schema/Case.Utm_E_X_6_dgts__c";
 import UTM_Y from "@salesforce/schema/Case.Utm_N_Y_7_dgts__c";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { getRecord, updateRecord } from "lightning/uiRecordApi";
 import { api, LightningElement, wire } from "lwc";
-import getJWTToken from "@salesforce/apex/FirebaseAuthProvider.getJWTToken";
 
 const MESSAGE_TYPES = {
   DATA_SYNC: "data-sync",
@@ -25,6 +28,9 @@ const MESSAGE_TYPES = {
 export default class Spills extends LightningElement {
   utm_x;
   utm_y;
+  waterbody_distance;
+  waterbody_id;
+  waterbody_name;
   @api recordId;
   @api isSandbox;
   @api instanceId;
@@ -33,7 +39,17 @@ export default class Spills extends LightningElement {
   hasIframeLoadListener = false;
   sampleId = 1234;
 
-  @wire(getRecord, { recordId: "$recordId", fields: [ID_FIELD, UTM_X, UTM_Y] })
+  @wire(getRecord, {
+    recordId: "$recordId",
+    fields: [
+      ID_FIELD,
+      UTM_X,
+      UTM_Y,
+      NEAREST_WATERBODY_DISTANCE,
+      NEAREST_WATERBODY_ID,
+      NEAREST_WATERBODY_NAME
+    ]
+  })
   wiredRecord({ error, data }) {
     if (error) {
       let message = "Unknown error";
@@ -53,6 +69,11 @@ export default class Spills extends LightningElement {
       console.log("salesforce: salesforce data updated", data);
       this.utm_x = data.fields[UTM_X.fieldApiName].value;
       this.utm_y = data.fields[UTM_Y.fieldApiName].value;
+      this.waterbody_distance =
+        data.fields[NEAREST_WATERBODY_DISTANCE.fieldApiName].value;
+      this.waterbody_id = data.fields[NEAREST_WATERBODY_ID.fieldApiName].value;
+      this.waterbody_name =
+        data.fields[NEAREST_WATERBODY_NAME.fieldApiName].value;
     }
 
     console.log("instance " + this.instanceId);
@@ -66,9 +87,9 @@ export default class Spills extends LightningElement {
   get iframeSrc() {
     console.log("salesforce: isSandbox", this.isSandbox);
     if (this.isSandbox) {
-      return `https://spillsmap.dev.utah.gov?embedded=true&readonly=${JSON.stringify(this.isReadOnly)}&flowpath=true`; // staging
+      return `https://spillsmap.dev.utah.gov?embedded=true&readonly=${JSON.stringify(this.isReadOnly)}&flowpath=true&waterbody=true`; // staging
     } else if (this.isSandbox === false) {
-      return `https://spillsmap.deq.utah.gov?embedded=true&readonly=${JSON.stringify(this.isReadOnly)}&flowpath=true`; // prod
+      return `https://spillsmap.deq.utah.gov?embedded=true&readonly=${JSON.stringify(this.isReadOnly)}&flowpath=true&waterbody=true`; // prod
     } else {
       console.warn("salesforce: isSandbox is undefined");
     }
@@ -125,8 +146,18 @@ export default class Spills extends LightningElement {
 
     const utm_x = data.UTM_X.toString(); // salesforce stores the coordinate fields as strings ¯\_(ツ)_/¯
     const utm_y = data.UTM_Y.toString();
-    if (utm_x === this.utm_x && utm_y === this.utm_y) {
-      console.log("salesforce: no change in UTM_X or UTM_Y");
+    // The website sends the new location before its waterbody lookup finishes and then sends the lookup result
+    // for the same location, so all of the waterbody fields need to be compared for the result to be saved.
+    if (
+      utm_x === this.utm_x &&
+      utm_y === this.utm_y &&
+      data.NEAREST_WATERBODY_DISTANCE === this.waterbody_distance &&
+      data.NEAREST_WATERBODY_ID === this.waterbody_id &&
+      data.NEAREST_WATERBODY_NAME === this.waterbody_name
+    ) {
+      console.log(
+        "salesforce: no change in UTM_X, UTM_Y, or NEAREST_WATERBODY fields"
+      );
       return;
     }
 
@@ -152,7 +183,11 @@ export default class Spills extends LightningElement {
       [MILEMARKER.fieldApiName]: data.MILEMARKER, // comes from widget text input
       [OWNER_AGENCY.fieldApiName]: data.OWNER_AGENCY,
       [UTM_X.fieldApiName]: utm_x,
-      [UTM_Y.fieldApiName]: utm_y
+      [UTM_Y.fieldApiName]: utm_y,
+      [NEAREST_WATERBODY_DISTANCE.fieldApiName]:
+        data.NEAREST_WATERBODY_DISTANCE,
+      [NEAREST_WATERBODY_ID.fieldApiName]: data.NEAREST_WATERBODY_ID,
+      [NEAREST_WATERBODY_NAME.fieldApiName]: data.NEAREST_WATERBODY_NAME
     };
 
     updateRecord({ fields })
@@ -213,7 +248,7 @@ export default class Spills extends LightningElement {
     );
   }
 
-  sendCoordinatesToIFrame() {
+  sendRecordDataToIFrame() {
     console.log(`salesforce: sending coordinates to iframe ${this.iframeId}`);
 
     try {
@@ -221,7 +256,10 @@ export default class Spills extends LightningElement {
         data: {
           ID: this.recordId,
           UTM_X: parseInt(this.utm_x, 10),
-          UTM_Y: parseInt(this.utm_y, 10)
+          UTM_Y: parseInt(this.utm_y, 10),
+          NEAREST_WATERBODY_DISTANCE: this.waterbody_distance,
+          NEAREST_WATERBODY_ID: this.waterbody_id,
+          NEAREST_WATERBODY_NAME: this.waterbody_name
         },
         type: MESSAGE_TYPES.DATA_SYNC
       });
@@ -244,11 +282,10 @@ export default class Spills extends LightningElement {
     this.refs.iframe.addEventListener("load", () => {
       console.log("salesforce: iframe loaded", this.utm_x, this.utm_y);
 
-      this.sendCoordinatesToIFrame();
+      this.sendRecordDataToIFrame();
     });
   }
 }
-
 
 /*
 Apex class:

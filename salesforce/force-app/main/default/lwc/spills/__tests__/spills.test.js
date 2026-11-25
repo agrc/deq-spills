@@ -8,6 +8,7 @@ jest.mock(
 
 import getJWTToken from "@salesforce/apex/FirebaseAuthProvider.getJWTToken";
 import Spills from "c/spills";
+import { getRecord, updateRecord } from "lightning/uiRecordApi";
 import { createElement } from "lwc";
 
 const flushPromises = async () => {
@@ -170,5 +171,139 @@ describe("c-spills", () => {
 
     expect(getJWTToken).not.toHaveBeenCalled();
     expect(postMessage).not.toHaveBeenCalled();
+  });
+
+  const origin = "https://spillsmap.dev.utah.gov";
+  const savedRecord = {
+    UTM_X: "420304",
+    UTM_Y: "4510276",
+    NEAREST_WATERBODY_DISTANCE: 413,
+    NEAREST_WATERBODY_ID: "stream:83629887",
+    NEAREST_WATERBODY_NAME: "Provo River"
+  };
+
+  function emitRecord(record) {
+    getRecord.emit({
+      fields: {
+        Utm_E_X_6_dgts__c: { value: record.UTM_X },
+        Utm_N_Y_7_dgts__c: { value: record.UTM_Y },
+        NearestWaterbodyDistance__c: {
+          value: record.NEAREST_WATERBODY_DISTANCE
+        },
+        NearestWaterbodyID__c: { value: record.NEAREST_WATERBODY_ID },
+        NearestWaterbodyName__c: { value: record.NEAREST_WATERBODY_NAME }
+      }
+    });
+  }
+
+  function sendFromWebsite(data) {
+    window.dispatchEvent(
+      new MessageEvent("message", {
+        data: {
+          data: {
+            ADDRESS: null,
+            CITY: null,
+            COUNTY: null,
+            DD_LAT: 40.2,
+            DD_LONG: -111.7,
+            HIGHWAY: null,
+            INDIAN: false,
+            MILEMARKER: null,
+            OWNER_AGENCY: null,
+            ZIP: null,
+            ...data
+          },
+          iframeId: mockedValue,
+          type: "data-sync"
+        },
+        origin
+      })
+    );
+  }
+
+  it("sends the waterbody fields along with the coordinates to the iframe", async () => {
+    const postMessage = jest.fn();
+    const element = createSpills();
+    const iframe = element.shadowRoot.querySelector("iframe");
+    Object.defineProperty(iframe, "contentWindow", {
+      configurable: true,
+      value: { postMessage }
+    });
+
+    emitRecord(savedRecord);
+    await flushPromises();
+
+    iframe.dispatchEvent(new Event("load"));
+
+    expect(postMessage).toHaveBeenCalledWith(
+      {
+        iframeId: mockedValue,
+        data: {
+          ID: "500000000000001",
+          UTM_X: 420304,
+          UTM_Y: 4510276,
+          NEAREST_WATERBODY_DISTANCE: 413,
+          NEAREST_WATERBODY_ID: "stream:83629887",
+          NEAREST_WATERBODY_NAME: "Provo River"
+        },
+        type: "data-sync"
+      },
+      origin
+    );
+  });
+
+  it("does not update the record when the website sends back the saved values", async () => {
+    createSpills();
+    emitRecord(savedRecord);
+    await flushPromises();
+
+    sendFromWebsite({
+      ...savedRecord,
+      UTM_X: 420304,
+      UTM_Y: 4510276
+    });
+    await flushPromises();
+
+    expect(updateRecord).not.toHaveBeenCalled();
+  });
+
+  it("saves the waterbody lookup result when a short move keeps the same waterbody", async () => {
+    updateRecord.mockResolvedValue({});
+    createSpills();
+    emitRecord(savedRecord);
+    await flushPromises();
+
+    // the website sends the new location before its waterbody lookup has finished
+    sendFromWebsite({
+      ...savedRecord,
+      UTM_X: 420310,
+      UTM_Y: 4510280
+    });
+    await flushPromises();
+
+    expect(updateRecord).toHaveBeenCalledTimes(1);
+
+    // the record refreshes with the new location before the lookup result arrives
+    emitRecord({ ...savedRecord, UTM_X: "420310", UTM_Y: "4510280" });
+    await flushPromises();
+
+    sendFromWebsite({
+      ...savedRecord,
+      UTM_X: 420310,
+      UTM_Y: 4510280,
+      NEAREST_WATERBODY_DISTANCE: 425
+    });
+    await flushPromises();
+
+    expect(updateRecord).toHaveBeenCalledTimes(2);
+    expect(updateRecord).toHaveBeenLastCalledWith({
+      fields: expect.objectContaining({
+        NearestWaterbodyDistance__c: 425,
+        NearestWaterbodyID__c: "stream:83629887",
+        NearestWaterbodyName__c: "Provo River",
+        Utm_E_X_6_dgts__c: "420310",
+        Utm_N_Y_7_dgts__c: "4510280"
+      })
+    });
   });
 });

@@ -14,7 +14,17 @@ export async function defineLocation(
   address: StringOrNull = null,
   highway: StringOrNull = null,
   milemarker: StringOrNull = null,
-): Promise<Omit<DataContextType['data'], 'FLOWPATH_LENGTH' | 'ID' | 'SPILL_NUMBER'>> {
+): Promise<
+  Omit<
+    DataContextType['data'],
+    | 'FLOWPATH_LENGTH'
+    | 'ID'
+    | 'SPILL_NUMBER'
+    | 'NEAREST_WATERBODY_DISTANCE'
+    | 'NEAREST_WATERBODY_ID'
+    | 'NEAREST_WATERBODY_NAME'
+  >
+> {
   if (!projectOperator.isLoaded()) {
     await projectOperator.load();
   }

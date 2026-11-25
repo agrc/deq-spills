@@ -32,7 +32,7 @@ export default function Geocode() {
 
     let location;
     if (searchType === 'single-address') {
-      location = await defineLocation(point, `${firstInput}, ${secondInput}`);
+      location = await defineLocation(point, `${firstInput}, ${secondInput}`, null, null);
     } else {
       location = await defineLocation(point, null, firstInput, secondInput);
     }

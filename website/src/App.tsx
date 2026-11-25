@@ -7,7 +7,7 @@ import Geocode from './components/Geocode';
 import MapContainer from './components/MapContainer';
 import Sidebar from './components/Sidebar';
 import { MapProvider } from './contexts/Map';
-import { getFlowPathEnabled, getIsEmbedded, getIsReadOnly } from './utilities/urlParameters';
+import { getFlowPathEnabled, getIsEmbedded, getIsReadOnly, getWaterbodyEnabled } from './utilities/urlParameters';
 
 const version = import.meta.env.PACKAGE_VERSION;
 
@@ -34,6 +34,7 @@ const links = [
 const isEmbedded = getIsEmbedded();
 const isReadOnly = getIsReadOnly();
 const flowPathEnabled = getFlowPathEnabled();
+const waterbodyEnabled = getWaterbodyEnabled();
 
 export default function App() {
   const app = useFirebaseApp();
@@ -66,7 +67,12 @@ export default function App() {
             <div className="flex size-full flex-1">
               <div className="flex size-full flex-col">
                 <MapProvider>
-                  <MapContainer isEmbedded={isEmbedded} isReadOnly={isReadOnly} flowPathEnabled={flowPathEnabled} />
+                  <MapContainer
+                    isEmbedded={isEmbedded}
+                    isReadOnly={isReadOnly}
+                    flowPathEnabled={flowPathEnabled}
+                    waterbodyEnabled={waterbodyEnabled}
+                  />
                   {!isEmbedded || isReadOnly ? null : (
                     <div className="flex flex-wrap gap-2 border-t border-t-slate-300 p-3">
                       <Coordinates />

@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { blankState } from '../contexts/DataProvider';
-import { getData, getIsEmbedded, getUrlParam } from './urlParameters';
+import { getData, getIsEmbedded, getUrlParam, getWaterbodyEnabled } from './urlParameters';
 
 describe('urlParameters', () => {
   let originalLocation: Location;
@@ -30,6 +30,11 @@ describe('urlParameters', () => {
     it('should return a number if the parameter is numeric', () => {
       window.location.search = '?UTM_X=123';
       expect(getUrlParam('UTM_X')).toBe(123);
+    });
+
+    it('should return null if a numeric parameter has a non-numeric value', () => {
+      window.location.search = '?UTM_X=abc';
+      expect(getUrlParam('UTM_X')).toBeNull();
     });
 
     it('should return decoded value for non-numeric parameters', () => {
@@ -62,6 +67,18 @@ describe('urlParameters', () => {
     it('should return false if embedded parameter is not true', () => {
       window.location.search = '?embedded=false';
       expect(getIsEmbedded()).toBe(false);
+    });
+  });
+
+  describe('getWaterbodyEnabled', () => {
+    it('should return true if waterbody parameter is true', () => {
+      window.location.search = '?waterbody=true';
+      expect(getWaterbodyEnabled()).toBe(true);
+    });
+
+    it('should return false if waterbody parameter is not true', () => {
+      window.location.search = '?waterbody=false';
+      expect(getWaterbodyEnabled()).toBe(false);
     });
   });
 
